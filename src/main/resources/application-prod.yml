@@ -1,0 +1,38 @@
+logging:
+  level:
+    ROOT: ${debug.level:INFO}
+    com.fininfo.saeopcc: ${debug.src.level:DEBUG}
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+
+  jackson:
+    serialization:
+      indent-output: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: ${datasource.password}
+    username: ${datasource.username}
+    url: ${datasource.url}
+    hikari:
+      auto-commit: false
+
+kafkaTopics:
+  issuertopicFromReferentielToConsumers: ${kafka.topic.issuertopicFromReferentielToConsumers}
+  SDGFromReferentielToConsumers: ${kafka.topic.SDGFromReferentielToConsumers}
+  clientFromReferentielToConsumers: ${kafka.topic.clientFromReferentielToConsumers}
+  custodiantopicFromReferentielToConsumers: ${kafka.topic.custodiantopicFromReferentielToConsumers}
+  fundtopic: ${kafka.topic.fundtopic}
+ 
+
+
+keycloak:
+  realm: ${keycloak.realm}
+  resource: ${keycloak.resource}
+  auth-server-url: ${keycloak.auth.server}
+  ssl-required: external
+  public-client: true
+  confidential-port: 0

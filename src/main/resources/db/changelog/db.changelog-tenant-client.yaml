@@ -1,0 +1,92 @@
+databaseChangeLog:
+  - changeSet:
+      id: client
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: client
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: client_pkey   
+              - column:
+                  name: mandate_manager
+                  type: VARCHAR(255)     
+              - column:
+                  name: mandate_manager_fax
+                  type: INTEGER
+              - column:
+                  name: mandate_manager_tel
+                  type: INTEGER
+              - column:
+                  name: mandate_manager_mail
+                  type: VARCHAR(255)     
+              - column:
+                  name: ebanking
+                  type: BOOLEAN     
+              - column:
+                  name: bank_domiciliation
+                  type: VARCHAR(255)     
+              - column:
+                  name: subject_tax
+                  type: BOOLEAN     
+              - column:
+                  name: cash_depositor
+                  type: BOOLEAN       
+              - column:
+                  name: client_type
+                  type: VARCHAR(255)     
+              - column:
+                  name: customer_analytics_segment
+                  type: INTEGER     
+              - column:
+                  name: fiscal_status
+                  type: VARCHAR(255)     
+              - column:
+                  name: isfund
+                  type: BOOLEAN 
+              - column:
+                  name: ishouse
+                  type: BOOLEAN 
+              - column:
+                  name: client_category_id
+                  type: BIGINT
+                  constraints:
+                    references: public.client_category(id)
+                    foreignKeyName: fk_client_client_category
+              - column:
+                  name: nationality_id
+                  type: BIGINT
+                  constraints:
+                    references: public.countries(id)
+                    foreignKeyName: fk_client_nationality_id
+              - column:
+                  name: residence_country_id
+                  type: BIGINT
+                  constraints:
+                    references: public.countries(id)
+                    foreignKeyName: fk_residence_country_id
+              - column:
+                  name: residence_status_id
+                  type: BIGINT
+                  constraints:
+                    references: public.residence_status(id)
+                    foreignKeyName: fk_residence_status_id
+              - column:
+                  name: security_sector_id
+                  type: BIGINT
+                  constraints:
+                    references: public.security_sector(id)
+                    foreignKeyName: fk_security_sector_id
+              - column:
+                  name: juridical_nature
+                  type: VARCHAR(255)
+              - column:
+                  name: is_resident
+                  type: Boolean
+              - column:
+                  name: security_form
+                  type: VARCHAR(255)

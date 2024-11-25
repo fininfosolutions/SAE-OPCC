@@ -1,0 +1,128 @@
+# specific path build
+trigger:
+  - SAE-Registred
+    
+
+jobs:
+  - job: Build_SAE_Registred
+    pool: 'BUILD-SERVER'
+#      name: Default
+#      demands:
+    variables:
+      java_version: '17'
+      jdkVersion: '17'
+      SPRING_OUTPUT_ANSI_ENABLED: NEVER
+      SPRING_JPA_SHOW_SQL: false
+      artifactName: ''
+  
+
+    steps:
+      - script: | 
+          echo "Version du JDK :" 
+          java -version : 
+        displayName: 'Afficher la version du JDK'
+      - script: | 
+          echo "Version du MVN :" 
+          mvn --version : 
+        displayName: 'Afficher la version du MVN'
+
+
+      #----------------------------------------------------------------------
+      # ADD Permission
+      #----------------------------------------------------------------------
+      - script: chmod 777 $(system.defaultworkingdirectory)/mvnw
+        displayName: 'ADD Permission'
+
+
+      #----------------------------------------------------------------------
+      # Apply Spotless
+      #----------------------------------------------------------------------
+      - script: mvn spotless:apply
+        displayName: 'Apply Spotless'
+
+
+      #----------------------------------------------------------------------
+      # Prepare sonarQube
+      #----------------------------------------------------------------------
+      # - task: SonarQubePrepare@4
+      #   inputs:
+      #     SonarQube: 'svcsonarqube'
+      #     scannerMode: 'Other'
+      #     extraProperties: |
+      #       sonar.coverage.exclusions=**/**
+      
+      #----------------------------------------------------------------------
+      # Test Packaging
+      #----------------------------------------------------------------------
+      - script: ./mvnw -DskipTests clean verify
+        displayName: 'TESTS: packaging'
+
+      #----------------------------------------------------------------------
+      # sonarqube-remove-branch-name
+      #----------------------------------------------------------------------
+    #   - powershell: |
+    #        $params = "$env:SONARQUBE_SCANNER_PARAMS" -replace '"sonar.branch.name":"[\w,/,-]*"\,?'
+    #        Write-Host "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$params"
+    #     displayName: 'sonarqube-remove-branch-name'
+      #----------------------------------------------------------------------
+      # sonarqube-remove-branch-name
+      #----------------------------------------------------------------------
+      #----------------------------------------------------------------------
+      # SonarQube analyses
+      #----------------------------------------------------------------------
+    #   - script: mvn sonar:sonar -Dsonar.host.url=http://192.168.30.23 -Dsonar.login=c6e4ab02cc62d586e83497752cf468b23e0ed0da -Dsonar.sources=$(Build.Repository.LocalPath)/src/main/ -Dsonar.java.binaries=$(Build.Repository.LocalPath)/target/classes/
+    #     displayName: 'TESTS: sonarqube analyses'
+      # #----------------------------------------------------------------------
+      # # Publish SonarQube Analyses To Dashboard
+      # #----------------------------------------------------------------------
+      # - task: SonarQubePublish@4
+      #   inputs:
+      #     pollingTimeoutSec: '300'
+      #----------------------------------------------------------------------
+      # Break The Build If Quality Gate Is Failed
+      #----------------------------------------------------------------------
+      # - task: sonar-buildbreaker@8
+      #   inputs:
+      #     SonarQube: 'svcsonarqube'
+     
+      #----------------------------------------------------------------------
+      # Docker Remove Image
+      #----------------------------------------------------------------------
+      
+      #- script: docker rmi -f referentiel 
+      #  displayName: 'remove image'
+
+      
+      #----------------------------------------------------------------------
+      # Build Docker Image
+      #----------------------------------------------------------------------
+      - script: ./mvnw package -Pprod -DskipTests jib:dockerBuild
+        displayName: 'Build Docker Image'
+      - script: |
+          docker tag saeregistred:latest saeregistred:$(Build.BuildNumber)
+          cd /home/administrateur/myagent1/_work/8/s
+          echo "TAG6="$(Build.BuildNumber) >> .env
+        displayName: 'Docker TAG Image'
+
+#----------------------------------------------------------------------
+# Connect to Nexus
+#----------------------------------------------------------------------
+      - script: docker login -u admin -p It@*2021 http://192.168.30.15:1200
+        displayName: 'Connect to Nexus'
+
+#----------------------------------------------------------------------
+# Push image to nexus
+#----------------------------------------------------------------------
+      - script: docker tag saeregistred:latest 192.168.30.15:1200/saeregistred:$(Build.BuildNumber)
+        displayName: 'docker tag image to nexus'
+      - script: docker push 192.168.30.15:1200/saeregistred:$(Build.BuildNumber)
+        displayName: 'docker push image to nexus'
+
+#----------------------------------------------------------------------
+# Connect to Kubernetes Server.
+#----------------------------------------------------------------------
+      - task: SSH@0
+        inputs:
+          sshEndpoint: 'Kube-ssh'
+          runOptions: 'commands'
+          commands: 'kubectl set image deployment/registred -n sae-dev saeregistred-app=''192.168.30.15:1200/saeregistred:$(Build.BuildNumber)'''

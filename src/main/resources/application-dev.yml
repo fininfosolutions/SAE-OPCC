@@ -1,0 +1,45 @@
+logging:
+  level:
+    ROOT: INFO
+    com.fininfo.saeopcc: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+
+  jackson:
+    serialization:
+      indent-output: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sae_opcc
+    username: postgres
+    password: root
+
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+
+kafkaTopics:
+  issuertopicFromReferentielToConsumers: issuertopicFromReferentielToConsumers
+  SDGFromReferentielToConsumers: SDGFromReferentielToConsumers
+  clientFromReferentielToConsumers: clientFromReferentielToConsumers
+  custodiantopicFromReferentielToConsumers: custodiantopicFromReferentielToConsumers
+  fundtopic: fundtopic
+
+ 
+
+keycloak:
+  realm: sae
+  resource: sae
+  auth-server-url: http://localhost:9080/auth/
+  ssl-required: external
+  public-client: true
+  confidential-port: 0
+
+
+
