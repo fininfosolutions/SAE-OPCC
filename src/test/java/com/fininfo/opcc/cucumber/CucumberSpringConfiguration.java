@@ -1,15 +1,13 @@
 package com.fininfo.opcc.cucumber;
 
+import com.fininfo.opcc.cucumber.helpers.AbstractStepDefHelper;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
-
-import com.fininfo.opcc.cucumber.helpers.AbstractStepDefHelper;
-
-import io.cucumber.spring.CucumberContextConfiguration;
 
 @CucumberContextConfiguration
 @SpringBootTest(

@@ -1,7 +1,8 @@
 package com.fininfo.saeopcc.shared.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,17 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -46,8 +42,6 @@ public class FundOrganism extends AbstractAuditingEntity implements Serializable
   @Column(name = "long_name")
   private String longName;
 
-
-
   @ManyToOne
   @JsonIgnoreProperties(value = "fundOrganisms", allowSetters = true)
   private FundManager fundManager;
@@ -66,8 +60,6 @@ public class FundOrganism extends AbstractAuditingEntity implements Serializable
     this.longName = longName;
     return this;
   }
-
- 
 
   public FundOrganism fundManager(FundManager fundManager) {
     this.fundManager = fundManager;

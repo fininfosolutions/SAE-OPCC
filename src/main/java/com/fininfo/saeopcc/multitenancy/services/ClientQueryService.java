@@ -1,16 +1,5 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fininfo.saeopcc.configuration.QueryService;
 import com.fininfo.saeopcc.multitenancy.domains.Client;
 import com.fininfo.saeopcc.multitenancy.domains.Client_;
@@ -18,8 +7,16 @@ import com.fininfo.saeopcc.multitenancy.repositories.ClientRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.ClientCriteria;
 import com.fininfo.saeopcc.multitenancy.services.dto.ClientDTO;
 import com.fininfo.saeopcc.shared.domains.Role_;
-
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service

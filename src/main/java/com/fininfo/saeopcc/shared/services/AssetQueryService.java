@@ -1,21 +1,5 @@
 package com.fininfo.saeopcc.shared.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.JoinType;
-
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fininfo.saeopcc.configuration.QueryService;
 import com.fininfo.saeopcc.shared.domains.Asset;
 import com.fininfo.saeopcc.shared.domains.Asset_;
@@ -31,6 +15,19 @@ import com.fininfo.saeopcc.shared.domains.SettlementType_;
 import com.fininfo.saeopcc.shared.repositories.AssetRepository;
 import com.fininfo.saeopcc.shared.services.dto.AssetCriteria;
 import com.fininfo.saeopcc.shared.services.dto.AssetDTO;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.JoinType;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service for executing complex queries for {@link Asset} entities in the database. The main input
@@ -294,7 +291,7 @@ public class AssetQueryService extends QueryService<Asset> {
                     criteria.getCentraliserId(),
                     root -> root.join(Asset_.centraliser, JoinType.LEFT).get(Centraliser_.id)));
       }
-     
+
       if (criteria.getLegalStatus() != null && specification != null) {
         specification =
             specification.and(buildSpecification(criteria.getLegalStatus(), Asset_.legalStatus));
@@ -306,7 +303,7 @@ public class AssetQueryService extends QueryService<Asset> {
                     criteria.getIssuerId(),
                     root -> root.join(Asset_.issuer, JoinType.LEFT).get(Issuer_.id)));
       }
-     
+
       if (criteria.getCsdId() != null && specification != null) {
         specification =
             specification.and(

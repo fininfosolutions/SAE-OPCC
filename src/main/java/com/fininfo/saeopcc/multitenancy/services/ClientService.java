@@ -1,13 +1,5 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.fininfo.saeopcc.multitenancy.domains.Client;
 import com.fininfo.saeopcc.multitenancy.repositories.ClientRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.ClientDTO;
@@ -16,8 +8,13 @@ import com.fininfo.saeopcc.shared.domains.Role;
 import com.fininfo.saeopcc.shared.repositories.AddressRepository;
 import com.fininfo.saeopcc.shared.repositories.RoleRepository;
 import com.fininfo.saeopcc.util.TenantContext;
-
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

@@ -1,18 +1,15 @@
 package com.fininfo.saeopcc.shared.domains;
 
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +24,6 @@ public class Issuer extends Role {
 
   @Column(name = "techAccount")
   private String techAccount;
-
 
   @Column(name = "client_segment")
   private String clientSegment;

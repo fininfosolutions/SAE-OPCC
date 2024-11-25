@@ -1,0 +1,62 @@
+databaseChangeLog:
+
+- changeSet:
+    id: flow
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: flow
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: flow_pkey
+        - column:
+            name: exception
+            type: VARCHAR(255)
+        - column:
+            name: exception_description
+            type: VARCHAR(255)
+        - column:
+            name: flow_status
+            type: VARCHAR(255)
+            constraints:
+              nullable: false 
+        - column:
+            name: total_record
+            type: INTEGER
+        - column:
+            name: sens
+            type: VARCHAR(255)
+            constraints:
+              nullable: false  
+        - column:
+            name: flow_date
+            type: DATE
+        - column:
+            name: nbre_of_valid_record
+            type: INTEGER
+        - column:
+            name: nbre_of_failed_record
+            type: INTEGER
+        - column:
+            name: file_type
+            type: VARCHAR(255)
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: last_modified_by
+            type: VARCHAR(255)
+        - column:
+            name: created_date
+            type: TIMESTAMP
+        - column:
+            name: last_modified_date
+            type: TIMESTAMP  
+      
+      
+                  

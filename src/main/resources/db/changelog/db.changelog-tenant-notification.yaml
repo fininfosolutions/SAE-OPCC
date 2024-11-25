@@ -1,0 +1,479 @@
+databaseChangeLog:
+- changeSet:
+    id: notification
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: notification
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: notification_pkey
+        - column:
+            name: market_type
+            type: VARCHAR(255)
+        - column:
+            name: sign
+            type: VARCHAR(255)
+        - column:
+            name: isin_code
+            type: VARCHAR(255)
+        - column:
+            name: security_description
+            type: VARCHAR(255)
+        - column:
+            name: seller
+            type: VARCHAR(255)
+        - column:
+            name: issuer
+            type: VARCHAR(255)
+        - column:
+            name: shareholder_reference
+            type: VARCHAR(255)
+        - column:
+            name: security_type
+            type: VARCHAR(255)
+        - column:
+            name: security_classification
+            type: VARCHAR(255)
+        - column:
+            name: transaction_type
+            type: VARCHAR(255)
+        - column:
+            name: transaction_number
+            type: VARCHAR(255)
+        - column:
+            name: contract_number
+            type: VARCHAR(255)
+        - column:
+            name: negociation_code
+            type: VARCHAR(255)
+        - column:
+            name: client_security_account
+            type: VARCHAR(255)
+        - column:
+            name: client_security_account_description
+            type: VARCHAR(255)
+        - column:
+            name: custodian
+            type: VARCHAR(255)
+        - column:
+            name: counterpart
+            type: VARCHAR(255)
+        - column:
+            name: client_name
+            type: VARCHAR(255)
+        - column:
+            name: client_identifier
+            type: VARCHAR(255)
+        - column:
+            name: broker_identifier
+            type: VARCHAR(255)
+        - column:
+            name: trade_date
+            type: DATE
+        - column:
+            name: settlement_date
+            type: DATE
+        - column:
+            name: value_date
+            type: DATE
+        - column:
+            name: return_date
+            type: DATE
+        - column:
+            name: maturity_date
+            type: DATE
+        - column:
+            name: end_date
+            type: DATE
+        - column:
+            name: validation_date
+            type: DATE
+        - column:
+            name: input_date
+            type: DATE
+        - column:
+            name: investment_day_number
+            type: INTEGER
+        - column:
+            name: maturity
+            type: DECIMAL(21, 2)
+        - column:
+            name: negociation_price
+            type: DECIMAL(21, 2)
+        - column:
+            name: ppc_negociation
+            type: DECIMAL(21, 2)
+        - column:
+            name: spread_negociation
+            type: DECIMAL(21, 2)
+        - column:
+            name: quantity
+            type: DECIMAL(21, 2)
+        - column:
+            name: provisional_share_number
+            type: DECIMAL(21, 2)
+        - column:
+            name: provisional_nav
+            type: DECIMAL(21, 2)
+        - column:
+            name: unit_price_nav_price
+            type: DECIMAL(21, 2)
+        - column:
+            name: repo_price
+            type: DECIMAL(21, 2)
+        - column:
+            name: repo_back_price
+            type: DECIMAL(21, 2)
+        - column:
+            name: provisional_amount
+            type: DECIMAL(21, 2)
+        - column:
+            name: repo_amount
+            type: DECIMAL(21, 2)
+        - column:
+            name: gross_amount
+            type: DECIMAL(21, 2)
+        - column:
+            name: interest
+            type: DECIMAL(21, 2)
+        - column:
+            name: vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: brokerage_commission
+            type: DECIMAL(21, 2)
+        - column:
+            name: total_fees
+            type: DECIMAL(21, 2)
+        - column:
+            name: net_amount
+            type: DECIMAL(21, 2)
+        - column:
+            name: net_amount_wht
+            type: DECIMAL(21, 2)
+        - column:
+            name: repo_back_amount_vat_excluded
+            type: DECIMAL(21, 2)
+        - column:
+            name: repo_back_amount_vat_included
+            type: DECIMAL(21, 2)
+        - column:
+            name: trade_currency
+            type: VARCHAR(255)
+        - column:
+            name: settlement_currency
+            type: VARCHAR(255)
+        - column:
+            name: notification_error
+            type: VARCHAR(255)
+        - column:
+            name: notification_error_description
+            type: VARCHAR(255)
+        - column:
+            name: notification_status
+            type: VARCHAR(50)
+        - column:
+            name: sens
+            type: VARCHAR(50)
+        - column:
+            name: sheet_config_id
+            type: BIGINT
+        - column:
+            name: operation_type
+            type: VARCHAR(255)
+        - column:
+            name: status
+            type: VARCHAR(255)
+        - column:
+            name: settlementplace
+            type: VARCHAR(255)
+        - column:
+            name: beneficiary_security_account
+            type: VARCHAR(255)
+        - column:
+            name: beneficiary_cash_account
+            type: VARCHAR(255)
+        - column:
+            name: currency_cash_account
+            type: VARCHAR(255)
+        - column:
+            name: nostro_security_account
+            type: VARCHAR(255)
+        - column:
+            name: nostro_cash_account
+            type: VARCHAR(255)
+        - column:
+            name: client_custodian_id
+            type: VARCHAR(255)
+        - column:
+            name: client_custodian_code
+            type: VARCHAR(255)
+        - column:
+            name: csd_id
+            type: VARCHAR(255)
+        - column:
+            name: csd_code
+            type: VARCHAR(255)
+        - column:
+            name: csd_description
+            type: VARCHAR(255)
+        - column:
+            name: beneficiary_id
+            type: VARCHAR(255)
+        - column:
+            name: beneficiary_code
+            type: VARCHAR(255)
+        - column:
+            name: benediciary_description
+            type: VARCHAR(255)
+        - column:
+            name: counter_part_code
+            type: VARCHAR(255)
+        - column:
+            name: counter_part_id
+            type: VARCHAR(255)
+        - column:
+            name: counter_part_custodian_id
+            type: VARCHAR(255)
+        - column:
+            name: counter_part_custodian_code
+            type: VARCHAR(255)
+        - column:
+            name: client_code
+            type: VARCHAR(255)
+        - column:
+            name: reference_rate
+            type: DECIMAL(21, 2)
+        - column:
+            name: coverage_rate
+            type: DECIMAL(21, 2)
+        - column:
+            name: base_point
+            type: DECIMAL(21, 2)
+        - column:
+            name: quantity_type
+            type: VARCHAR(255)
+        - column:
+            name: intereset_amount_gross
+            type: DECIMAL(21, 2)
+        - column:
+            name: intereset_amount_vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: tpprf
+            type: DECIMAL(21, 2)
+        - column:
+            name: broker_commission_vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: broker_commission_net
+            type: DECIMAL(21, 2)
+        - column:
+            name: stock_exchange_tax_gross
+            type: DECIMAL(21, 2)
+        - column:
+            name: stock_exchange_tax_vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: stock_exchange_tax_net
+            type: DECIMAL(21, 2)
+        - column:
+            name: settlement_amount
+            type: DECIMAL(21, 2)
+        - column:
+            name: settlement_fees_gross
+            type: DECIMAL(21, 2)
+        - column:
+            name: settlement_fees_vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: settlement_fees_net
+            type: DECIMAL(21, 2)
+        - column:
+            name: cash_account_currency_id
+            type: VARCHAR(255)
+        - column:
+            name: cash_account_currency
+            type: VARCHAR(255)
+        - column:
+            name: market_classification
+            type: VARCHAR(255)
+        - column:
+            name: market_structure
+            type: VARCHAR(255)
+        - column:
+            name: entry_or_exit_right_gross
+            type: DECIMAL(21, 2)
+        - column:
+            name: entry_or_exit_right_vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: entry_or_exit_right_net
+            type: DECIMAL(21, 2)
+        - column:
+            name: placement_network_commission_gross
+            type: DECIMAL(21, 2)
+        - column:
+            name: placement_network_commission_vat
+            type: DECIMAL(21, 2)
+        - column:
+            name: placement_network_commission_net
+            type: DECIMAL(21, 2)
+        - column:
+            name: subs_redemp_type
+            type: BOOLEAN
+        - column:
+            name: sett_part_client_id
+            type: BIGINT
+        - column:
+            name: sett_part_client_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_client_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_client_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_safe_keeping_id
+            type: BIGINT
+        - column:
+            name: sett_part_safekeeping_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_safekeeping_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_safekeeping_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_place_of_settlement_id
+            type: BIGINT
+        - column:
+            name: sett_part_place_of_settlement_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_place_of_settlement_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_place_of_settlement_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_rea_gid
+            type: BIGINT
+        - column:
+            name: sett_part_reag_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_reag_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_reag_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_deag_id
+            type: BIGINT
+        - column:
+            name: sett_part_deag_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_deag_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_deag_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_buyr_id
+            type: BIGINT
+        - column:
+            name: sett_part_buyr_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_buyr_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_buyr_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_sell_id
+            type: BIGINT
+        - column:
+            name: sett_part_sell_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_sell_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_sell_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_othr_prty_1_id
+            type: BIGINT
+        - column:
+            name: sett_part_othr_prty_1_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_othr_prty_1_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_othr_prty_1_property_code
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_othr_prty_2_id
+            type: BIGINT
+        - column:
+            name: sett_part_othr_prty_2_identifier
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_othr_prty_2_ds_schema
+            type: VARCHAR(255)
+        - column:
+            name: sett_part_othr_prty_2_property_code
+            type: VARCHAR(255)
+        - column:
+            name: negociation_rate
+            type: DECIMAL(21, 2)
+        - column:
+            name: client_provider_id
+            type: VARCHAR(255)
+        - column:
+            name: client_provider_code
+            type: VARCHAR(255)
+        - column:
+            name: client_provider_description
+            type: VARCHAR(255)
+        - column:
+            name: client_cash_account
+            type: VARCHAR(255)
+        - column:
+            name: client_cash_account_descr
+            type: VARCHAR(255)
+        - column:
+            name: counter_part_custodian_descrip
+            type: VARCHAR(255)
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: last_modified_by
+            type: VARCHAR(255)
+        - column:
+            name: created_date
+            type: TIMESTAMP
+        - column:
+            name: last_modified_date
+            type: TIMESTAMP
+        - column:
+            name: flow_id
+            type: BIGINT
+            constraints:
+              foreignKeyTable: flow
+              foreignKeyName: notification_flow_fkey
+              references: flow(id)
+       

@@ -1,23 +1,19 @@
 package com.fininfo.saeopcc.shared.domains;
 
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +31,4 @@ public class FundManager extends Role {
 
   @OneToMany(mappedBy = "fundManager", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private Set<FundOrganism> managedFunds = new HashSet<>();
-
- 
 }

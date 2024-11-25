@@ -8,9 +8,9 @@ import java.util.Objects;
 
 /**
  * Criteria class for the {@link com.backupswift.referentiel.domain.NostroAccount} entity. This
- * class is used in {@link com.fininfo.saeopcc.shared.controllers.NostroAccountResource} to receive all
- * the possible filtering options from the Http GET request parameters. For example the following
- * could be a valid request: {@code
+ * class is used in {@link com.fininfo.saeopcc.shared.controllers.NostroAccountResource} to receive
+ * all the possible filtering options from the Http GET request parameters. For example the
+ * following could be a valid request: {@code
  * /nostro-accounts?id.greaterThan=5&attr1.contains=something&attr2.specified=false} As Spring is
  * unable to properly convert the types, unless specific {@link Filter} class are used, we need to
  * use fix type specific filters.

@@ -1,0 +1,34 @@
+databaseChangeLog:
+
+- changeSet:
+    id: broker_entity_mapping
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: broker_entity_mapping
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: broker_entity_mapping_pkey
+        - column:
+            name: source_field
+            type: VARCHAR(255)
+        - column:
+            name: target_field
+            type: VARCHAR(255)
+        - column:
+            name: default_value
+            type: VARCHAR(255)
+        - column:
+            name: field_value_nature
+            type: VARCHAR(255)
+        - column:
+            name: input_excel_flow_id
+            type: BIGINT
+            constraints:
+              references: input_excel_flow(id)
+              foreignKeyName: input_excel_flow_fkey

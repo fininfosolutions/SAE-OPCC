@@ -7,8 +7,8 @@ import java.util.Objects;
 
 /**
  * Criteria class for the {@link com.backupswift.referentiel.domain.FiscalAuthority} entity. This
- * class is used in {@link com.fininfo.saeopcc.shared.controllers.FiscalAuthorityResource} to receive
- * all the possible filtering options from the Http GET request parameters. For example the
+ * class is used in {@link com.fininfo.saeopcc.shared.controllers.FiscalAuthorityResource} to
+ * receive all the possible filtering options from the Http GET request parameters. For example the
  * following could be a valid request: {@code
  * /fiscal-authorities?id.greaterThan=5&attr1.contains=something&attr2.specified=false} As Spring is
  * unable to properly convert the types, unless specific {@link Filter} class are used, we need to

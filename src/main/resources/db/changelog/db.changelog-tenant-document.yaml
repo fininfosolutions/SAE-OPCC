@@ -1,0 +1,57 @@
+databaseChangeLog:
+
+- changeSet:
+    id: document
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: document
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: document_pkey
+        - column:
+            name: title
+            type: VARCHAR(255)
+        - column:
+            name: mime_type
+            type: VARCHAR(255)
+        - column:
+            name: size
+            type: BIGINT
+        - column:
+            name: reference_notif
+            type: VARCHAR(255)
+            constraints:
+              unique: true 
+        - column:
+            name: content
+            type: oid
+        - column:
+            name: mur
+            type: BIGINT     
+        - column:
+            name: flow_id
+            type: BIGINT
+            constraints:
+              references: flow(id)
+              foreignKeyName: flow_fkey
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: last_modified_by
+            type: VARCHAR(255)
+        - column:
+            name: created_date
+            type: TIMESTAMP
+        - column:
+            name: last_modified_date
+            type: TIMESTAMP  
+      
+      
+                  

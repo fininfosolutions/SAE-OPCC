@@ -1,5 +1,6 @@
 package com.fininfo.saeopcc.aop.logging;
 
+import com.fininfo.saeopcc.configuration.ReferentielConstants;
 import java.util.Arrays;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-
-import com.fininfo.saeopcc.configuration.ReferentielConstants;
 
 /**
  * Aspect for logging execution of service and repository Spring components.

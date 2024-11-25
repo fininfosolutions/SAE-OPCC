@@ -1,8 +1,5 @@
 package com.fininfo.saeopcc.shared.services.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 import com.fininfo.saeopcc.shared.domains.enumeration.DayWeek;
 import com.fininfo.saeopcc.shared.domains.enumeration.FundCategory;
 import com.fininfo.saeopcc.shared.domains.enumeration.FundClassification;
@@ -13,7 +10,8 @@ import com.fininfo.saeopcc.shared.domains.enumeration.FundStatus;
 import com.fininfo.saeopcc.shared.domains.enumeration.FundType;
 import com.fininfo.saeopcc.shared.domains.enumeration.Periodicity;
 import com.fininfo.saeopcc.shared.domains.enumeration.UnitCategory;
-
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

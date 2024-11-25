@@ -1,7 +1,5 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
-import java.io.Serializable;
-
 import com.fininfo.saeopcc.configuration.BooleanFilter;
 import com.fininfo.saeopcc.configuration.Criteria;
 import com.fininfo.saeopcc.configuration.Filter;
@@ -10,7 +8,7 @@ import com.fininfo.saeopcc.configuration.LongFilter;
 import com.fininfo.saeopcc.configuration.StringFilter;
 import com.fininfo.saeopcc.shared.domains.enumeration.ClientType;
 import com.fininfo.saeopcc.shared.domains.enumeration.FiscalStatus;
-
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,12 +1,14 @@
 package com.fininfo.saeopcc.shared.services;
 
+import com.fininfo.saeopcc.shared.domains.Asset;
+import com.fininfo.saeopcc.shared.repositories.AssetRepository;
+import com.fininfo.saeopcc.shared.repositories.FundRepository;
+import com.fininfo.saeopcc.shared.services.dto.AssetDTO;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.fininfo.saeopcc.shared.domains.Asset;
-import com.fininfo.saeopcc.shared.repositories.AssetRepository;
-import com.fininfo.saeopcc.shared.repositories.FundRepository;
-import com.fininfo.saeopcc.shared.services.dto.AssetDTO;
 
 /** Service Implementation for managing {@link Asset}. */
 @Service
@@ -31,8 +28,6 @@ public class AssetService {
 
   // @Autowired(required = false)
   @Autowired private AssetRepository assetRepository;
-
- 
 
   @Autowired private FundRepository fundRepository;
 
@@ -132,6 +127,4 @@ public class AssetService {
 
     return !assetsByIsin.isEmpty() ? assetsByIsin.get(0) : null;
   }
-
-
 }

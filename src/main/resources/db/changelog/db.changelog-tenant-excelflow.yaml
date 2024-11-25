@@ -1,0 +1,18 @@
+databaseChangeLog:
+
+- changeSet:
+    id: excel_flow
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: excel_flow
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            constraints:
+              primaryKey: true
+              primaryKeyName: excel_flow_pkey
+        - column:
+            name: excel_content_type
+            type: VARCHAR(255)

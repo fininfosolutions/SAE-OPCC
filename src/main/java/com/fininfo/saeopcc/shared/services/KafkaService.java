@@ -83,7 +83,6 @@
 // import com.fininfo.saeopcc.shared.domains.enumeration.UnitCategory;
 // import com.fininfo.saeopcc.shared.domains.exceptionutils.MapperException;
 
-
 // @Service
 // public class KafkaService {
 
@@ -111,7 +110,7 @@
 //   private String contractproducerTopic;
 
 //   @Autowired private ClientService clientService;
- 
+
 //   @Autowired private CustodianService custodianService;
 
 //   @Autowired private FundService fundService;
@@ -119,7 +118,6 @@
 //   @Autowired private IssuerService issuerService;
 
 //   @Autowired private SDGService sdgService;
-  
 
 //   @Value("${kafkaTopics.valuationTopicFromOpccToConsumers}")
 //   private String valuationProducerTopic;
@@ -210,7 +208,8 @@
 
 //                 } else if (field.getType().equals(BigDecimal.class)) {
 
-//                   BigDecimal bigDecimalValue = (BigDecimal) decimalFormat().parse(value.toString());
+//                   BigDecimal bigDecimalValue = (BigDecimal)
+// decimalFormat().parse(value.toString());
 
 //                   field.set(entity, bigDecimalValue);
 
@@ -269,34 +268,40 @@
 //                       field.set(entity, SecurityFormValue);
 //                       break;
 //                   }
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof SocioProfessionalCategory) {
 
 //                   SocioProfessionalCategory s = new SocioProfessionalCategory();
 //                   s.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, s);
 
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof EconomicAgentCategory) {
 //                   EconomicAgentCategory e = new EconomicAgentCategory();
 //                   e.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, e);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Countries) {
 //                   Countries c = new Countries();
 //                   c.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, c);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof ResidenceStatus) {
 //                   ResidenceStatus c = new ResidenceStatus();
 //                   c.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, c);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof SecuritySector) {
 //                   SecuritySector c = new SecuritySector();
 //                   c.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, c);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof ClientCategory) {
 //                   ClientCategory c = new ClientCategory();
 //                   c.setId(((ObjectNode) value).get("id").longValue());
@@ -331,7 +336,8 @@
 
 //                 } else if (field.getType().equals(BigDecimal.class)) {
 
-//                   BigDecimal bigDecimalValue = (BigDecimal) decimalFormat().parse(value.toString());
+//                   BigDecimal bigDecimalValue = (BigDecimal)
+// decimalFormat().parse(value.toString());
 
 //                   field.set(entity, bigDecimalValue);
 
@@ -348,7 +354,7 @@
 //                   Boolean booleanValue = Boolean.valueOf(value.toString());
 
 //                   field.set(entity, booleanValue);
-//                 } 
+//                 }
 //                  else if (field.getType().isEnum() && entity instanceof Fund) {
 //                   switch (field.getName()) {
 //                     case "dayNAV":
@@ -427,53 +433,62 @@
 //                       break;
 //                   }
 //                 }
-//                   else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                   else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof FundOrganism) {
 
 //                   FundOrganism f = new FundOrganism();
 //                   f.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, f);
 
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof BusinessRiskCategory) {
 
 //                   BusinessRiskCategory f = new BusinessRiskCategory();
 //                   f.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, f);
 
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof FiscalNature) {
 
 //                   FiscalNature f = new FiscalNature();
 //                   f.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, f);
 
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof SecuritySector) {
 //                   SecuritySector s = new SecuritySector();
 //                   s.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, s);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Devise) {
 //                   Devise d = new Devise();
 //                   d.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, d);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Centraliser) {
 //                   Centraliser c = new Centraliser();
 //                   c.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, c);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Issuer) {
 //                   Issuer i = new Issuer();
 //                   i.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, i);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof SDG) {
 //                   SDG i = new SDG();
 //                   i.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, i);
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof CSD) {
 //                   CSD csd = new CSD();
 //                   csd.setId(((ObjectNode) value).get("id").longValue());
@@ -509,7 +524,8 @@
 
 //                 } else if (field.getType().equals(BigDecimal.class)) {
 
-//                   BigDecimal bigDecimalValue = (BigDecimal) decimalFormat().parse(value.toString());
+//                   BigDecimal bigDecimalValue = (BigDecimal)
+// decimalFormat().parse(value.toString());
 
 //                   field.set(entity, bigDecimalValue);
 
@@ -526,8 +542,8 @@
 //                   Boolean booleanValue = Boolean.valueOf(value.toString());
 
 //                   field.set(entity, booleanValue);
-//                 } 
-               
+//                 }
+
 //                 else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Custodian) {
 
@@ -535,14 +551,16 @@
 //                   c.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, c);
 
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Client) {
 
 //                   Client cl = new Client();
 //                   cl.setId(((ObjectNode) value).get("id").longValue());
 //                   field.set(entity, cl);
 
-//                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
+//                 } else if
+// (Class.forName(field.getType().getName()).getConstructor().newInstance()
 //                     instanceof Devise) {
 //                   Devise d = new Devise();
 //                   d.setId(((ObjectNode) value).get("id").longValue());
@@ -574,17 +592,16 @@
 
 //                 } else if (field.getType().equals(BigDecimal.class)) {
 
-//                   BigDecimal bigDecimalValue = (BigDecimal) decimalFormat().parse(value.toString());
+//                   BigDecimal bigDecimalValue = (BigDecimal)
+// decimalFormat().parse(value.toString());
 
 //                   field.set(entity, bigDecimalValue);
 
 //                 }
 //                  else if (field.getType().equals(LocalDate.class)) {
 //                   DateTimeFormatter dtf = null;
-                  
 
 //                     dtf = DateTimeFormatter.ofPattern(PATTERN_DATE);
-                  
 
 //                   LocalDate localDateValue = LocalDate.parse(value.toString(), dtf);
 
@@ -600,7 +617,7 @@
 //                   AddressTypes addressTypesValue = AddressTypes.valueOf(value.toString());
 
 //                   field.set(entity, addressTypesValue);
-//                 } 
+//                 }
 //                  else if (field.getType().isAssignableFrom(Asset.class)) {
 
 //                   Asset asset = new Asset();
@@ -614,7 +631,8 @@
 //           } catch (NoSuchFieldException e) {
 
 //             log.error(
-//                 "field {} not found in target entity {}", key, entity.getClass().getSimpleName());
+//                 "field {} not found in target entity {}", key,
+// entity.getClass().getSimpleName());
 
 //           } catch (Exception e) {
 //             throw new RuntimeException(e);
@@ -752,7 +770,6 @@
 //     }
 //   }
 
-  
 //   @KafkaListener(
 //       topics = "#{'${kafkaTopics.fundtopic}'}",
 //       groupId = "#{'${kafka.consumer.group.id}'}",
@@ -796,8 +813,6 @@
 //       log.error("ffffffff", updatedJson);
 //     }
 //   }
-
- 
 
 //   @KafkaListener(
 //       topics = "#{'${kafkaTopics.custodiantopicFromReferentielToConsumers}'}",

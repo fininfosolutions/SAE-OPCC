@@ -1,0 +1,28 @@
+databaseChangeLog:
+
+- changeSet:
+    id: flow_config
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: flow_config
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: flow_config_pkey
+        - column:
+            name: sens
+            type: VARCHAR(255)
+        - column:
+            name: flow_type
+            type: VARCHAR(255)
+        - column:
+            name: code
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)

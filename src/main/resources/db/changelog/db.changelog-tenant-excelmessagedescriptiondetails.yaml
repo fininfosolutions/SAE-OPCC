@@ -1,0 +1,40 @@
+databaseChangeLog:
+
+- changeSet:
+    id: excel_message_description_details
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: excel_message_description_details
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: excel_message_description_details_pkey
+        - column:
+            name: field_name
+            type: VARCHAR(255)
+        - column:
+            name: field_type
+            type: VARCHAR(255)
+        - column:
+            name: default_value
+            type: VARCHAR(255)
+        - column:
+            name: is_nullable
+            type: BOOLEAN
+        - column:
+            name: field_index
+            type: INTEGER
+        - column:
+            name: field_comment
+            type: VARCHAR(255)
+        - column:
+            name: input_excel_flow_id
+            type: BIGINT
+            constraints:
+              references: input_excel_flow(id)
+              foreignKeyName: input_excel_flow_fkey

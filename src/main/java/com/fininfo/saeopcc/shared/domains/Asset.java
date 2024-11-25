@@ -1,22 +1,5 @@
 package com.fininfo.saeopcc.shared.domains;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
 import com.fininfo.saeopcc.shared.domains.enumeration.AssetType;
@@ -28,11 +11,24 @@ import com.fininfo.saeopcc.shared.domains.enumeration.QuantityType;
 import com.fininfo.saeopcc.shared.domains.enumeration.QuotationPriceMode;
 import com.fininfo.saeopcc.shared.domains.enumeration.SecurityForm;
 import com.fininfo.saeopcc.shared.domains.enumeration.SettlementPlace;
-
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -194,13 +190,9 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
   @JsonIgnoreProperties(value = "assets", allowSetters = true)
   private Centraliser centraliser;
 
-  
-
   @ManyToOne
   @JsonIgnoreProperties(value = "assets", allowSetters = true)
   private Issuer issuer;
-
-  
 
   @ManyToOne
   @JsonIgnoreProperties(value = "assets", allowSetters = true)

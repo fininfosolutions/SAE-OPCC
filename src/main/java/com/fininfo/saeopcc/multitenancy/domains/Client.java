@@ -1,5 +1,15 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fininfo.saeopcc.shared.domains.ClientCategory;
+import com.fininfo.saeopcc.shared.domains.Countries;
+import com.fininfo.saeopcc.shared.domains.ResidenceStatus;
+import com.fininfo.saeopcc.shared.domains.Role;
+import com.fininfo.saeopcc.shared.domains.SecuritySector;
+import com.fininfo.saeopcc.shared.domains.enumeration.ClientType;
+import com.fininfo.saeopcc.shared.domains.enumeration.FiscalStatus;
+import com.fininfo.saeopcc.shared.domains.enumeration.JuridicalNature;
+import com.fininfo.saeopcc.shared.domains.enumeration.SecurityForm;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,18 +21,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fininfo.saeopcc.shared.domains.ClientCategory;
-import com.fininfo.saeopcc.shared.domains.Countries;
-import com.fininfo.saeopcc.shared.domains.ResidenceStatus;
-import com.fininfo.saeopcc.shared.domains.Role;
-import com.fininfo.saeopcc.shared.domains.SecuritySector;
-import com.fininfo.saeopcc.shared.domains.enumeration.ClientType;
-import com.fininfo.saeopcc.shared.domains.enumeration.FiscalStatus;
-import com.fininfo.saeopcc.shared.domains.enumeration.JuridicalNature;
-import com.fininfo.saeopcc.shared.domains.enumeration.SecurityForm;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

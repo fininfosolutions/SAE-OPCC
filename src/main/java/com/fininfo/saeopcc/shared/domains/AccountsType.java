@@ -1,23 +1,19 @@
 package com.fininfo.saeopcc.shared.domains;
 
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -40,6 +36,4 @@ public class AccountsType extends AbstractAuditingEntity implements Serializable
 
   @Column(name = "description")
   private String description;
-
-  
 }

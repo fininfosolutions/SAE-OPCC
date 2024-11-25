@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: subscription
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: subscription
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: subscription_pkey
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: transaction_type
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: maturity_date
+                  type: DATE
+                  constraints:
+                    nullable: true
+              - column:
+                  name: rate
+                  type: NUMERIC(21,2)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: amount
+                  type: NUMERIC(21,2)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: settlement_date
+                  type: DATE
+                  constraints:
+                    nullable: true
+              - column:
+                  name: custodian_id
+                  type: BIGINT
+                  constraints:
+                    references: public.custodian(id)
+                    foreignKeyName: custodian_fkey
+              - column:
+                  name: shareholder_id
+                  type: BIGINT
+                  constraints:
+                    references: shareholder(id)
+                    foreignKeyName: shareholder_fkey
+              - column:
+                  name: origin
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP
+              - column:
+                  name: message
+                  type: TEXT
+              - column:
+                  name: ecart
+                  type: BOOLEAN

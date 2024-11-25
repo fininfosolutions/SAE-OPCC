@@ -1,0 +1,37 @@
+databaseChangeLog:
+
+- changeSet:
+    id: input_excel_flow
+    author: fininfo
+    changes:
+    - createTable:
+        tableName: input_excel_flow
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: input_excel_flow_pkey
+        - column:
+            name: sheet_name
+            type: VARCHAR(255)
+        - column:
+            name: header_position
+            type: INTEGER
+        - column:
+            name: first_column_position
+            type: INTEGER
+        - column:
+            name: last_column_position
+            type: INTEGER
+        - column:
+            name: content_start_position
+            type: INTEGER
+        - column:
+            name: excel_flow_id
+            type: BIGINT
+            constraints:
+              references: excel_flow(id)
+              foreignKeyName: excel_flow_fkey

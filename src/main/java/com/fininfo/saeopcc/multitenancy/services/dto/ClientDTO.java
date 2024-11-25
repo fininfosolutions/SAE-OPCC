@@ -5,7 +5,6 @@ import com.fininfo.saeopcc.shared.domains.enumeration.FiscalStatus;
 import com.fininfo.saeopcc.shared.domains.enumeration.JuridicalNature;
 import com.fininfo.saeopcc.shared.domains.enumeration.SecurityForm;
 import com.fininfo.saeopcc.shared.services.dto.RoleDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
