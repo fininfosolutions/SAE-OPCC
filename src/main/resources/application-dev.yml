@@ -30,6 +30,7 @@ kafkaTopics:
   clientFromReferentielToConsumers: clientFromReferentielToConsumers
   custodiantopicFromReferentielToConsumers: custodiantopicFromReferentielToConsumers
   fundtopic: fundtopic
+  compartementtopicFromReferentielToConsumers: compartementtopicFromReferentielToConsumers
 
  
 

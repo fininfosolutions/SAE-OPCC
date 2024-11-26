@@ -29,10 +29,10 @@ spring:
             client-id: sae
         provider:
           oidc:
-            issuer-uri: http://localhost:9080/realms/sae
+            issuer-uri: http://localhost:9080/auth/realms/sae
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9080/realms/sae
+          issuer-uri: http://localhost:9080/auth/realms/sae
         multitenant:
           enabled: true
           resolve-mode: jwt
