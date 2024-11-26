@@ -1,18 +1,32 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
-import com.fininfo.saeopcc.shared.domains.Devise;
-import com.fininfo.saeopcc.shared.domains.Fund;
-import com.fininfo.saeopcc.shared.domains.enumeration.ShareClass;
-import com.fininfo.saeopcc.shared.domains.enumeration.ShareForm;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.fininfo.saeopcc.shared.domains.Devise;
+import com.fininfo.saeopcc.shared.domains.Fund;
+import com.fininfo.saeopcc.shared.domains.IssueAccount;
+import com.fininfo.saeopcc.shared.domains.enumeration.ShareClass;
+import com.fininfo.saeopcc.shared.domains.enumeration.ShareForm;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -97,4 +111,5 @@ public class Compartement {
   @ManyToOne private Client client;
 
   @OneToOne private Fund fund;
+  @OneToOne private IssueAccount issueAccount;
 }
