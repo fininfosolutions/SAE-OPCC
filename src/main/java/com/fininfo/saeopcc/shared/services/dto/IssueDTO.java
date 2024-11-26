@@ -1,7 +1,8 @@
 package com.fininfo.saeopcc.shared.services.dto;
 
+import com.fininfo.saeopcc.multitenancy.domains.Subscription;
 import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
-
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,9 +16,6 @@ import lombok.NoArgsConstructor;
 public class IssueDTO {
   private Long id;
   private Integer currentStep;
-  private Long subscriptionId;
-  private String subscriptionReference;
   private IssueStatus issueStatus;
-  
-
+  Set<Subscription> subscriptions;
 }

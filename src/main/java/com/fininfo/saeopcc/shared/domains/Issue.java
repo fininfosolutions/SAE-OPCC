@@ -1,28 +1,29 @@
 package com.fininfo.saeopcc.shared.domains;
 
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
+import com.fininfo.saeopcc.multitenancy.domains.Subscription;
+import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
 import java.io.Serializable;
-
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-import com.fininfo.saeopcc.multitenancy.domains.Subscription;
-import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @NoArgsConstructor
@@ -47,6 +48,9 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
   @Column(name = "status")
   private IssueStatus issueStatus;
 
-  @OneToMany Subscription subscription;
-
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue", cascade = CascadeType.ALL)
+  @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private Set<Subscription> subscriptions = new HashSet<>();
 }

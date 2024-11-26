@@ -1,9 +1,15 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirection;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
+import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
+import com.fininfo.saeopcc.shared.domains.Custodian;
+import com.fininfo.saeopcc.shared.domains.Issue;
+import com.fininfo.saeopcc.shared.domains.enumeration.TransactionType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,15 +19,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirection;
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
-import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
-import com.fininfo.saeopcc.shared.domains.Custodian;
-import com.fininfo.saeopcc.shared.domains.Issue;
-import com.fininfo.saeopcc.shared.domains.enumeration.TransactionType;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -82,5 +79,6 @@ public class Subscription extends AbstractAuditingEntity implements Serializable
   @ManyToOne private Custodian custodian;
 
   @ManyToOne private Shareholder shareholder;
-  @ManyToOne private Issue issue;
+
+  @ManyToOne @EqualsAndHashCode.Exclude private Issue issue;
 }
