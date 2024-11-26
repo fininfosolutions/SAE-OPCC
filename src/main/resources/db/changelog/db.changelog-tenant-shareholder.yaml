@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: shareholder
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: shareholder
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: shareholder_pkey

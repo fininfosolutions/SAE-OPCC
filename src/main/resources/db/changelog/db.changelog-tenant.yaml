@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-client.yaml  
   - include:
       file: db/changelog/db.changelog-tenant-compartement.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-shareholder.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-subscription.yaml
