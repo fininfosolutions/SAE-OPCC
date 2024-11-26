@@ -1,0 +1,43 @@
+package com.fininfo.saeopcc.shared.domains;
+
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
+import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuppressWarnings("squid:S2160")
+@EqualsAndHashCode(callSuper = false)
+@Entity
+@Table(name = "issue", schema = CurrentTenantResolver.DEFAULT_SCHEMA)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Issue extends AbstractAuditingEntity implements Serializable {
+  private static final long serialVersionUID = 1L;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+
+  @Column(name = "current_step")
+  private Integer currentStep;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status")
+  private IssueStatus issueStatus;
+}

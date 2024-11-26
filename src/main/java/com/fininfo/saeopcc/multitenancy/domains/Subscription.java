@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirection;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import com.fininfo.saeopcc.shared.domains.Custodian;
@@ -69,6 +70,10 @@ public class Subscription extends AbstractAuditingEntity implements Serializable
   @Enumerated(EnumType.STRING)
   @Column(name = "origin")
   private Origin origin;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "direction")
+  private SubscriptionDirection subscriptionDirection;
 
   @ManyToOne private Custodian custodian;
 

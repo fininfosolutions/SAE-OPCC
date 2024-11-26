@@ -22,38 +22,27 @@ databaseChangeLog:
               - column:
                   name: transaction_type
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: quantity
                   type: INTEGER
-                  constraints:
-                    nullable: false
               - column:
                   name: maturity_date
                   type: DATE
-                  constraints:
-                    nullable: true
               - column:
                   name: rate
                   type: NUMERIC(21,2)
-                  constraints:
-                    nullable: true
               - column:
                   name: amount
                   type: NUMERIC(21,2)
-                  constraints:
-                    nullable: true
               - column:
                   name: status
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: true
+              - column:
+                  name: subscriptionDirection
+                  type: VARCHAR(255)
               - column:
                   name: settlement_date
                   type: DATE
-                  constraints:
-                    nullable: true
               - column:
                   name: custodian_id
                   type: BIGINT
