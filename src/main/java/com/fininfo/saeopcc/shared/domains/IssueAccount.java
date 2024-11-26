@@ -1,9 +1,9 @@
 package com.fininfo.saeopcc.shared.domains;
 
+import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,9 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,6 +63,4 @@ public class IssueAccount extends AbstractAuditingEntity implements Serializable
   private String reference;
 
   @OneToOne private Issue issue;
-
-  
 }
