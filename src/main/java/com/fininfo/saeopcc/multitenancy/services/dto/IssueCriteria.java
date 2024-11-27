@@ -1,4 +1,4 @@
-package com.fininfo.saeopcc.shared.services.dto;
+package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.configuration.Criteria;
 import com.fininfo.saeopcc.configuration.IntegerFilter;

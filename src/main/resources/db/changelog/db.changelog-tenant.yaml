@@ -6,4 +6,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/db.changelog-tenant-shareholder.yaml
   - include:
+      file: db/changelog/db.changelog-tenant-issueaccount.yaml      
+  - include:
+      file: db/changelog/db.changelog-tenant-issue.yaml      
+  - include:
       file: db/changelog/db.changelog-tenant-subscription.yaml

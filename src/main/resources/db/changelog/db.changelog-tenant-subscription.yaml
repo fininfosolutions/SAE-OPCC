@@ -53,7 +53,7 @@ databaseChangeLog:
                   name: issue_id
                   type: BIGINT
                   constraints:
-                    references: public.issue(id)
+                    references: issue(id)
                     foreignKeyName: issue_fkey
               - column:
                   name: shareholder_id

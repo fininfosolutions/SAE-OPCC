@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: issue
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: issue
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: issue_pkey
+              - column:
+                  name: current_step
+                  type: INTEGER
+              - column:
+                  name: issue_status
+                  type: VARCHAR(50)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP

@@ -5,7 +5,6 @@ import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirectio
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import com.fininfo.saeopcc.shared.domains.Custodian;
-import com.fininfo.saeopcc.shared.domains.Issue;
 import com.fininfo.saeopcc.shared.domains.enumeration.TransactionType;
 import java.io.Serializable;
 import java.math.BigDecimal;

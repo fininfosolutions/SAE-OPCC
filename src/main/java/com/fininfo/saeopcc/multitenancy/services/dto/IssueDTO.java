@@ -1,4 +1,4 @@
-package com.fininfo.saeopcc.shared.services.dto;
+package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.multitenancy.domains.Subscription;
 import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
