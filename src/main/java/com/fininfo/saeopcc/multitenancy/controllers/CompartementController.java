@@ -38,6 +38,18 @@ public class CompartementController {
     return ResponseEntity.ok().headers(headers).body(page.getContent());
   }
 
+  @GetMapping("/compartements/without-issue")
+  public ResponseEntity<List<CompartementDTO>> getAllCompartementswithoutissue(
+      CompartementCriteria criteria, Pageable pageable) {
+    log.debug("REST request to get Compartements without Issue by criteria: {}", criteria);
+    Page<CompartementDTO> page =
+        compartementqueryservice.findCompartementsWithoutIssue(criteria, pageable);
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
+  }
+
   @GetMapping("compatements/{id}")
   public CompartementDTO getbyId(@PathVariable("id") Long id) {
     return compartementService.getOne(id);

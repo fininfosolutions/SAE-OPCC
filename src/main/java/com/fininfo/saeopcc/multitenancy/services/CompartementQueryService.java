@@ -3,9 +3,11 @@ package com.fininfo.saeopcc.multitenancy.services;
 import com.fininfo.saeopcc.configuration.QueryService;
 import com.fininfo.saeopcc.multitenancy.domains.Compartement;
 import com.fininfo.saeopcc.multitenancy.domains.Compartement_;
+import com.fininfo.saeopcc.multitenancy.domains.Issue;
 import com.fininfo.saeopcc.multitenancy.domains.IssueAccount;
 import com.fininfo.saeopcc.multitenancy.repositories.CompartementRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueAccountRepository;
+import com.fininfo.saeopcc.multitenancy.repositories.IssueRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.CompartementCriteria;
 import com.fininfo.saeopcc.multitenancy.services.dto.CompartementDTO;
 import com.fininfo.saeopcc.shared.domains.Fund_;
@@ -28,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompartementQueryService extends QueryService<Compartement> {
   @Autowired private CompartementRepository compartementRepository;
   @Autowired private IssueAccountRepository issueAccountRepository;
+  @Autowired private IssueRepository issueRepository;
+
   @Autowired private ModelMapper modelMapper;
 
   @Transactional(readOnly = true)
@@ -46,6 +50,36 @@ public class CompartementQueryService extends QueryService<Compartement> {
     List<CompartementDTO> filteredList =
         page.getContent().stream()
             .filter(compartement -> !compartimentIds.contains(compartement.getId()))
+            .map(compartement -> modelMapper.map(compartement, CompartementDTO.class))
+            .collect(Collectors.toList());
+
+    return new PageImpl<>(filteredList, pageable, filteredList.size());
+  }
+
+  @Transactional(readOnly = true)
+  public Page<CompartementDTO> findCompartementsWithoutIssue(
+      CompartementCriteria criteria, Pageable pageable) {
+
+    Specification<Compartement> specification = createSpecification(criteria);
+
+    List<Long> linkedIssueAccountIds =
+        issueRepository.findAll().stream()
+            .map(Issue::getIssueAccount)
+            .map(IssueAccount::getId)
+            .collect(Collectors.toList());
+
+    List<Long> linkedCompartementIds =
+        issueAccountRepository.findAll().stream()
+            .filter(issueAccount -> linkedIssueAccountIds.contains(issueAccount.getId()))
+            .map(IssueAccount::getCompartement)
+            .map(Compartement::getId)
+            .collect(Collectors.toList());
+
+    Page<Compartement> page = compartementRepository.findAll(specification, pageable);
+
+    List<CompartementDTO> filteredList =
+        page.getContent().stream()
+            .filter(compartement -> !linkedCompartementIds.contains(compartement.getId()))
             .map(compartement -> modelMapper.map(compartement, CompartementDTO.class))
             .collect(Collectors.toList());
 
