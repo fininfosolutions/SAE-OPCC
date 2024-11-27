@@ -48,8 +48,7 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
   @Column(name = "issue_status")
   private IssueStatus issueStatus;
 
-    @OneToOne private IssueAccount issueAccount;
-
+  @OneToOne private IssueAccount issueAccount;
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue", cascade = CascadeType.ALL)
   @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

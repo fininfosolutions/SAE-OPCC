@@ -45,5 +45,6 @@ public class CompartementDTO {
   private String clientDescription;
   private Long fundId;
   private String fundIsin;
+  private String fundCode;
   private String fundSdgDescription;
 }
