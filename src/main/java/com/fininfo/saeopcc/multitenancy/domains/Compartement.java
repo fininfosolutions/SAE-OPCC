@@ -2,7 +2,6 @@ package com.fininfo.saeopcc.multitenancy.domains;
 
 import com.fininfo.saeopcc.shared.domains.Devise;
 import com.fininfo.saeopcc.shared.domains.Fund;
-import com.fininfo.saeopcc.shared.domains.IssueAccount;
 import com.fininfo.saeopcc.shared.domains.enumeration.ShareClass;
 import com.fininfo.saeopcc.shared.domains.enumeration.ShareForm;
 import java.math.BigDecimal;
@@ -107,5 +106,4 @@ public class Compartement {
   @ManyToOne private Client client;
 
   @OneToOne private Fund fund;
-  @OneToOne private IssueAccount issueAccount;
 }

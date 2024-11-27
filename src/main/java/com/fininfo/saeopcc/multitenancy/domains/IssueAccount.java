@@ -1,6 +1,6 @@
-package com.fininfo.saeopcc.shared.domains;
+package com.fininfo.saeopcc.multitenancy.domains;
 
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
+import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "issue_account", schema = CurrentTenantResolver.DEFAULT_SCHEMA)
+@Table(name = "issue_account")
 @SuppressWarnings("squid:S2160")
 @EqualsAndHashCode(callSuper = false)
 public class IssueAccount extends AbstractAuditingEntity implements Serializable {
@@ -55,6 +55,12 @@ public class IssueAccount extends AbstractAuditingEntity implements Serializable
   @Column(name = "securities_quantity")
   private BigDecimal securitiesquantity;
 
+  @Column(name = "amount")
+  private BigDecimal amount;
+
+  @Column(name = "price")
+  private BigDecimal price;
+
   @Column(name = "actif")
   private Boolean actif;
 
@@ -62,5 +68,5 @@ public class IssueAccount extends AbstractAuditingEntity implements Serializable
   @Column(name = "reference", unique = true)
   private String reference;
 
-  @OneToOne private Issue issue;
+  @OneToOne private Compartement compartement;
 }

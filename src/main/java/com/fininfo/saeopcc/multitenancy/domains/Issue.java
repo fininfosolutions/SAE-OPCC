@@ -1,7 +1,6 @@
-package com.fininfo.saeopcc.shared.domains;
+package com.fininfo.saeopcc.multitenancy.domains;
 
-import com.fininfo.saeopcc.config.multitenant.CurrentTenantResolver;
-import com.fininfo.saeopcc.multitenancy.domains.Subscription;
+import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -31,7 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @SuppressWarnings("squid:S2160")
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "issue", schema = CurrentTenantResolver.DEFAULT_SCHEMA)
+@Table(name = "issue")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Issue extends AbstractAuditingEntity implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -45,12 +44,12 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
   private Integer currentStep;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "status")
+  @Column(name = "issue_status")
   private IssueStatus issueStatus;
 
-  // @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue", cascade = CascadeType.ALL)
-  // @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-  // @EqualsAndHashCode.Exclude
-  // @ToString.Exclude
-  // private Set<Subscription> subscriptions = new HashSet<>();
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue", cascade = CascadeType.ALL)
+  @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private Set<Subscription> subscriptions = new HashSet<>();
 }
