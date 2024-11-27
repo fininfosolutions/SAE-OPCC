@@ -30,3 +30,9 @@ databaseChangeLog:
               - column:
                   name: last_modified_date
                   type: TIMESTAMP
+              - column:
+                  name: issue_account_id
+                  type: BIGINT
+                  constraints:
+                    references: issue_account(id)
+                    foreignKeyName: fk_issue_account
