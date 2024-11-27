@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,6 +47,9 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
   @Enumerated(EnumType.STRING)
   @Column(name = "issue_status")
   private IssueStatus issueStatus;
+
+    @OneToOne private IssueAccount issueAccount;
+
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue", cascade = CascadeType.ALL)
   @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
