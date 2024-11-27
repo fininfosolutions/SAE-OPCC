@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface IssueAccountRepository
-    extends JpaRepository<IssueAccount, Long>, JpaSpecificationExecutor<IssueAccount> {
-
-}
+    extends JpaRepository<IssueAccount, Long>, JpaSpecificationExecutor<IssueAccount> {}
