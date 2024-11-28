@@ -3,13 +3,17 @@ package com.fininfo.saeopcc.multitenancy.domains;
 import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -43,6 +47,10 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
   private IssueStatus issueStatus;
 
   @OneToOne private IssueAccount issueAccount;
+
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
+  @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+  private Set<Subscription> subscriptions = new HashSet<>();
 
   // @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue", cascade = CascadeType.ALL)
   // @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

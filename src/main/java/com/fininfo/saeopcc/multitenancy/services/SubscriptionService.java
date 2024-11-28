@@ -215,4 +215,12 @@ public class SubscriptionService {
         .findById(id)
         .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class));
   }
+
+  @Transactional(readOnly = true)
+  public List<SubscriptionDTO> findSubscriptionsbyIssue(Long id) {
+    log.debug("Request to get Subscriptions by issueId : {}", id);
+    return subscriptionRepository.findByIssue_id(id).stream()
+        .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
+        .collect(Collectors.toList());
+  }
 }
