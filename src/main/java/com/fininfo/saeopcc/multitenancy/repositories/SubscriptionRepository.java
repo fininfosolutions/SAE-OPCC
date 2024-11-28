@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.repositories;
 
 import com.fininfo.saeopcc.multitenancy.domains.Subscription;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,5 @@ public interface SubscriptionRepository
   // List<Subscription> findByAsset_idAndStatus(Long assetId, SubscriptionStatus
   // subscriptionStatus);
 
-  // List<Subscription> findByAsset_id(Long assetId);
+  List<Subscription> findByIssue_id(Long issueId);
 }

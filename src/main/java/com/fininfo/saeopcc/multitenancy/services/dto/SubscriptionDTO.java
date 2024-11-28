@@ -52,7 +52,7 @@ public class SubscriptionDTO implements Serializable {
   private Long counterpartId;
 
   private Long shareholderId;
-
+  private Long issueId;
   private String shareholderReference;
   private String shareholderDescription;
   private Origin origin;
