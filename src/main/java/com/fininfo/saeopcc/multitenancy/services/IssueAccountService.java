@@ -29,4 +29,10 @@ public class IssueAccountService {
         .findById(id)
         .map(issueAccount -> modelMapper.map(issueAccount, IssueAccountDTO.class));
   }
+
+  public Optional<IssueAccountDTO> findOneByCompartementId(Long id) {
+    return issueAccountDTORepository
+        .findByCompartement_Id(id)
+        .map(issueAccount -> modelMapper.map(issueAccount, IssueAccountDTO.class));
+  }
 }
