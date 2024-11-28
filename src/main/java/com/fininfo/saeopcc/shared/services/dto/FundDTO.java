@@ -94,4 +94,5 @@ public class FundDTO extends AssetDTO {
   private FundGuarantee fundGuarantee;
   private FundStatus fundStatus;
   private FundForm fundForm;
+  private String fundSdgDescription;
 }

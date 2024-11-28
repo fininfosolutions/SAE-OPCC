@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: issue_report
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: issue_report
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: issue_report_pkey
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP
+              - column:
+                  name: issue_account_id
+                  type: BIGINT
+                  constraints:
+                    references: issue_account(id)
+                    foreignKeyName: fk_issue_report_issue_account

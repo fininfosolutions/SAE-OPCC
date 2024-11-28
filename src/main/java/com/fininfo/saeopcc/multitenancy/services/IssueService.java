@@ -1,0 +1,33 @@
+package com.fininfo.saeopcc.multitenancy.services;
+
+import com.fininfo.saeopcc.multitenancy.domains.Issue;
+import com.fininfo.saeopcc.multitenancy.repositories.IssueRepository;
+import com.fininfo.saeopcc.multitenancy.services.dto.IssueDTO;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class IssueService {
+  @Autowired IssueRepository issueRepository;
+  @Autowired ModelMapper modelMapper;
+
+  @Transactional(readOnly = true)
+  public Page<IssueDTO> getAllIssues(Pageable pageable) {
+    Page<Issue> page = issueRepository.findAll(pageable);
+    return page.map(issue -> modelMapper.map(issue, IssueDTO.class));
+  }
+
+  public IssueDTO save(IssueDTO issueDTO) {
+    Issue issue = modelMapper.map(issueDTO, Issue.class);
+    issue = issueRepository.save(issue);
+    return modelMapper.map(issue, IssueDTO.class);
+  }
+
+  public long countTotalIssues() {
+    return issueRepository.count();
+  }
+}

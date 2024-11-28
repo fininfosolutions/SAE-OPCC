@@ -3,7 +3,6 @@ package com.fininfo.saeopcc.multitenancy.services.dto;
 import com.fininfo.saeopcc.configuration.Criteria;
 import com.fininfo.saeopcc.configuration.IntegerFilter;
 import com.fininfo.saeopcc.configuration.LongFilter;
-import com.fininfo.saeopcc.configuration.StringFilter;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +13,6 @@ public class IssueCriteria implements Serializable, Criteria {
 
   private LongFilter id;
   private IntegerFilter currentStep;
-  private LongFilter assetId;
-  private StringFilter assetIsin;
-  private StringFilter assetCode;
-  private StringFilter assetDescription;
 
   public IssueCriteria(IssueCriteria other) {
     this.id = other.id == null ? null : other.id.copy();

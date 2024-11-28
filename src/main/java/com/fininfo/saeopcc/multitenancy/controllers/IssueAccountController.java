@@ -107,4 +107,12 @@ public class IssueAccountController {
     log.debug("REST request to count Bonds by criteria: {}", criteria);
     return ResponseEntity.ok().body(issueAccountQueryService.countByCriteria(criteria));
   }
+
+  @GetMapping("/issueaccounts/compartement/{id}")
+  public ResponseEntity<IssueAccountDTO> getIssueAccountByCompartement(@PathVariable Long id) {
+    log.debug("REST request to get Bond : {}", id);
+    Optional<IssueAccountDTO> issueAccountDTODTO =
+        issueAccountDTOService.findOneByCompartementId(id);
+    return ResponseUtil.wrapOrNotFound(issueAccountDTODTO);
+  }
 }

@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-issue.yaml      
   - include:
       file: db/changelog/db.changelog-tenant-subscription.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-issueReport.yaml
