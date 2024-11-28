@@ -4,5 +4,6 @@ package com.fininfo.saeopcc.shared.domains.enumeration;
 public enum TransactionType {
   MIXED,
   GOODS,
-  CASH
+  CASH,
+  SELL
 }

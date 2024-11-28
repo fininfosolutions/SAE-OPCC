@@ -1,6 +1,8 @@
 package com.fininfo.saeopcc.multitenancy.repositories;
 
 import com.fininfo.saeopcc.multitenancy.domains.Issue;
+import com.fininfo.saeopcc.multitenancy.domains.IssueAccount;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -8,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface IssueRepository
-    extends JpaRepository<Issue, Long>, JpaSpecificationExecutor<Issue> {}
+    extends JpaRepository<Issue, Long>, JpaSpecificationExecutor<Issue> {
+  Optional<Issue> findByIssueAccount(IssueAccount issueAccount);
+}
