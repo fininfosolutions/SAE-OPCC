@@ -1,9 +1,12 @@
 package com.fininfo.saeopcc.multitenancy.domains.flow;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SwiftTagFieldValueNatureList;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,6 +41,10 @@ public class BrokerEntityMapping implements Serializable {
 
   @Column(name = "default_value")
   private String defaultValue;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "field_value_nature")
+  private SwiftTagFieldValueNatureList fieldValueNature;
 
   @ManyToOne
   @JsonIgnoreProperties(value = "brokerEntityMappings", allowSetters = true)

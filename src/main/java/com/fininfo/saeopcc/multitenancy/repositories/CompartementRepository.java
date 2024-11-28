@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.repositories;
 
 import com.fininfo.saeopcc.multitenancy.domains.Compartement;
+import com.fininfo.saeopcc.shared.domains.Fund;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,6 @@ public interface CompartementRepository
       Specification<Compartement> specification, Pageable pageable);
 
   Optional<Compartement> findByFund_Id(Long id);
+
+  Optional<Compartement> findByFund(Fund fund);
 }

@@ -1,0 +1,16 @@
+databaseChangeLog:
+
+- changeSet:
+    id: document_table
+    author: fininfo
+    changes:
+    - addColumn:
+        tableName: document
+        columns:
+        - column:
+            name: document_type
+            type: VARCHAR(255)
+        - column:
+            name: imported
+            type: BOOLEAN
+       

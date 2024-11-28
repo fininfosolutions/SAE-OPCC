@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirection;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.shared.domains.enumeration.TransactionType;
 import java.io.Serializable;
@@ -40,6 +41,7 @@ public class SubscriptionDTO implements Serializable {
   private String counterpartReference;
   private String counterpartDescription;
   private String counterpartExternalReference;
+  private SubscriptionDirection subscriptionDirection;
 
   private Long custodianId;
 

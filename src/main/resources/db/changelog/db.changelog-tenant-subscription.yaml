@@ -38,7 +38,7 @@ databaseChangeLog:
                   name: status
                   type: VARCHAR(255)
               - column:
-                  name: subscriptionDirection
+                  name: subscription_direction
                   type: VARCHAR(255)
               - column:
                   name: settlement_date

@@ -72,7 +72,7 @@ public class Subscription extends AbstractAuditingEntity implements Serializable
   private Origin origin;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "direction")
+  @Column(name = "subscription_direction")
   private SubscriptionDirection subscriptionDirection;
 
   @ManyToOne private Custodian custodian;

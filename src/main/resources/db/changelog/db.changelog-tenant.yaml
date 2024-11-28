@@ -12,4 +12,24 @@ databaseChangeLog:
   - include:
       file: db/changelog/db.changelog-tenant-subscription.yaml
   - include:
+      file: db/changelog/db.changelog-tenant-flowconfig.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-excelflow.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-inputexcelflow.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-brokerentitymapping.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-excelmessagedescriptiondetails.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-flow.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-document.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-notification.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-notificationerror.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-documentV1.yaml
+  - include:
       file: db/changelog/db.changelog-tenant-issueReport.yaml
