@@ -32,6 +32,9 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -187,25 +190,37 @@ public class SubscriptionService {
     return subscriptionDTOs;
   }
 
-  //   @Transactional
-  //   public SubscriptionDTO save(SubscriptionDTO subscriptionDTO) {
-  //     Subscription subscription = modelMapper.map(subscriptionDTO, Subscription.class);
-  //     subscription = subscriptionRepository.save(subscription);
-  //     if (subscription.getId() != null) {
-  //       subscription.setReference(createGlobalReference(SAE_PREFIX + subscription.getId()));
-  //       subscription.setStatus(SubscriptionStatus.PREVALIDATED);
-  //       subscription = subscriptionRepository.save(subscription);
-  //     }
-  //     SubscriptionDTO subDTO = modelMapper.map(subscription, SubscriptionDTO.class);
-  //     subDTO.setAssetIsin(subscriptionDTO.getAssetIsin());
-  //     subDTO.setShareholderReference(subscriptionDTO.getShareholderReference());
+  public SubscriptionDTO save(SubscriptionDTO subscriptionDTO) {
+    Subscription subscription = modelMapper.map(subscriptionDTO, Subscription.class);
+    subscription = subscriptionRepository.save(subscription);
+    if (subscription.getId() != null) {
+      subscription.setReference(createGlobalReference(SAE_PREFIX + subscription.getId()));
+      subscription.setStatus(SubscriptionStatus.PREVALIDATED);
+      subscription = subscriptionRepository.save(subscription);
+    }
+    SubscriptionDTO subDTO = modelMapper.map(subscription, SubscriptionDTO.class);
+    subDTO.setShareholderReference(subscriptionDTO.getShareholderReference());
 
-  //     return subDTO;
-  //   }
+    return subDTO;
+  }
 
   private String createGlobalReference(String reference) {
     String aditionaleZeros = "0".repeat(16 - reference.length());
     return reference.replace("SAE", "SAE".concat(aditionaleZeros));
+  }
+
+  public Page<SubscriptionDTO> getSubscriptionsByIssue(Long issueId, Pageable pageable) {
+    Optional<Issue> issueOpt = issueRepository.findById(issueId);
+    if (issueOpt.isPresent()) {
+      Page<Subscription> page = subscriptionRepository.findByIssue_id(issueId, pageable);
+      return page.map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class));
+    } else {
+      return new PageImpl<>(new ArrayList<>());
+    }
+  }
+
+  public long countSubscriptionsByIssue(Long issueId) {
+    return subscriptionRepository.countByIssue_Id(issueId);
   }
 
   @Transactional(readOnly = true)
@@ -216,11 +231,24 @@ public class SubscriptionService {
         .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class));
   }
 
-  @Transactional(readOnly = true)
-  public List<SubscriptionDTO> findSubscriptionsbyIssue(Long id) {
-    log.debug("Request to get Subscriptions by issueId : {}", id);
-    return subscriptionRepository.findByIssue_id(id).stream()
-        .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
-        .collect(Collectors.toList());
+  public SubscriptionDTO updateManuelSubscription(SubscriptionDTO subscriptionDTO) {
+    Subscription subscription = modelMapper.map(subscriptionDTO, Subscription.class);
+    return modelMapper.map(subscriptionRepository.save(subscription), SubscriptionDTO.class);
+  }
+
+  public SubscriptionDTO rejectSubscription(Long id) {
+    return subscriptionRepository
+        .findById(id)
+        .map(
+            subscription -> {
+              if (subscription.getStatus().equals(SubscriptionStatus.PREVALIDATED)) {
+                subscription.setStatus(SubscriptionStatus.REJECTED);
+                return subscriptionRepository.save(subscription);
+              } else {
+                return subscription;
+              }
+            })
+        .map(x -> modelMapper.map(x, SubscriptionDTO.class))
+        .orElseThrow();
   }
 }
