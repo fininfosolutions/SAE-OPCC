@@ -1,5 +1,6 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
+import com.fininfo.saeopcc.shared.domains.enumeration.AssetType;
 import com.fininfo.saeopcc.shared.domains.enumeration.DetentionForm;
 import com.fininfo.saeopcc.shared.domains.enumeration.ShareClass;
 import com.fininfo.saeopcc.shared.domains.enumeration.ShareForm;
@@ -47,7 +48,9 @@ public class CompartementDTO {
   private Long fundId;
   private String fundIsin;
   private String fundCode;
+  private String fundDescription;
   private String fundSdgDescription;
+  private AssetType fundAssetType;
   private DetentionForm fundDetentionForm;
 
 }
