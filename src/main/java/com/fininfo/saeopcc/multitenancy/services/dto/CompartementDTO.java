@@ -52,5 +52,4 @@ public class CompartementDTO {
   private String fundSdgDescription;
   private AssetType fundAssetType;
   private DetentionForm fundDetentionForm;
-
 }

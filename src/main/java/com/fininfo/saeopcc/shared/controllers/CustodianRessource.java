@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,7 +28,7 @@ public class CustodianRessource {
   @Autowired ModelMapper modelMapper;
   @Autowired CustodianQueryService CustodianQueryService;
 
-  @GetMapping("/custodians")
+  @GetMapping("/allcustodians")
   public ResponseEntity<List<CustodianDTO>> getAllCustodians(
       CustodianCriteria criteria, Pageable pageable) {
     Page<CustodianDTO> page = CustodianQueryService.findByCriteria(criteria, pageable);
@@ -42,5 +43,20 @@ public class CustodianRessource {
     Optional<CustodianDTO> CustodianDTO =
         custodianRepository.findById(id).map(x -> modelMapper.map(x, CustodianDTO.class));
     return ResponseUtil.wrapOrNotFound(CustodianDTO);
+  }
+
+  @GetMapping("/allcustodians/withOr")
+  public ResponseEntity<List<CustodianDTO>> getAllCustodiansWithOr(
+      @RequestParam("externalReference") String ref,
+      @RequestParam("description") String des,
+      Pageable pageable) {
+    Page<CustodianDTO> page =
+        custodianRepository
+            .getAllByExternalReferenceContainsOrDescriptionContains(ref, des, pageable)
+            .map(x -> modelMapper.map(x, CustodianDTO.class));
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
   }
 }

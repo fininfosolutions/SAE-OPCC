@@ -2,6 +2,8 @@ package com.fininfo.saeopcc.shared.repositories;
 
 import com.fininfo.saeopcc.shared.domains.Custodian;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,7 @@ public interface CustodianRepository
   Custodian getCustodianByReference(String ref);
 
   Custodian getCustodianByActiveTrueAndReference(String reference);
+
+  Page<Custodian> getAllByExternalReferenceContainsOrDescriptionContains(
+      String reference, String description, Pageable pageable);
 }
