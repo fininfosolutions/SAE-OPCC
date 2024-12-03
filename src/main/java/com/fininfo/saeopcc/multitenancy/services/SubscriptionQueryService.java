@@ -84,12 +84,12 @@ public class SubscriptionQueryService extends QueryService<Subscription> {
           specification.and(buildSpecification(criteria.getReference(), Subscription_.reference));
     }
 
-    // if (criteria.getAssetIsin() != null) {
+    // if (criteria.getIssueIssueAccountIssueCompartementFundCode() != null) {
     //   specification =
     //       specification.and(
     //           buildSpecification(
-    //               criteria.getAssetIsin(),
-    //               root -> root.join(Subscription_.asset, JoinType.LEFT).get(Asset_.isin)));
+    //               criteria.getIssueIssueAccountIssueCompartementFundCode(),
+    //               root -> root.join(Subscription_.issue, JoinType.LEFT).get(Issue_.i)));
     // }
 
     if (criteria.getShareholderReference() != null) {
