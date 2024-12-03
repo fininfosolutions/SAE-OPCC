@@ -51,7 +51,7 @@ public class SubscriptionCriteria implements Serializable, Criteria {
 
   private StringFilter reference;
 
-  private StringFilter assetIsin;
+  private StringFilter issueIssueAccountIssueCompartementFundCode;
 
   private StringFilter shareholderReference;
 
@@ -65,7 +65,10 @@ public class SubscriptionCriteria implements Serializable, Criteria {
 
     this.amount = other.amount == null ? null : other.amount.copy();
 
-    this.assetIsin = other.assetIsin == null ? null : other.assetIsin.copy();
+    this.issueIssueAccountIssueCompartementFundCode =
+        other.issueIssueAccountIssueCompartementFundCode == null
+            ? null
+            : other.issueIssueAccountIssueCompartementFundCode.copy();
 
     this.custodianReference =
         other.custodianReference == null ? null : other.custodianReference.copy();
@@ -77,12 +80,12 @@ public class SubscriptionCriteria implements Serializable, Criteria {
   public SubscriptionCriteria(
       LongFilter id,
       BigDecimalFilter amount,
-      StringFilter assetIsin,
+      StringFilter issueIssueAccountIssueCompartementFundCode,
       StringFilter custodianReference,
       StringFilter shareholderReference) {
     this.id = id;
 
-    this.assetIsin = assetIsin;
+    this.issueIssueAccountIssueCompartementFundCode = issueIssueAccountIssueCompartementFundCode;
 
     this.amount = amount;
 

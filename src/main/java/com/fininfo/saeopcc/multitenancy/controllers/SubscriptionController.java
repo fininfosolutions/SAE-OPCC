@@ -5,7 +5,9 @@ import com.fininfo.saeopcc.configuration.PaginationUtil;
 import com.fininfo.saeopcc.configuration.ResponseUtil;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
+import com.fininfo.saeopcc.multitenancy.services.SubscriptionQueryService;
 import com.fininfo.saeopcc.multitenancy.services.SubscriptionService;
+import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionCriteria;
 import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionDTO;
 import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
 import java.net.URI;
@@ -39,6 +41,8 @@ public class SubscriptionController {
 
   @Value("${spring.application.name}")
   private String applicationName;
+
+  @Autowired private SubscriptionQueryService subscriptionQueryService;
 
   @PostMapping("/subscriptions")
   public ResponseEntity<SubscriptionDTO> createSubscription(
@@ -103,20 +107,20 @@ public class SubscriptionController {
     return subscriptionService.validateSubscription(subscriptionDtos);
   }
 
-  //  @GetMapping("/SubscriptionByQuery")
-  // public ResponseEntity<List<SubscriptionDTO>> getAllSubscription(
-  //     SubscriptionCriteria criteria, Pageable pageable) {
-  //   log.debug("REST request to get subscription by criteria: {}", criteria);
-  //   Page<SubscriptionDTO> page = subscriptionQueryService.findByCriteria(criteria, pageable);
-  //   HttpHeaders headers =
-  //       PaginationUtil.generatePaginationHttpHeaders(
-  //           ServletUriComponentsBuilder.fromCurrentRequest(), page);
-  //   return ResponseEntity.ok().headers(headers).body(page.getContent());
-  // }
+  @GetMapping("/SubscriptionByQuery")
+  public ResponseEntity<List<SubscriptionDTO>> getAllSubscription(
+      SubscriptionCriteria criteria, Pageable pageable) {
+    log.debug("REST request to get subscription by criteria: {}", criteria);
+    Page<SubscriptionDTO> page = subscriptionQueryService.findByCriteria(criteria, pageable);
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
+  }
 
-  // @GetMapping("/subscription/count")
-  // public ResponseEntity<Long> getTotalSubscriptionCount(SubscriptionCriteria criteria) {
-  //   log.debug("REST request to count subscription by criteria: {}", criteria);
-  //   return ResponseEntity.ok().body(subscriptionQueryService.countByCriteria(criteria));
-  // }
+  @GetMapping("/subscriptions/count")
+  public ResponseEntity<Long> getTotalSubscriptionCount(SubscriptionCriteria criteria) {
+    log.debug("REST request to count subscription by criteria: {}", criteria);
+    return ResponseEntity.ok().body(subscriptionQueryService.countByCriteria(criteria));
+  }
 }

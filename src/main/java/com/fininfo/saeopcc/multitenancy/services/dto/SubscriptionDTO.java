@@ -56,4 +56,6 @@ public class SubscriptionDTO implements Serializable {
   private String shareholderReference;
   private String shareholderDescription;
   private Origin origin;
+  private String issueIssueAccountIssueCompartementFundCode;
+  private String issueIssueAccountIssueCompartementFundIsin;
 }
