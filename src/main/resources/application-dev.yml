@@ -31,7 +31,7 @@ kafkaTopics:
   custodiantopicFromReferentielToConsumers: custodiantopicFromReferentielToConsumers
   fundtopic: fundtopic
   compartementtopicFromReferentielToConsumers: compartementtopicFromReferentielToConsumers
-
+  shareholderFromReferentielToConsumers: shareholderFromReferentielToConsumers
  
 
 keycloak:

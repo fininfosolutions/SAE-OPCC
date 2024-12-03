@@ -14,8 +14,10 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.fininfo.saeopcc.configuration.KafkaConfiguration;
 import com.fininfo.saeopcc.multitenancy.domains.Client;
 import com.fininfo.saeopcc.multitenancy.domains.Compartement;
+import com.fininfo.saeopcc.multitenancy.domains.Shareholder;
 import com.fininfo.saeopcc.multitenancy.services.ClientService;
 import com.fininfo.saeopcc.multitenancy.services.CompartementService;
+import com.fininfo.saeopcc.multitenancy.services.ShareholderService;
 import com.fininfo.saeopcc.shared.domains.Address;
 import com.fininfo.saeopcc.shared.domains.Asset;
 import com.fininfo.saeopcc.shared.domains.BusinessRiskCategory;
@@ -106,6 +108,7 @@ public class KafkaService {
   @Autowired private ClientService clientService;
   @Autowired private CustodianService custodianService;
   @Autowired private CompartementService compartementService;
+  @Autowired private ShareholderService shareholderService;
 
   @Autowired private FundService fundService;
 
@@ -780,6 +783,63 @@ public class KafkaService {
     } catch (NoSuchFieldException | IllegalAccessException e) {
 
       log.error(JSON_ERROR_MESSAGE, updatedJson);
+    }
+  }
+
+  @KafkaListener(
+      topics = "#{'${kafkaTopics.shareholderFromReferentielToConsumers}'}",
+      groupId = "#{'${kafka.consumer.group.id}'}",
+      containerFactory = "kakfaListenerContainerFactory")
+  public void getShareholder(String data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic)
+      throws JsonMappingException, JsonProcessingException {
+
+    final Logger log = LoggerFactory.getLogger(getClass());
+
+    ObjectMapper mapper =
+        new ObjectMapper()
+            .registerModule(new ParameterNamesModule())
+            .registerModule(new Jdk8Module())
+            .registerModule(new JavaTimeModule());
+
+    JsonNode rootNode = mapper.readTree(data);
+
+    String entityType = rootNode.fieldNames().next();
+
+    String firstKey = rootNode.fieldNames().next();
+
+    JsonNode innerNode = rootNode.get(firstKey);
+
+    String updatedJson = mapper.writeValueAsString(innerNode);
+
+    JsonNode schemaNode = null;
+
+    String schemaJson = null;
+
+    schemaNode = rootNode.get(SCHEMA_KEY);
+    schemaJson = mapper.writeValueAsString(schemaNode);
+
+    try {
+
+      if (entityType.equalsIgnoreCase(Shareholder.class.getSimpleName())) {
+
+        String tenant = schemaNode.asText();
+
+        Shareholder c = new Shareholder();
+
+        c = (Shareholder) fillRequiredEntity(c, innerNode);
+
+        Shareholder synced = shareholderService.syncShareholder(c, tenant);
+
+        if (synced != null) {
+
+          log.info("Shareholder Synchronized : [{}]", synced);
+
+        } else log.error("Synchronize Shareholder Process Failed !");
+      }
+
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+
+      log.error("Error parsing JSON data: {} with Schema {}", updatedJson, schemaJson);
     }
   }
 
