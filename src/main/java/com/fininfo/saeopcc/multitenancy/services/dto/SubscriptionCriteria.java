@@ -52,6 +52,8 @@ public class SubscriptionCriteria implements Serializable, Criteria {
   private StringFilter reference;
 
   private StringFilter issueIssueAccountIssueCompartementFundCode;
+  private StringFilter issueIssueAccountIssueCompartementFundIsin;
+  private StringFilter issueIssueAccountIssueCompartementFundDescription;
 
   private StringFilter shareholderReference;
 
@@ -75,6 +77,15 @@ public class SubscriptionCriteria implements Serializable, Criteria {
 
     this.shareholderReference =
         other.shareholderReference == null ? null : other.shareholderReference.copy();
+    this.issueIssueAccountIssueCompartementFundIsin =
+        other.issueIssueAccountIssueCompartementFundIsin == null
+            ? null
+            : other.issueIssueAccountIssueCompartementFundIsin.copy();
+
+    this.issueIssueAccountIssueCompartementFundDescription =
+        other.issueIssueAccountIssueCompartementFundDescription == null
+            ? null
+            : other.issueIssueAccountIssueCompartementFundDescription.copy();
   }
 
   public SubscriptionCriteria(
@@ -82,7 +93,9 @@ public class SubscriptionCriteria implements Serializable, Criteria {
       BigDecimalFilter amount,
       StringFilter issueIssueAccountIssueCompartementFundCode,
       StringFilter custodianReference,
-      StringFilter shareholderReference) {
+      StringFilter shareholderReference,
+      StringFilter issueIssueAccountIssueCompartementFundIsin,
+      StringFilter issueIssueAccountIssueCompartementFundDescription) {
     this.id = id;
 
     this.issueIssueAccountIssueCompartementFundCode = issueIssueAccountIssueCompartementFundCode;
@@ -92,6 +105,9 @@ public class SubscriptionCriteria implements Serializable, Criteria {
     this.custodianReference = custodianReference;
 
     this.shareholderReference = shareholderReference;
+    this.issueIssueAccountIssueCompartementFundIsin = issueIssueAccountIssueCompartementFundIsin;
+    this.issueIssueAccountIssueCompartementFundDescription =
+        issueIssueAccountIssueCompartementFundDescription;
   }
 
   @Override

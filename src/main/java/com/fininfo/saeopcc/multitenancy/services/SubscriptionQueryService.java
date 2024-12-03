@@ -1,11 +1,15 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.configuration.QueryService;
+import com.fininfo.saeopcc.multitenancy.domains.Compartement_;
+import com.fininfo.saeopcc.multitenancy.domains.IssueAccount_;
+import com.fininfo.saeopcc.multitenancy.domains.Issue_;
 import com.fininfo.saeopcc.multitenancy.domains.Subscription;
 import com.fininfo.saeopcc.multitenancy.domains.Subscription_;
 import com.fininfo.saeopcc.multitenancy.repositories.SubscriptionRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionCriteria;
 import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionDTO;
+import com.fininfo.saeopcc.shared.domains.Asset_;
 import com.fininfo.saeopcc.shared.domains.Role_;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,13 +88,42 @@ public class SubscriptionQueryService extends QueryService<Subscription> {
           specification.and(buildSpecification(criteria.getReference(), Subscription_.reference));
     }
 
-    // if (criteria.getIssueIssueAccountIssueCompartementFundCode() != null) {
-    //   specification =
-    //       specification.and(
-    //           buildSpecification(
-    //               criteria.getIssueIssueAccountIssueCompartementFundCode(),
-    //               root -> root.join(Subscription_.issue, JoinType.LEFT).get(Issue_.i)));
-    // }
+    if (criteria.getIssueIssueAccountIssueCompartementFundIsin() != null) {
+      specification =
+          specification.and(
+              buildSpecification(
+                  criteria.getIssueIssueAccountIssueCompartementFundIsin(),
+                  root ->
+                      root.join(Subscription_.issue, JoinType.LEFT)
+                          .join(Issue_.issueAccount, JoinType.LEFT)
+                          .join(IssueAccount_.compartement, JoinType.LEFT)
+                          .join(Compartement_.fund, JoinType.LEFT)
+                          .get(Asset_.isin)));
+    }
+    if (criteria.getIssueIssueAccountIssueCompartementFundCode() != null) {
+      specification =
+          specification.and(
+              buildSpecification(
+                  criteria.getIssueIssueAccountIssueCompartementFundCode(),
+                  root ->
+                      root.join(Subscription_.issue, JoinType.LEFT)
+                          .join(Issue_.issueAccount, JoinType.LEFT)
+                          .join(IssueAccount_.compartement, JoinType.LEFT)
+                          .join(Compartement_.fund, JoinType.LEFT)
+                          .get(Asset_.code)));
+    }
+    if (criteria.getIssueIssueAccountIssueCompartementFundDescription() != null) {
+      specification =
+          specification.and(
+              buildSpecification(
+                  criteria.getIssueIssueAccountIssueCompartementFundDescription(),
+                  root ->
+                      root.join(Subscription_.issue, JoinType.LEFT)
+                          .join(Issue_.issueAccount, JoinType.LEFT)
+                          .join(IssueAccount_.compartement, JoinType.LEFT)
+                          .join(Compartement_.fund, JoinType.LEFT)
+                          .get(Asset_.description)));
+    }
 
     if (criteria.getShareholderReference() != null) {
       specification =
