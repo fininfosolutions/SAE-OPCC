@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,5 +251,32 @@ public class SubscriptionService {
             })
         .map(x -> modelMapper.map(x, SubscriptionDTO.class))
         .orElseThrow();
+  }
+
+  public List<SubscriptionDTO> validateSubscription(List<SubscriptionDTO> subscriptionDtos) {
+    List<Subscription> updatedSubscriptions =
+        subscriptionDtos.stream()
+            .map(
+                dto -> {
+                  Subscription subscription =
+                      subscriptionRepository
+                          .findById(dto.getId())
+                          .orElseThrow(
+                              () ->
+                                  new EntityNotFoundException(
+                                      "Subscription not found for id: " + dto.getId()));
+
+                  subscription.setStatus(SubscriptionStatus.VALIDATED);
+                  return subscription;
+                })
+            .collect(Collectors.toList());
+
+    if (!updatedSubscriptions.isEmpty()) {
+      subscriptionRepository.saveAll(updatedSubscriptions);
+    }
+
+    return updatedSubscriptions.stream()
+        .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
+        .collect(Collectors.toList());
   }
 }

@@ -96,4 +96,27 @@ public class SubscriptionController {
   public SubscriptionDTO updateSubscriptionStatus(@PathVariable Long id) {
     return subscriptionService.rejectSubscription(id);
   }
+
+  @PutMapping("/subscriptions/validate")
+  public List<SubscriptionDTO> updateSubscriptions(
+      @RequestBody List<SubscriptionDTO> subscriptionDtos) {
+    return subscriptionService.validateSubscription(subscriptionDtos);
+  }
+
+  //  @GetMapping("/SubscriptionByQuery")
+  // public ResponseEntity<List<SubscriptionDTO>> getAllSubscription(
+  //     SubscriptionCriteria criteria, Pageable pageable) {
+  //   log.debug("REST request to get subscription by criteria: {}", criteria);
+  //   Page<SubscriptionDTO> page = subscriptionQueryService.findByCriteria(criteria, pageable);
+  //   HttpHeaders headers =
+  //       PaginationUtil.generatePaginationHttpHeaders(
+  //           ServletUriComponentsBuilder.fromCurrentRequest(), page);
+  //   return ResponseEntity.ok().headers(headers).body(page.getContent());
+  // }
+
+  // @GetMapping("/subscription/count")
+  // public ResponseEntity<Long> getTotalSubscriptionCount(SubscriptionCriteria criteria) {
+  //   log.debug("REST request to count subscription by criteria: {}", criteria);
+  //   return ResponseEntity.ok().body(subscriptionQueryService.countByCriteria(criteria));
+  // }
 }
