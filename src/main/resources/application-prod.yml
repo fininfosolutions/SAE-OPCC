@@ -26,6 +26,8 @@ kafkaTopics:
   clientFromReferentielToConsumers: ${kafka.topic.clientFromReferentielToConsumers}
   custodiantopicFromReferentielToConsumers: ${kafka.topic.custodiantopicFromReferentielToConsumers}
   fundtopic: ${kafka.topic.fundtopic}
+  intermediaryFromReferentielToConsumers: ${kafka.topic.intermediaryFromReferentielToConsumers}
+
  
 
 

@@ -30,6 +30,7 @@ import com.fininfo.saeopcc.shared.domains.EconomicAgentCategory;
 import com.fininfo.saeopcc.shared.domains.FiscalNature;
 import com.fininfo.saeopcc.shared.domains.Fund;
 import com.fininfo.saeopcc.shared.domains.FundOrganism;
+import com.fininfo.saeopcc.shared.domains.Intermediary;
 import com.fininfo.saeopcc.shared.domains.Issuer;
 import com.fininfo.saeopcc.shared.domains.ResidenceStatus;
 import com.fininfo.saeopcc.shared.domains.Role;
@@ -117,6 +118,7 @@ public class KafkaService {
   @Autowired private SDGService sdgService;
 
   @Autowired private ProviderService providerService;
+  @Autowired private IntermediaryService intermediaryService;
 
   public KafkaService(
       KafkaConfiguration kafkaProperties, KafkaTemplate<String, String> kafkaTemplate) {
@@ -942,6 +944,54 @@ public class KafkaService {
     } catch (NoSuchFieldException | IllegalAccessException e) {
 
       log.error("Error parsing JSON data: {} with Schema {}", updatedJson, schemaJson);
+    }
+  }
+
+  @KafkaListener(
+      topics = "#{'${kafkaTopics.intermediaryFromReferentielToConsumers}'}",
+      groupId = "#{'${kafka.consumer.group.id}'}",
+      containerFactory = "kakfaListenerContainerFactory")
+  public void getIntermediary(String data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic)
+      throws JsonMappingException, JsonProcessingException {
+
+    final Logger log = LoggerFactory.getLogger(getClass());
+
+    ObjectMapper mapper =
+        new ObjectMapper()
+            .registerModule(new ParameterNamesModule())
+            .registerModule(new Jdk8Module())
+            .registerModule(new JavaTimeModule());
+
+    JsonNode rootNode = mapper.readTree(data);
+
+    String entityType = rootNode.fieldNames().next();
+
+    String firstKey = rootNode.fieldNames().next();
+
+    JsonNode innerNode = rootNode.get(firstKey);
+
+    String updatedJson = mapper.writeValueAsString(innerNode);
+
+    try {
+
+      if (entityType.equalsIgnoreCase(Intermediary.class.getSimpleName())) {
+
+        Intermediary c = new Intermediary();
+
+        c = (Intermediary) fillRequiredEntity(c, innerNode);
+
+        Intermediary synced = intermediaryService.syncIntermediary(c);
+
+        if (synced != null) {
+
+          log.info("Intermediary Synchronized : [{}]", synced);
+
+        } else log.error("Synchronize Intermediary Process Failed !");
+      }
+
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+
+      log.error("Error parsing JSON data: {}", updatedJson);
     }
   }
 
