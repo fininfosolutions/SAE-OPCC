@@ -7,9 +7,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = {LiquibaseAutoConfiguration.class})
-public class SaeOpccApplication {
+public class SaeopccApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(SaeOpccApplication.class, args);
+    SpringApplication.run(SaeopccApplication.class, args);
   }
 }
