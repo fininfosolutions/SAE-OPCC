@@ -4,7 +4,7 @@ trigger:
     
 
 jobs:
-  - job: Build_SAE_Registred
+  - job: Build_SAE_Opcc
     pool: 'BUILD-SERVER'
 #      name: Default
 #      demands:
@@ -42,55 +42,12 @@ jobs:
 
 
       #----------------------------------------------------------------------
-      # Prepare sonarQube
-      #----------------------------------------------------------------------
-      # - task: SonarQubePrepare@4
-      #   inputs:
-      #     SonarQube: 'svcsonarqube'
-      #     scannerMode: 'Other'
-      #     extraProperties: |
-      #       sonar.coverage.exclusions=**/**
-      
-      #----------------------------------------------------------------------
       # Test Packaging
       #----------------------------------------------------------------------
       - script: ./mvnw -DskipTests clean verify
         displayName: 'TESTS: packaging'
 
-      #----------------------------------------------------------------------
-      # sonarqube-remove-branch-name
-      #----------------------------------------------------------------------
-    #   - powershell: |
-    #        $params = "$env:SONARQUBE_SCANNER_PARAMS" -replace '"sonar.branch.name":"[\w,/,-]*"\,?'
-    #        Write-Host "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$params"
-    #     displayName: 'sonarqube-remove-branch-name'
-      #----------------------------------------------------------------------
-      # sonarqube-remove-branch-name
-      #----------------------------------------------------------------------
-      #----------------------------------------------------------------------
-      # SonarQube analyses
-      #----------------------------------------------------------------------
-    #   - script: mvn sonar:sonar -Dsonar.host.url=http://192.168.30.23 -Dsonar.login=c6e4ab02cc62d586e83497752cf468b23e0ed0da -Dsonar.sources=$(Build.Repository.LocalPath)/src/main/ -Dsonar.java.binaries=$(Build.Repository.LocalPath)/target/classes/
-    #     displayName: 'TESTS: sonarqube analyses'
-      # #----------------------------------------------------------------------
-      # # Publish SonarQube Analyses To Dashboard
-      # #----------------------------------------------------------------------
-      # - task: SonarQubePublish@4
-      #   inputs:
-      #     pollingTimeoutSec: '300'
-      #----------------------------------------------------------------------
-      # Break The Build If Quality Gate Is Failed
-      #----------------------------------------------------------------------
-      # - task: sonar-buildbreaker@8
-      #   inputs:
-      #     SonarQube: 'svcsonarqube'
      
-      #----------------------------------------------------------------------
-      # Docker Remove Image
-      #----------------------------------------------------------------------
-      
-      #- script: docker rmi -f referentiel 
-      #  displayName: 'remove image'
 
       
       #----------------------------------------------------------------------
@@ -99,7 +56,7 @@ jobs:
       - script: ./mvnw package -Pprod -DskipTests jib:dockerBuild
         displayName: 'Build Docker Image'
       - script: |
-          docker tag saeregistred:latest saeregistred:$(Build.BuildNumber)
+          docker tag sae-opcc:latest sae-opcc:$(Build.BuildNumber)
           cd /home/administrateur/myagent1/_work/8/s
           echo "TAG6="$(Build.BuildNumber) >> .env
         displayName: 'Docker TAG Image'
@@ -113,16 +70,16 @@ jobs:
 #----------------------------------------------------------------------
 # Push image to nexus
 #----------------------------------------------------------------------
-      - script: docker tag saeregistred:latest 192.168.30.15:1200/saeregistred:$(Build.BuildNumber)
+      - script: docker tag sae-opcc:latest 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber)
         displayName: 'docker tag image to nexus'
-      - script: docker push 192.168.30.15:1200/saeregistred:$(Build.BuildNumber)
+      - script: docker push 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber)
         displayName: 'docker push image to nexus'
 
 #----------------------------------------------------------------------
 # Connect to Kubernetes Server.
 #----------------------------------------------------------------------
-      - task: SSH@0
-        inputs:
-          sshEndpoint: 'Kube-ssh'
-          runOptions: 'commands'
-          commands: 'kubectl set image deployment/registred -n sae-dev saeregistred-app=''192.168.30.15:1200/saeregistred:$(Build.BuildNumber)'''
+     # - task: SSH@0
+     #   inputs:
+      #    sshEndpoint: 'Kube-ssh'
+      #    runOptions: 'commands'
+       #   commands: 'kubectl set image deployment/registred -n sae-dev saeregistred-app=''192.168.30.15:1200/saeregistred:$(Build.BuildNumber)'''
