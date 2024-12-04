@@ -1,6 +1,6 @@
 package com.fininfo.saeopcc.shared.domains.enumeration;
 
-public enum AccountType {
+public enum AccountGender {
   CASH,
-  SEC,
+  SEC
 }
