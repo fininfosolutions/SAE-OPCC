@@ -78,8 +78,8 @@ jobs:
 #----------------------------------------------------------------------
 # Connect to Kubernetes Server.
 #----------------------------------------------------------------------
-     # - task: SSH@0
-     #   inputs:
-      #    sshEndpoint: 'Kube-ssh'
-      #    runOptions: 'commands'
-       #   commands: 'kubectl set image deployment/registred -n sae-dev saeregistred-app=''192.168.30.15:1200/saeregistred:$(Build.BuildNumber)'''
+      - task: SSH@0
+        inputs:
+          sshEndpoint: 'Kube-ssh'
+          runOptions: 'commands'
+          commands: 'kubectl set image deployment/sae-opcc -n fa-dev sae-opcc-app=''192.168.30.15:1200/sae-opcc:$(Build.BuildNumber)'''
