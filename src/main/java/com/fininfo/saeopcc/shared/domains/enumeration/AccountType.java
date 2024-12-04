@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.shared.domains.enumeration;
 
 public enum AccountType {
-  CASH,
-  SEC,
+  LIBRE,
+  NANTI,
+  BLOQUE
 }
