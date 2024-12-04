@@ -80,6 +80,6 @@ jobs:
 #----------------------------------------------------------------------
       - task: SSH@0
         inputs:
-          sshEndpoint: 'Kube-ssh'
+          sshEndpoint: 'Kub-ssh'
           runOptions: 'commands'
           commands: 'kubectl set image deployment/sae-opcc -n fa-dev sae-opcc-app=''192.168.30.15:1200/sae-opcc:$(Build.BuildNumber)'''
