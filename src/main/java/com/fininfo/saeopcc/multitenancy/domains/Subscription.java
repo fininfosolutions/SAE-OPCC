@@ -76,6 +76,7 @@ public class Subscription extends AbstractAuditingEntity implements Serializable
   private SubscriptionDirection subscriptionDirection;
 
   @ManyToOne private Custodian custodian;
+  @ManyToOne private SecuritiesAccount securitiesAccount;
 
   @ManyToOne private Shareholder shareholder;
 

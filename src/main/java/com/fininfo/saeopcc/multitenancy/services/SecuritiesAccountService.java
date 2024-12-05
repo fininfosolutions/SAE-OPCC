@@ -282,11 +282,7 @@ public class SecuritiesAccountService {
         .map(secaccount -> modelMapper.map(secaccount, SecuritiesAccountDTO.class));
   }
 
-  public boolean securitiesAccountExist(
-      Long assetId, Long shareholderId, Long intermediaryId, String accountType) {
-    if (!VALID_ACCOUNT_TYPES.contains(accountType)) {
-      return false;
-    }
+  public boolean securitiesAccountExist(Long assetId, Long shareholderId, Long intermediaryId) {
 
     return securitiesAccountRepository
         .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(

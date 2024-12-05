@@ -49,7 +49,7 @@ public class Account extends AbstractAuditingEntity implements Serializable {
   @Enumerated(EnumType.STRING)
   private AccountClassification accountClassification;
 
-  @Column(name = "account_type")
+  @Column(name = "account_gender")
   @Enumerated(EnumType.STRING)
   private AccountGender accountGender;
 
