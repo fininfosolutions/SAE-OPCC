@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -30,7 +32,9 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Id private Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
+  private Long id;
 
   @Column(name = "description")
   private String description;

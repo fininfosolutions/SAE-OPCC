@@ -218,4 +218,16 @@ public class SecuritiesAccountController {
 
     return ResponseEntity.ok().body(secAccountDTO);
   }
+
+  @GetMapping("/secaccounts/exists")
+  public ResponseEntity<Boolean> doesSecuritiesAccountExist(
+      @RequestParam Long assetId,
+      @RequestParam Long shareholderId,
+      @RequestParam Long intermediaryId,
+      @RequestParam String accountType) {
+    boolean exists =
+        secAccountService.securitiesAccountExist(
+            assetId, shareholderId, intermediaryId, accountType);
+    return ResponseEntity.ok(exists);
+  }
 }

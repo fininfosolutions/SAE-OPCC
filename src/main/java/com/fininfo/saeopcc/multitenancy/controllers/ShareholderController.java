@@ -46,7 +46,7 @@ public class ShareholderController {
     return ResponseEntity.ok().headers(headers).body(page.getContent());
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/shareholders/{id}")
   public ResponseEntity<ShareholderDTO> getshareholder(@PathVariable Long id) {
     Optional<ShareholderDTO> ShareholderDTO =
         shareholderRepository.findById(id).map(x -> modelMapper.map(x, ShareholderDTO.class));
