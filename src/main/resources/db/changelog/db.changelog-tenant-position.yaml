@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: position
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: position
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: position_pkey
+              - column:
+                  name: value_date
+                  type: DATE
+              - column:
+                  name: position_date
+                  type: TIMESTAMP
+              - column:
+                  name: end_date
+                  type: DATE
+              - column:
+                  name: position_type
+                  type: VARCHAR(255)    
+              - column:
+                  name: reference
+                  type: VARCHAR(255)         
+              - column:
+                  name: position_nature
+                  type: VARCHAR(255)         
+              - column:
+                  name: nostro_security_account
+                  type: VARCHAR(255)     
+              - column:
+                  name: custodian
+                  type: VARCHAR(255)      
+              - column:
+                  name: investment_type
+                  type: VARCHAR(255)         
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP
+              - column:
+                  name: account_id
+                  type: BIGINT
+                  constraints:
+                    references: public.account(id)
+                    foreignKeyName: fk_account_id
