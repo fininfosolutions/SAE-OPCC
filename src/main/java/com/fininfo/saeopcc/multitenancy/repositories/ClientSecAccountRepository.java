@@ -54,8 +54,6 @@ public interface ClientSecAccountRepository
           AccountType accountType,
           Long accountCategoryId);
 
-  List<ClientSecAccount> findByClient_Id(Long id);
-
   List<ClientSecAccount> findByAsset_IdAndShareholder_IdAndAccountType(
       Long id, Long id2, AccountType accountType);
 
