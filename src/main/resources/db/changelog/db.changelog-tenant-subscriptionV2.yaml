@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-securities_account_id_column
+      author: fininfo
+      changes:
+        - addColumn:
+            tableName: subscription
+            columns:
+              - column:
+                  name: securities_account_id
+                  type: BIGINT
+                  constraints:
+                    references: securities_account(id)
+                    foreignKeyName: securities_account_fkey

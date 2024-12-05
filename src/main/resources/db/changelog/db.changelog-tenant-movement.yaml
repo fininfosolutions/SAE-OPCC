@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: movement
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: movement
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: movement_pkey
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
+              - column:
+                  name: instruction_reference
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: movement_date
+                  type: DATE
+              - column:
+                  name: impacted_date
+                  type: DATE
+              - column:
+                  name: impacted
+                  type: BOOLEAN
+              - column:
+                  name: reversed
+                  type: BOOLEAN
+              - column:
+                  name: amount
+                  type: NUMERIC(19, 4)
+              - column:
+                  name: quantity
+                  type: NUMERIC(19, 4)
+              - column:
+                  name: direction
+                  type: BIGINT
+              - column:
+                  name: sens
+                  type: VARCHAR(255)
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: htm
+                  type: BOOLEAN
+              - column:
+                  name: nostro_security_account
+                  type: VARCHAR(255)
+              - column:
+                  name: custodian
+                  type: VARCHAR(255)
+              - column:
+                  name: investment_type
+                  type: VARCHAR(255)
+              - column:
+                  name: transaction_type
+                  type: VARCHAR(255)
+              - column:
+                  name: instruction_id
+                  type: BIGINT
+              - column:
+                  name: origin
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP
+              - column:
+                  name: asset_id
+                  type: BIGINT
+                  constraints:
+                    references: public.asset(id)
+                    foreignKeyName: fk_asset_id
+              - column:
+                  name: account_id
+                  type: BIGINT
+                  constraints:
+                    references: public.account(id)
+                    foreignKeyName: fk_account_id

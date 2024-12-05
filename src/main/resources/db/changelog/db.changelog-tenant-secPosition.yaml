@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: secposition
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: sec_position
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: secposition_pkey
+              - column:
+                  name: quantity
+                  type: NUMERIC(21, 2)
+              - column:
+                  name: asset_id
+                  type: BIGINT
+                  constraints:
+                    references: public.asset(id)
+                    foreignKeyName: fk_asset_id
