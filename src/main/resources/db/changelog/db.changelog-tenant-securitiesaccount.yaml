@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: securities_account
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: securities_account
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: securities_account_pkey
+              - column:
+                  name: asset_id
+                  type: BIGINT
+                  constraints:
+                    references: public.asset(id)
+                    foreignKeyName: fk_asset
+              - column:
+                  name: intermediary_id
+                  type: BIGINT
+                  constraints:
+                    references: public.intermediary(id)
+                    foreignKeyName: fk_intermediary
+              - column:
+                  name: account_category_id
+                  type: BIGINT
+                  constraints:
+                    references: public.account_category(id)
+                    foreignKeyName: fk_account_category
+              - column:
+                  name: shareholder_id
+                  type: BIGINT
+                  constraints:
+                    references: shareholder(id)
+                    foreignKeyName: fk_shareholder
+              - column:
+                  name: account_type
+                  type: VARCHAR(255)
