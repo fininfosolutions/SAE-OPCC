@@ -24,16 +24,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "client_sec_account")
+@Table(name = "securities_account")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("squid:S2160")
 @EqualsAndHashCode(callSuper = false)
-public class ClientSecAccount extends Account {
+public class SecuritiesAccount extends Account {
 
   @Id private Long id;
-
-  @Column(name = "proxy")
-  private String proxy;
 
   @ManyToOne
   @JsonIgnoreProperties(value = "securitiesAccounts", allowSetters = true)
@@ -54,13 +51,4 @@ public class ClientSecAccount extends Account {
   @Enumerated(EnumType.STRING)
   @Column(name = "account_type")
   private AccountType accountType;
-
-  @Column(name = "is_disabled")
-  private Boolean isDisabled;
-
-  @Column(name = "is_pure")
-  private Boolean isPure;
-
-  @Column(name = "external_reference")
-  private String externalReference;
 }

@@ -1,18 +1,15 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
-import com.fininfo.saeopcc.multitenancy.domains.ClientSecAccount;
+import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
 import com.fininfo.saeopcc.multitenancy.domains.Shareholder;
-import com.fininfo.saeopcc.multitenancy.repositories.ClientSecAccountRepository;
-import com.fininfo.saeopcc.multitenancy.services.dto.ClientSecAccountDTO;
+import com.fininfo.saeopcc.multitenancy.repositories.SecuritiesAccountRepository;
+import com.fininfo.saeopcc.multitenancy.services.dto.SecuritiesAccountDTO;
 import com.fininfo.saeopcc.shared.domains.Asset;
 import com.fininfo.saeopcc.shared.domains.Intermediary;
 import com.fininfo.saeopcc.shared.domains.SAEConfig;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
-import com.fininfo.saeopcc.shared.domains.enumeration.AssetType;
 import com.fininfo.saeopcc.shared.repositories.AssetRepository;
-import com.fininfo.saeopcc.shared.services.IntermediaryService;
 import com.fininfo.saeopcc.shared.services.SAEConfigService;
-import com.fininfo.saeopcc.shared.services.dto.AssetDTO;
 import com.fininfo.saeopcc.util.TenantContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,52 +23,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientSecAccountService {
-  @Autowired private ClientSecAccountRepository securitiesAccountRepository;
+public class SecuritiesAccountService {
+  @Autowired private SecuritiesAccountRepository securitiesAccountRepository;
   @Autowired private ModelMapper modelMapper;
   @Autowired private AssetRepository assetRepository;
   @Autowired private SAEConfigService SAEConfigService;
-  @Autowired private IntermediaryService intermediaryService;
 
-  public List<ClientSecAccountDTO> save(ClientSecAccountDTO secAccountDTO) {
-    List<ClientSecAccount> accounts = new ArrayList<>();
-    List<ClientSecAccountDTO> result = new ArrayList<>();
-    if (secAccountDTO != null
-        && secAccountDTO.getIsPure()
-        && secAccountDTO.getIntermediaryId() == null) {
-      Optional<Intermediary> intermediaryOpt =
-          Optional.ofNullable(intermediaryService.findByCode("000"));
-
-      intermediaryOpt.ifPresent(
-          intermediary -> {
-            secAccountDTO.setIntermediaryId(intermediary.getId());
-            secAccountDTO.setIntermediaryDescription(intermediary.getDescription());
-            secAccountDTO.setIntermediaryAffiliedCode(intermediary.getAffiliedCode());
-          });
-    }
+  public List<SecuritiesAccountDTO> save(SecuritiesAccountDTO secAccountDTO) {
+    List<SecuritiesAccount> accounts = new ArrayList<>();
+    List<SecuritiesAccountDTO> result = new ArrayList<>();
     Optional<Asset> assetOpt = assetRepository.findById(secAccountDTO.getAssetId());
     Asset asset = assetOpt.orElse(null);
-
-    String assetReference = "";
-    if (asset != null) {
-      if (asset.getAssetType() == AssetType.FUND) {
-        AssetDTO assetDTO = modelMapper.map(asset, AssetDTO.class);
-        assetReference = assetDTO.getSdgReference();
-      } else if (asset.getAssetType() == AssetType.EQUITY) {
-        AssetDTO assetDTO = modelMapper.map(asset, AssetDTO.class);
-        assetReference = assetDTO.getIssuerReference();
-      }
-    }
 
     SAEConfig saeconfig = SAEConfigService.getSAEConfigByCode(TenantContext.getTenantId());
 
     String intermediaryAffiliatedCode = secAccountDTO.getIntermediaryAffiliedCode();
     String formattedIFH =
-        secAccountDTO.getIsPure()
-            ? "000"
-            : (intermediaryAffiliatedCode != null && intermediaryAffiliatedCode.length() >= 3)
-                ? intermediaryAffiliatedCode.substring(intermediaryAffiliatedCode.length() - 3)
-                : "";
+        (intermediaryAffiliatedCode != null && intermediaryAffiliatedCode.length() >= 3)
+            ? intermediaryAffiliatedCode.substring(intermediaryAffiliatedCode.length() - 3)
+            : "";
 
     String shareholderReference = secAccountDTO.getShareholderReference();
     String formattedShareholderReference =
@@ -82,37 +52,51 @@ public class ClientSecAccountService {
                     shareholderReference.substring(shareholderReference.length() - 5))
                 : Integer.parseInt("0" + shareholderReference));
 
-    if (!"00".equals(secAccountDTO.getAccountCategoryCode())) {
+    if ((!"00".equals(secAccountDTO.getAccountCategoryCode()))
+        && (!"20".equals(secAccountDTO.getAccountCategoryCode()))) {
       createSingleAccount(
           secAccountDTO, asset, saeconfig, formattedShareholderReference, formattedIFH, accounts);
     } else {
-      for (int i = 1; i <= 3; i++) {
-        createMultipleAccounts(
-            secAccountDTO,
-            asset,
-            saeconfig,
-            formattedShareholderReference,
-            formattedIFH,
-            i,
-            accounts);
+      if ("00".equals(secAccountDTO.getAccountCategoryCode())) {
+        for (int i = 1; i <= 3; i++) {
+          createMultipleAccounts(
+              secAccountDTO,
+              asset,
+              saeconfig,
+              formattedShareholderReference,
+              formattedIFH,
+              i,
+              accounts);
+        }
+      } else if ("20".equals(secAccountDTO.getAccountCategoryCode())) {
+        for (int i = 4; i <= 6; i++) {
+          createMultipleAccounts(
+              secAccountDTO,
+              asset,
+              saeconfig,
+              formattedShareholderReference,
+              formattedIFH,
+              i,
+              accounts);
+        }
       }
     }
 
     result =
         accounts.stream()
-            .map(account -> modelMapper.map(account, ClientSecAccountDTO.class))
+            .map(account -> modelMapper.map(account, SecuritiesAccountDTO.class))
             .collect(Collectors.toList());
 
     return result;
   }
 
   private void createSingleAccount(
-      ClientSecAccountDTO secAccountDTO,
+      SecuritiesAccountDTO secAccountDTO,
       Asset asset,
       SAEConfig saeconfig,
       String formattedShareholderReference,
       String formattedIFH,
-      List<ClientSecAccount> accounts) {
+      List<SecuritiesAccount> accounts) {
     String suffix = getSuffixFromAccountType(secAccountDTO.getAccountType());
     String accountNumber =
         saeconfig.getValue()
@@ -122,18 +106,15 @@ public class ClientSecAccountService {
             + suffix
             + secAccountDTO.getAccountCategoryCode();
 
-    ClientSecAccount secAccount = modelMapper.map(secAccountDTO, ClientSecAccount.class);
+    SecuritiesAccount secAccount = modelMapper.map(secAccountDTO, SecuritiesAccount.class);
     secAccount.setAccountNumber(accountNumber);
     secAccount.setAccountType(secAccountDTO.getAccountType());
     secAccount.setDescription(
-        secAccountDTO.getDescription()
-            + " "
-            + secAccountDTO.getAccountType().name()
-            + (secAccountDTO.getIsPure() ? " PUR" : " ADMINISTRÉ"));
-    secAccount.setIsDisabled(false);
+        secAccountDTO.getDescription() + " " + secAccountDTO.getAccountType().name());
+    // secAccount.setIsDisabled(false);
     secAccount.setIsActive(true);
 
-    ClientSecAccount existingAccount =
+    SecuritiesAccount existingAccount =
         securitiesAccountRepository
             .findByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeAndAccountCategory_id(
                 asset.getId(),
@@ -151,22 +132,18 @@ public class ClientSecAccountService {
   }
 
   private void createMultipleAccounts(
-      ClientSecAccountDTO secAccountDTO,
+      SecuritiesAccountDTO secAccountDTO,
       Asset asset,
       SAEConfig saeconfig,
       String formattedShareholderReference,
       String formattedIFH,
       int accountTypeSuffix,
-      List<ClientSecAccount> accounts) {
-    ClientSecAccount secAccount = modelMapper.map(secAccountDTO, ClientSecAccount.class);
+      List<SecuritiesAccount> accounts) {
+    SecuritiesAccount secAccount = modelMapper.map(secAccountDTO, SecuritiesAccount.class);
 
     String accountTypeDescription = getAccountTypeDescription(accountTypeSuffix);
     secAccount.setAccountType(AccountType.valueOf(accountTypeDescription));
-    secAccount.setDescription(
-        secAccountDTO.getDescription()
-            + " "
-            + accountTypeDescription
-            + (secAccountDTO.getIsPure() ? " PUR" : " ADMINISTRÉ"));
+    secAccount.setDescription(secAccountDTO.getDescription() + " " + accountTypeDescription);
 
     String accountNumber =
         saeconfig.getValue()
@@ -174,13 +151,13 @@ public class ClientSecAccountService {
             + formattedShareholderReference
             + formattedIFH
             + accountTypeSuffix
-            + "00";
+            + secAccountDTO.getAccountCategoryCode();
 
     secAccount.setAccountNumber(accountNumber);
-    secAccount.setIsDisabled(false);
+    // secAccount.setIsDisabled(false);
     secAccount.setIsActive(true);
 
-    ClientSecAccount existingAccount =
+    SecuritiesAccount existingAccount =
         securitiesAccountRepository
             .findByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeAndAccountCategory_id(
                 asset.getId(),
@@ -205,6 +182,13 @@ public class ClientSecAccountService {
         return "2";
       case BLOQUE:
         return "3";
+      case SOUS:
+        return "4";
+      case APPELE:
+        return "5";
+      case LIBERE:
+        return "6";
+
       default:
         return "";
     }
@@ -218,28 +202,35 @@ public class ClientSecAccountService {
         return "NANTI";
       case 3:
         return "BLOQUE";
+      case 4:
+        return "SOUS";
+      case 5:
+        return "APPELE";
+      case 6:
+        return "LIBERE";
+
       default:
         throw new IllegalArgumentException("Invalid account type suffix: " + accountTypeSuffix);
     }
   }
 
-  public Page<ClientSecAccountDTO> findAll(Pageable pageable) {
+  public Page<SecuritiesAccountDTO> findAll(Pageable pageable) {
     return securitiesAccountRepository
         .findAll(pageable)
-        .map(x -> modelMapper.map(x, ClientSecAccountDTO.class));
+        .map(x -> modelMapper.map(x, SecuritiesAccountDTO.class));
   }
 
   public Long countAll() {
     return securitiesAccountRepository.count();
   }
 
-  public ClientSecAccount findSecAccount(
+  public SecuritiesAccount findSecAccount(
       Asset asset, Shareholder shareholder, Intermediary intermediary, AccountType accountType) {
     return securitiesAccountRepository.findSecAccountBy(
         asset.getId(), shareholder.getId(), intermediary.getId(), accountType.toString());
   }
 
-  public ClientSecAccount findSecAccountByCategory(
+  public SecuritiesAccount findSecAccountByCategory(
       Asset asset,
       Shareholder shareholder,
       Intermediary intermediary,
@@ -253,8 +244,8 @@ public class ClientSecAccountService {
         categoryCode);
   }
 
-  public ClientSecAccount toggleActive(Long entityId) {
-    ClientSecAccount secaccount =
+  public SecuritiesAccount toggleActive(Long entityId) {
+    SecuritiesAccount secaccount =
         securitiesAccountRepository
             .findById(entityId)
             .orElseThrow(() -> new EntityNotFoundException("Entity not found"));
@@ -264,13 +255,13 @@ public class ClientSecAccountService {
     return securitiesAccountRepository.save(secaccount);
   }
 
-  public Optional<ClientSecAccountDTO> findOne(Long id) {
+  public Optional<SecuritiesAccountDTO> findOne(Long id) {
     return securitiesAccountRepository
         .findById(id)
-        .map(secaccount -> modelMapper.map(secaccount, ClientSecAccountDTO.class));
+        .map(secaccount -> modelMapper.map(secaccount, SecuritiesAccountDTO.class));
   }
 
-  public List<ClientSecAccount> findSecAccountsByParams(
+  public List<SecuritiesAccount> findSecAccountsByParams(
       Asset asset, Shareholder shareholder, Intermediary intermediary, AccountType accountType) {
 
     if (intermediary != null) {
@@ -283,9 +274,9 @@ public class ClientSecAccountService {
     }
   }
 
-  public Optional<ClientSecAccountDTO> findByAccountNumberAndIsActive(String accountNumber) {
+  public Optional<SecuritiesAccountDTO> findByAccountNumberAndIsActive(String accountNumber) {
     return securitiesAccountRepository
         .findByAccountNumberAndIsActiveTrue(accountNumber)
-        .map(secaccount -> modelMapper.map(secaccount, ClientSecAccountDTO.class));
+        .map(secaccount -> modelMapper.map(secaccount, SecuritiesAccountDTO.class));
   }
 }

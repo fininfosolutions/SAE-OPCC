@@ -33,3 +33,5 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-documentV1.yaml
   - include:
       file: db/changelog/db.changelog-tenant-issueReport.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-securitiesaccount.yaml

@@ -13,11 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ClientSecAccountDTO extends AccountDTO {
+public class SecuritiesAccountDTO extends AccountDTO {
 
   private Long id;
-  private Boolean isActive;
-  private String proxy;
   private AccountType accountType;
   private Long assetId;
   private String assetIsin;
@@ -28,7 +26,6 @@ public class ClientSecAccountDTO extends AccountDTO {
   private String assetSdgReference;
   private DetentionForm assetDetentionForm;
   private String assetReference;
-  private Boolean isPure;
   private String intermediaryAffiliedCode;
   private String intermediaryDescription;
   private AssetType assetAssetType;
@@ -36,7 +33,6 @@ public class ClientSecAccountDTO extends AccountDTO {
   private String assetDescription;
   private Long intermediaryId;
   private Long shareholderId;
-  private Boolean isDisabled;
   private Long accountCategoryId;
   private String accountCategoryCode;
 }

@@ -1,6 +1,6 @@
 package com.fininfo.saeopcc.multitenancy.repositories;
 
-import com.fininfo.saeopcc.multitenancy.domains.ClientSecAccount;
+import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.util.List;
 import java.util.Optional;
@@ -11,10 +11,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientSecAccountRepository
-    extends JpaRepository<ClientSecAccount, Long>, JpaSpecificationExecutor<ClientSecAccount> {
+public interface SecuritiesAccountRepository
+    extends JpaRepository<SecuritiesAccount, Long>, JpaSpecificationExecutor<SecuritiesAccount> {
 
-  ClientSecAccount findFirstByAccountNumber(String accountNumber);
+  //   SecuritiesAccount findFirstByAccountNumber(String accountNumber);
 
   @Query(
       value =
@@ -24,7 +24,7 @@ public interface ClientSecAccountRepository
               + "and (:intermediaryId is null or intermediary_id = :intermediaryId) "
               + "and account_type = :accountType ",
       nativeQuery = true)
-  ClientSecAccount findSecAccountBy(
+  SecuritiesAccount findSecAccountBy(
       @Param("assetId") Long assetId,
       @Param("shareholderId") Long shareholderId,
       @Param("intermediaryId") Long intermediaryId,
@@ -39,14 +39,14 @@ public interface ClientSecAccountRepository
               + "and account_type = :accountType "
               + "and account_category_id in (select id from public.account_category where code = :categoryCode)",
       nativeQuery = true)
-  ClientSecAccount findSecAccountByWithCategory(
+  SecuritiesAccount findSecAccountByWithCategory(
       @Param("assetId") Long assetId,
       @Param("shareholderId") Long shareholderId,
       @Param("intermediaryId") Long intermediaryId,
       @Param("accountType") String accountType,
       @Param("categoryCode") String categoryCode);
 
-  ClientSecAccount
+  SecuritiesAccount
       findByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeAndAccountCategory_id(
           Long assetId,
           Long shareholderId,
@@ -54,11 +54,11 @@ public interface ClientSecAccountRepository
           AccountType accountType,
           Long accountCategoryId);
 
-  List<ClientSecAccount> findByAsset_IdAndShareholder_IdAndAccountType(
+  List<SecuritiesAccount> findByAsset_IdAndShareholder_IdAndAccountType(
       Long id, Long id2, AccountType accountType);
 
-  List<ClientSecAccount> findByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountType(
+  List<SecuritiesAccount> findByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountType(
       Long id, Long id2, Long id3, AccountType accountType);
 
-  Optional<ClientSecAccount> findByAccountNumberAndIsActiveTrue(String accountNumber);
+  Optional<SecuritiesAccount> findByAccountNumberAndIsActiveTrue(String accountNumber);
 }
