@@ -61,4 +61,7 @@ public interface SecuritiesAccountRepository
       Long id, Long id2, Long id3, AccountType accountType);
 
   Optional<SecuritiesAccount> findByAccountNumberAndIsActiveTrue(String accountNumber);
+
+  boolean existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
+      Long assetId, Long shareholderId, Long intermediaryId, List<AccountType> accountTypes);
 }

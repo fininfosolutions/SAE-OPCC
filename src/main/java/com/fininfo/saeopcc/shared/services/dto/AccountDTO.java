@@ -4,6 +4,7 @@ import com.fininfo.saeopcc.shared.domains.enumeration.AccountClassification;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountNature;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.io.Serializable;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,4 +26,5 @@ public class AccountDTO implements Serializable {
   private AccountNature accountNature;
   private String code2;
   private Boolean isActive;
+  private LocalDate openingDate;
 }

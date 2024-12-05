@@ -28,6 +28,8 @@ public class SecuritiesAccountService {
   @Autowired private ModelMapper modelMapper;
   @Autowired private AssetRepository assetRepository;
   @Autowired private SAEConfigService SAEConfigService;
+  private static final List<AccountType> VALID_ACCOUNT_TYPES =
+      List.of(AccountType.SOUS, AccountType.APPELE, AccountType.LIBERE);
 
   public List<SecuritiesAccountDTO> save(SecuritiesAccountDTO secAccountDTO) {
     List<SecuritiesAccount> accounts = new ArrayList<>();
@@ -278,5 +280,16 @@ public class SecuritiesAccountService {
     return securitiesAccountRepository
         .findByAccountNumberAndIsActiveTrue(accountNumber)
         .map(secaccount -> modelMapper.map(secaccount, SecuritiesAccountDTO.class));
+  }
+
+  public boolean securitiesAccountExist(
+      Long assetId, Long shareholderId, Long intermediaryId, String accountType) {
+    if (!VALID_ACCOUNT_TYPES.contains(accountType)) {
+      return false;
+    }
+
+    return securitiesAccountRepository
+        .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
+            assetId, shareholderId, intermediaryId, VALID_ACCOUNT_TYPES);
   }
 }
