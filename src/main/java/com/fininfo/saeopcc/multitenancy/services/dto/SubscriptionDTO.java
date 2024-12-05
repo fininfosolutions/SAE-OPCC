@@ -33,6 +33,9 @@ public class SubscriptionDTO implements Serializable {
   private BigDecimal rate;
 
   private BigDecimal amount;
+  private Long securitiesAccountId;
+
+  private String securitiesAccountAccountNumber;
 
   private LocalDate settlementDate;
 

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: change_quantity_column_subscription
+      author: fininfo
+      changes:
+        - modifyDataType:
+            tableName: subscription
+            columnName: quantity
+            newDataType: NUMERIC(21,2)
