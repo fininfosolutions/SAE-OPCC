@@ -2,7 +2,6 @@ package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.InvestmentType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.PositionType;
-import com.fininfo.saeopcc.shared.domains.enumeration.PositionNature;
 import com.fininfo.saeopcc.shared.services.dto.AbstractAuditingEntityDTO;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -23,11 +22,9 @@ public class PositionDTO extends AbstractAuditingEntityDTO {
   private String reference;
 
   private Instant positionDate;
-  private PositionNature positionNature;
 
-  private String nostroSecurityAccount;
-  private String custodian;
-  private String clientDescription;
+  private String shareholderDescription;
+  private String intermediaryDescription;
 
   private LocalDate valueDate;
   private InvestmentType investmentType;

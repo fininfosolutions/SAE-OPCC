@@ -3,6 +3,7 @@ package com.fininfo.saeopcc.multitenancy.services.dto;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirection;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
+import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import com.fininfo.saeopcc.shared.domains.enumeration.TransactionType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ public class SubscriptionDTO implements Serializable {
   private Long securitiesAccountId;
 
   private String securitiesAccountAccountNumber;
+  private AccountType securitiesAccountAccountType;
 
   private LocalDate settlementDate;
 
@@ -61,4 +63,5 @@ public class SubscriptionDTO implements Serializable {
   private Origin origin;
   private String issueIssueAccountIssueCompartementFundCode;
   private String issueIssueAccountIssueCompartementFundIsin;
+  private Long issueIssueAccountIssueCompartementFundId;
 }
