@@ -223,9 +223,12 @@ public class SecuritiesAccountController {
   public ResponseEntity<Boolean> doesSecuritiesAccountExist(
       @RequestParam Long assetId,
       @RequestParam Long shareholderId,
-      @RequestParam Long intermediaryId) {
+      @RequestParam Long intermediaryId,
+      @RequestParam Long accountCategoryId,
+      @RequestParam(required = false) AccountType accountType) {
     boolean exists =
-        secAccountService.securitiesAccountExist(assetId, shareholderId, intermediaryId);
+        secAccountService.securitiesAccountExist(
+            assetId, shareholderId, intermediaryId, accountCategoryId, accountType);
     return ResponseEntity.ok(exists);
   }
 }
