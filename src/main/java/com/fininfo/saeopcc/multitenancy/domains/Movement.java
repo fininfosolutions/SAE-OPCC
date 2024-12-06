@@ -1,7 +1,6 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Direction;
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.InvestmentType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
@@ -53,13 +52,10 @@ public class Movement extends AbstractAuditingEntity implements Serializable {
   private LocalDate impactedDate;
 
   private Boolean impacted;
-  private Boolean htm;
 
   private Boolean reversed;
 
   private BigDecimal amount;
-  private String nostroSecurityAccount;
-  private String custodian;
 
   private BigDecimal quantity;
 
@@ -70,9 +66,6 @@ public class Movement extends AbstractAuditingEntity implements Serializable {
 
   @Enumerated(EnumType.STRING)
   private MovementType type;
-
-  @Enumerated(EnumType.STRING)
-  private InvestmentType investmentType;
 
   @Enumerated(EnumType.STRING)
   private Origin origin;

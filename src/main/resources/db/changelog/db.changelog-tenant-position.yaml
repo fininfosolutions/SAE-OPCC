@@ -29,18 +29,6 @@ databaseChangeLog:
                   name: reference
                   type: VARCHAR(255)         
               - column:
-                  name: position_nature
-                  type: VARCHAR(255)         
-              - column:
-                  name: nostro_security_account
-                  type: VARCHAR(255)     
-              - column:
-                  name: custodian
-                  type: VARCHAR(255)      
-              - column:
-                  name: investment_type
-                  type: VARCHAR(255)         
-              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:
