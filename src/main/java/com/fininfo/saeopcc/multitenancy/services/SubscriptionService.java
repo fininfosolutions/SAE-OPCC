@@ -26,6 +26,7 @@ import com.fininfo.saeopcc.shared.services.CounterpartService;
 import com.fininfo.saeopcc.shared.services.CustodianService;
 import com.fininfo.saeopcc.shared.services.FundService;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,6 +55,7 @@ public class SubscriptionService {
   @Autowired private CompartementRepository compartementRepository;
   @Autowired private IssueRepository issueRepository;
   @Autowired private IssueAccountRepository issueAccountRepository;
+  @Autowired private MovementService movementService;
 
   private static final String SAE_PREFIX = "SAE";
 
@@ -253,8 +255,9 @@ public class SubscriptionService {
         .orElseThrow();
   }
 
+  @Transactional
   public List<SubscriptionDTO> validateSubscription(List<SubscriptionDTO> subscriptionDtos) {
-    List<Subscription> updatedSubscriptions =
+    List<SubscriptionDTO> subscriptionsDtoSaved =
         subscriptionDtos.stream()
             .map(
                 dto -> {
@@ -267,16 +270,18 @@ public class SubscriptionService {
                                       "Subscription not found for id: " + dto.getId()));
 
                   subscription.setStatus(SubscriptionStatus.VALIDATED);
-                  return subscription;
+
+                  return modelMapper.map(
+                      subscriptionRepository.save(subscription), SubscriptionDTO.class);
                 })
             .collect(Collectors.toList());
+    subscriptionsDtoSaved.sort(Comparator.comparing(dto -> dto.getSettlementDate()));
+    subscriptionsDtoSaved.forEach(
+        subsDto -> {
+          movementService.handleMovementsAndPositionsfromsubscription(
+              subsDto, SubscriptionStatus.VALIDATED);
+        });
 
-    if (!updatedSubscriptions.isEmpty()) {
-      subscriptionRepository.saveAll(updatedSubscriptions);
-    }
-
-    return updatedSubscriptions.stream()
-        .map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class))
-        .collect(Collectors.toList());
+    return subscriptionsDtoSaved;
   }
 }

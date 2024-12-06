@@ -1,10 +1,8 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.InvestmentType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.PositionType;
 import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import com.fininfo.saeopcc.shared.domains.Account;
-import com.fininfo.saeopcc.shared.domains.enumeration.PositionNature;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -36,12 +34,8 @@ public class Position extends AbstractAuditingEntity implements Serializable {
   private String reference;
 
   private Instant positionDate;
-  private PositionNature positionNature;
-  private String nostroSecurityAccount;
-  private String custodian;
 
   private LocalDate valueDate;
-  private InvestmentType investmentType;
 
   private LocalDate endDate;
 

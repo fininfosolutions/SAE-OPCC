@@ -39,3 +39,9 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-subscriptionV1.yaml
   - include:
       file: db/changelog/db.changelog-tenant-subscriptionV2.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-movement.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-position.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-secPosition.yaml
