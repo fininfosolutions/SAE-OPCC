@@ -4,10 +4,12 @@ import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
 import com.fininfo.saeopcc.multitenancy.domains.Shareholder;
 import com.fininfo.saeopcc.multitenancy.repositories.SecuritiesAccountRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.SecuritiesAccountDTO;
+import com.fininfo.saeopcc.shared.domains.AccountCategory;
 import com.fininfo.saeopcc.shared.domains.Asset;
 import com.fininfo.saeopcc.shared.domains.Intermediary;
 import com.fininfo.saeopcc.shared.domains.SAEConfig;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
+import com.fininfo.saeopcc.shared.repositories.AccountCategoryRepository;
 import com.fininfo.saeopcc.shared.repositories.AssetRepository;
 import com.fininfo.saeopcc.shared.services.SAEConfigService;
 import com.fininfo.saeopcc.util.TenantContext;
@@ -16,20 +18,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class SecuritiesAccountService {
   @Autowired private SecuritiesAccountRepository securitiesAccountRepository;
   @Autowired private ModelMapper modelMapper;
   @Autowired private AssetRepository assetRepository;
   @Autowired private SAEConfigService SAEConfigService;
+  @Autowired private AccountCategoryRepository accountCategoryRepository;
   private static final List<AccountType> VALID_ACCOUNT_TYPES =
       List.of(AccountType.SOUS, AccountType.APPELE, AccountType.LIBERE);
+  private static final List<AccountType> old_ACCOUNT_TYPES =
+      List.of(AccountType.BLOQUE, AccountType.LIBRE, AccountType.NANTI);
 
   public List<SecuritiesAccountDTO> save(SecuritiesAccountDTO secAccountDTO) {
     List<SecuritiesAccount> accounts = new ArrayList<>();
@@ -282,10 +289,29 @@ public class SecuritiesAccountService {
         .map(secaccount -> modelMapper.map(secaccount, SecuritiesAccountDTO.class));
   }
 
-  public boolean securitiesAccountExist(Long assetId, Long shareholderId, Long intermediaryId) {
+  public boolean securitiesAccountExist(
+      Long assetId,
+      Long shareholderId,
+      Long intermediaryId,
+      Long accountCategoryId,
+      AccountType accountType) {
 
-    return securitiesAccountRepository
-        .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
-            assetId, shareholderId, intermediaryId, VALID_ACCOUNT_TYPES);
+    AccountCategory accountCategory =
+        accountCategoryRepository.findById(accountCategoryId).orElse(null);
+    if (accountCategory.getDescription().equals("00")) {
+      return securitiesAccountRepository
+          .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
+              assetId, shareholderId, intermediaryId, old_ACCOUNT_TYPES);
+    }
+    if (accountCategory.getDescription().equals("20")) {
+      return securitiesAccountRepository
+          .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
+              assetId, shareholderId, intermediaryId, VALID_ACCOUNT_TYPES);
+    } else {
+
+      return securitiesAccountRepository
+          .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountType(
+              assetId, shareholderId, intermediaryId, accountType);
+    }
   }
 }

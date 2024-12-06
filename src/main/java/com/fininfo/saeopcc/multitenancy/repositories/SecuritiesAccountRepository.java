@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface SecuritiesAccountRepository
     extends JpaRepository<SecuritiesAccount, Long>, JpaSpecificationExecutor<SecuritiesAccount> {
 
-  //   SecuritiesAccount findFirstByAccountNumber(String accountNumber);
+  // SecuritiesAccount findFirstByAccountNumber(String accountNumber);
 
   @Query(
       value =
@@ -64,4 +64,14 @@ public interface SecuritiesAccountRepository
 
   boolean existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
       Long assetId, Long shareholderId, Long intermediaryId, List<AccountType> accountTypes);
+
+  boolean existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeAndAccountCategory_id(
+      Long assetId,
+      Long shareholderId,
+      Long intermediaryId,
+      AccountType accountType,
+      Long accountCategoryId);
+
+  boolean existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountType(
+      Long assetId, Long shareholderId, Long intermediaryId, AccountType accountType);
 }
