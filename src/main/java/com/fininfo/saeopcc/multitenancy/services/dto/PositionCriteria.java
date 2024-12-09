@@ -34,6 +34,7 @@ public class PositionCriteria implements Serializable, Criteria {
   private LongFilter assetId;
   private LongFilter clientId;
   private Boolean reversed;
+  private StringFilter accountAccountNumber;
 
   public PositionCriteria(PositionCriteria other) {
     this.id = other.id == null ? null : other.id.copy();
@@ -57,6 +58,8 @@ public class PositionCriteria implements Serializable, Criteria {
     this.endDate = other.endDate == null ? null : other.endDate.copy();
     this.assetId = other.assetId == null ? null : other.assetId.copy();
     this.clientId = other.clientId == null ? null : other.clientId.copy();
+    this.accountAccountNumber =
+        other.accountAccountNumber == null ? null : other.accountAccountNumber.copy();
   }
 
   public PositionCriteria(
@@ -78,7 +81,8 @@ public class PositionCriteria implements Serializable, Criteria {
       ZonedDateTimeFilter valueDate,
       ZonedDateTimeFilter endDate,
       LongFilter assetId,
-      LongFilter clientId) {
+      LongFilter clientId,
+      StringFilter accountAccountNumber) {
     this.id = id;
     this.reference = reference;
     this.clientSecurityAccount = clientSecurityAccount;
@@ -98,6 +102,7 @@ public class PositionCriteria implements Serializable, Criteria {
     this.endDate = endDate;
     this.assetId = assetId;
     this.clientId = clientId;
+    this.accountAccountNumber = accountAccountNumber;
   }
 
   @Override
