@@ -45,3 +45,7 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-position.yaml
   - include:
       file: db/changelog/db.changelog-tenant-secPosition.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-event.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-appeal.yaml
