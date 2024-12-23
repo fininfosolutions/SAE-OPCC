@@ -86,6 +86,21 @@ public class CompartementQueryService extends QueryService<Compartement> {
     return new PageImpl<>(filteredList, pageable, filteredList.size());
   }
 
+  public Page<CompartementDTO> findByCriteria(CompartementCriteria criteria, Pageable page) {
+    log.debug("find by criteria : {}, page: {}", criteria, page);
+    final Specification<Compartement> specification = createSpecification(criteria);
+    Page<Compartement> compartementPage = compartementRepository.findAll(specification, page);
+    return compartementPage.map(
+        compartement -> modelMapper.map(compartement, CompartementDTO.class));
+  }
+
+  @Transactional(readOnly = true)
+  public long countByCriteria(CompartementCriteria criteria) {
+    log.debug("count by criteria : {}", criteria);
+    final Specification<Compartement> specification = createSpecification(criteria);
+    return compartementRepository.count(specification);
+  }
+
   protected Specification<Compartement> createSpecification(CompartementCriteria criteria) {
     Specification<Compartement> specification = Specification.where(null);
 

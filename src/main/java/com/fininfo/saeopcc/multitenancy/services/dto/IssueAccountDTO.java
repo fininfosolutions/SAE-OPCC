@@ -1,5 +1,6 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
+import com.fininfo.saeopcc.shared.domains.enumeration.DetentionForm;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,4 +30,6 @@ public class IssueAccountDTO implements Serializable {
   private Long compartementId;
   private String compartementFundCode;
   private String compartementFundIsin;
+  private String compartementReference;
+  private DetentionForm compartementFundDetentionForm;
 }
