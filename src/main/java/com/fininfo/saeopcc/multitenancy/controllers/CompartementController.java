@@ -54,4 +54,26 @@ public class CompartementController {
   public CompartementDTO getbyId(@PathVariable("id") Long id) {
     return compartementService.getOne(id);
   }
+
+  @GetMapping("compatements/client/{id}")
+  public List<CompartementDTO> getbyClientId(@PathVariable("id") Long id, Pageable pageable) {
+    return compartementService.getByClientId(id, pageable);
+  }
+
+  @GetMapping("/compatementsByQuery")
+  public ResponseEntity<List<CompartementDTO>> getAllSubscription(
+      CompartementCriteria criteria, Pageable pageable) {
+    log.debug("REST request to get subscription by criteria: {}", criteria);
+    Page<CompartementDTO> page = compartementqueryservice.findByCriteria(criteria, pageable);
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
+  }
+
+  @GetMapping("/compatementsByQuery/count")
+  public ResponseEntity<Long> getTotalSubscriptionCount(CompartementCriteria criteria) {
+    log.debug("REST request to count subscription by criteria: {}", criteria);
+    return ResponseEntity.ok().body(compartementqueryservice.countByCriteria(criteria));
+  }
 }
