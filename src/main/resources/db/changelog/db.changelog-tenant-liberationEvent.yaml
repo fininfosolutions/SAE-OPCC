@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: liberation_event
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: liberation_event
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: liberation_event_pkey   
+              - column:
+                  name: call_event_id
+                  type: BIGINT
+                  constraints:
+                    references: call_event(id)
+                    foreignKeyName: call_event_fkey
+ 
+

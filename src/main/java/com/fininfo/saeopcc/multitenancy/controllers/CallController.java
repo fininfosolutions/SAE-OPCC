@@ -1,12 +1,9 @@
 package com.fininfo.saeopcc.multitenancy.controllers;
 
-import com.fininfo.saeopcc.configuration.HeaderUtil;
-import com.fininfo.saeopcc.multitenancy.services.AppealService;
-import com.fininfo.saeopcc.multitenancy.services.dto.AppealDTO;
-import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fininfo.saeopcc.configuration.HeaderUtil;
+import com.fininfo.saeopcc.multitenancy.services.CallService;
+import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
+import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
+
 @RestController
 @RequestMapping("/api/v1")
-public class AppealController {
+public class CallController {
   private static final String ENTITY_NAME = "Appeal";
 
   @Value("${spring.application.name}")
   private String applicationName;
 
-  @Autowired private AppealService appealService;
+  @Autowired private CallService appealService;
 
   @GetMapping("/calculate-appeal")
-  public AppealDTO getAppeal(
+  public CallDTO getAppeal(
       @RequestParam Long subscriptionId,
       @RequestParam(required = false) BigDecimal percentage,
       @RequestParam(required = false) BigDecimal amount) {
@@ -47,14 +49,14 @@ public class AppealController {
   }
 
   @PostMapping("/appeals")
-  public ResponseEntity<AppealDTO> createAppeal(@RequestBody AppealDTO appealDTO)
+  public ResponseEntity<CallDTO> createAppeal(@RequestBody CallDTO appealDTO)
       throws URISyntaxException {
     if (appealDTO.getId() != null) {
       throw new BadRequestAlertException(
           "A new appeal cannot already have an ID", ENTITY_NAME, "idexists");
     }
 
-    AppealDTO result = appealService.save(appealDTO);
+    CallDTO result = appealService.save(appealDTO);
 
     return ResponseEntity.created(new URI("/api/appeals/" + result.getId()))
         .headers(
