@@ -17,59 +17,14 @@ databaseChangeLog:
                   name: description
                   type: VARCHAR(255)
               - column:
-                  name: closing_date
-                  type: DATE
-              - column:
-                  name: appeal_date
-                  type: DATE
-              - column:
-                  name: global_sous_initial_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_sous_initial_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_sous_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_sous_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_appeal_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_appeal_quantity
-                  type: NUMERIC(21,2)
+                  name: reference
+                  type: VARCHAR(255)
               - column:
                   name: percentage
                   type: NUMERIC(21,2)
               - column:
                   name: event_status
                   type: VARCHAR(255)
-              - column:
-                  name: global_unfunded_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_unfunded_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: dinvestment_period
-                  type: VARCHAR(255)
-              - column:
-                  name: investment_period
-                  type: VARCHAR(255)
-              - column:
-                  name: issue_id
-                  type: BIGINT
-                  constraints:
-                    references: issue(id)
-                    foreignKeyName: issue_fkey
-              - column:
-                  name: devise_id
-                  type: BIGINT
-                  constraints:
-                    references: public.devise(id)
-                    foreignKeyName: devise_fkey
               - column:
                   name: created_by
                   type: VARCHAR(255)

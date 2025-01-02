@@ -16,24 +16,10 @@ import lombok.NoArgsConstructor;
 public class EventDTO {
   private Long id;
   private String description;
-  private LocalDate closingDate;
-  private LocalDate appealDate;
-
-  private BigDecimal globalSousAmount;
-  private BigDecimal globalSousQuantity;
-  private BigDecimal globalAppealAmount;
-  private BigDecimal globalAppealQuantity;
-  private BigDecimal globalSousInitialAmount;
-  private BigDecimal globalSousInitialQuantity;
+  
+  private String reference;
 
   private BigDecimal percentage;
+  
   private EventStatus eventStatus;
-  private BigDecimal globalUnfundedAmount;
-  private BigDecimal globalUnfundedQuantity;
-  private String dinvestmentPeriod;
-
-  private String investmentPeriod;
-
-  private Long issueId;
-  private Long deviseId;
 }

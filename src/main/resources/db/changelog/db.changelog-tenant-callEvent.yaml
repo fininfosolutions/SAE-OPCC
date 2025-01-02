@@ -1,51 +1,47 @@
 databaseChangeLog:
   - changeSet:
-      id: appeal
+      id: call_event
       author: fininfo
       changes:
         - createTable:
-            tableName: appeal
+            tableName: call_event
             columns:
               - column:
                   name: id
                   type: BIGINT
-                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    primaryKeyName: appeal_pkey
-              - column:
-                  name: description
-                  type: VARCHAR(255)
-              - column:
-                  name: appeal_date
-                  type: DATE
+                    primaryKeyName: call_event_pkey   
               - column:
                   name: closing_date
                   type: DATE
               - column:
-                  name: appeal_amount
+                  name: appeal_date
+                  type: DATE
+              - column:
+                  name: global_sous_initial_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: percentage
+                  name: global_sous_initial_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: unfunded_amount
+                  name: global_sous_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: sous_amount
+                  name: global_sous_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: sous_quantity
+                  name: global_appeal_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: appeal_quantity
+                  name: global_appeal_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: unfunded_quantity
+                  name: global_unfunded_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: appeal_status
-                  type: VARCHAR(255)
+                  name: global_unfunded_quantity
+                  type: NUMERIC(21,2)
               - column:
                   name: dinvestment_period
                   type: VARCHAR(255)
@@ -53,29 +49,15 @@ databaseChangeLog:
                   name: investment_period
                   type: VARCHAR(255)
               - column:
-                  name: origin
-                  type: VARCHAR(255)
-              - column:
-                  name: subscription_id
+                  name: issue_id
                   type: BIGINT
                   constraints:
-                    references: subscription(id)
-                    foreignKeyName: subscription_fkey
+                    references: issue(id)
+                    foreignKeyName: issue_fkey
               - column:
                   name: devise_id
                   type: BIGINT
                   constraints:
                     references: public.devise(id)
                     foreignKeyName: devise_fkey
-              - column:
-                  name: created_by
-                  type: VARCHAR(255)
-              - column:
-                  name: last_modified_by
-                  type: VARCHAR(255)
-              - column:
-                  name: created_date
-                  type: TIMESTAMP
-              - column:
-                  name: last_modified_date
-                  type: TIMESTAMP
+

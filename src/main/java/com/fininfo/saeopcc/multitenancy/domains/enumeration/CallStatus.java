@@ -1,6 +1,6 @@
 package com.fininfo.saeopcc.multitenancy.domains.enumeration;
 
-public enum AppealStatus {
+public enum CallStatus {
   REJECTED,
   PREVALIDATED,
   VALIDATED,

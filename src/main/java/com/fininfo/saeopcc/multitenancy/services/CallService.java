@@ -1,36 +1,43 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
-import com.fininfo.saeopcc.multitenancy.domains.Appeal;
-import com.fininfo.saeopcc.multitenancy.domains.Subscription;
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.AppealStatus;
-import com.fininfo.saeopcc.multitenancy.repositories.AppealRepository;
-import com.fininfo.saeopcc.multitenancy.repositories.SubscriptionRepository;
-import com.fininfo.saeopcc.multitenancy.services.dto.AppealDTO;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fininfo.saeopcc.multitenancy.domains.Call;
+import com.fininfo.saeopcc.multitenancy.domains.Event;
+import com.fininfo.saeopcc.multitenancy.domains.Issue;
+import com.fininfo.saeopcc.multitenancy.domains.Subscription;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
+import com.fininfo.saeopcc.multitenancy.repositories.CallRepository;
+import com.fininfo.saeopcc.multitenancy.repositories.SubscriptionRepository;
+import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
-public class AppealService {
+public class CallService {
   @Autowired private ModelMapper modelMapper;
 
-  @Autowired private AppealRepository appealRepository;
+  @Autowired private CallRepository appealRepository;
   @Autowired private SubscriptionRepository subscriptionRepository;
 
   public Boolean isAmountExceeding(Long subscriptionId, BigDecimal amount) {
 
-    List<Appeal> appeals =
-        appealRepository.findBySubscriptionIdAndAppealStatusOrderByIdDesc(
-            subscriptionId, AppealStatus.VALIDATED);
+    List<Call> appeals =
+        appealRepository.findBySubscriptionIdAndCallStatusOrderByIdDesc(
+            subscriptionId, CallStatus.VALIDATED);
 
     if (!appeals.isEmpty()) {
-      Appeal appeal = appeals.get(0);
+      Call appeal = appeals.get(0);
       return amount.compareTo(appeal.getUnfundedAmount()) > 0;
     }
 
@@ -43,16 +50,16 @@ public class AppealService {
     return false;
   }
 
-  public AppealDTO getAppealDTO(Long subscriptionId, BigDecimal percentage, BigDecimal amount) {
+  public CallDTO getAppealDTO(Long subscriptionId, BigDecimal percentage, BigDecimal amount) {
 
-    List<Appeal> appeals =
-        appealRepository.findBySubscriptionIdAndAppealStatusOrderByIdDesc(
-            subscriptionId, AppealStatus.VALIDATED);
+    List<Call> appeals =
+        appealRepository.findBySubscriptionIdAndCallStatusOrderByIdDesc(
+            subscriptionId, CallStatus.VALIDATED);
 
-    AppealDTO appealDTO = new AppealDTO();
+    CallDTO appealDTO = new CallDTO();
 
     if (!appeals.isEmpty()) {
-      Appeal appeal = appeals.get(0);
+      Call appeal = appeals.get(0);
 
       if (percentage != null) {
         fillAppealDTOFromAppeal(
@@ -86,7 +93,7 @@ public class AppealService {
   }
 
   private void fillAppealDTOFromAppeal(
-      AppealDTO dto, Appeal appeal, BigDecimal percentage, BigDecimal appealAmount) {
+      CallDTO dto, Call appeal, BigDecimal percentage, BigDecimal appealAmount) {
     dto.setSousAmount(appeal.getUnfundedAmount());
     dto.setSousQuantity(appeal.getUnfundedQuantity());
     dto.setPercentage(percentage);
@@ -97,7 +104,7 @@ public class AppealService {
   }
 
   private void fillAppealDTOFromSubscription(
-      AppealDTO dto, Subscription subscription, BigDecimal percentage, BigDecimal appealAmount) {
+      CallDTO dto, Subscription subscription, BigDecimal percentage, BigDecimal appealAmount) {
     dto.setSousAmount(subscription.getAmount());
     dto.setSousQuantity(subscription.getQuantity());
     dto.setPercentage(percentage);
@@ -107,16 +114,54 @@ public class AppealService {
     dto.setUnfundedQuantity(subscription.getQuantity().subtract(dto.getAppealQuantity()));
   }
 
-  public AppealDTO save(AppealDTO appealDTO) {
-    Appeal appeal = modelMapper.map(appealDTO, Appeal.class);
+  public CallDTO save(CallDTO appealDTO) {
+    Call appeal = modelMapper.map(appealDTO, Call.class);
     appeal = appealRepository.save(appeal);
     if (appeal.getId() != null) {
       appeal.setDescription(
           appeal.getId() + "-" + appeal.getSubscription().getShareholder().getDescription());
       appeal = appealRepository.save(appeal);
     }
-    AppealDTO appDTO = modelMapper.map(appeal, AppealDTO.class);
+    CallDTO appDTO = modelMapper.map(appeal, CallDTO.class);
 
     return appDTO;
+  }
+
+  // public void createFromEvent(Event event){
+
+  //   List<Subscription> subscriptions=
+  // subscriptionRepository.findByIssue_id(event.getIssue().getId()).stream().filter(sub->sub.getStatus().equals(SubscriptionStatus.VALIDATED)).forEach(sub->{
+
+  //   Appeal appeal=new Appeal();
+
+  //     appeal.setAppealAmount(sub.getAmount());
+  //   appeal.setUnfundedAmount(sub.getAmount().subtract(appeal.getAppealAmount()));
+
+  //   // // TODO: 25/12/2024  complite all champs
+  //   appeal.setEvent(event);
+
+  //   appealRepository.save(appeal);
+  //   });
+  // }
+
+  public void createFromEvent(Event event) {
+
+    Issue Issue= new Issue();
+    List<Subscription> subscriptions =
+        subscriptionRepository.findByIssue_id(Issue.getId()).stream()
+            .filter(sub -> sub.getStatus().equals(SubscriptionStatus.VALIDATED))
+            .collect(Collectors.toList());
+
+    subscriptions.forEach(
+        sub -> {
+          Call appeal = new Call();
+
+          appeal.setAppealAmount(sub.getAmount());
+          appeal.setUnfundedAmount(sub.getAmount().subtract(appeal.getAppealAmount()));
+
+         // appeal.setEvent(event);
+
+          appealRepository.save(appeal);
+        });
   }
 }
