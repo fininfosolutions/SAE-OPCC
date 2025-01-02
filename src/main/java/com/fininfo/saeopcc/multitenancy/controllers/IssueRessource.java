@@ -2,6 +2,7 @@ package com.fininfo.saeopcc.multitenancy.controllers;
 
 import com.fininfo.saeopcc.configuration.HeaderUtil;
 import com.fininfo.saeopcc.configuration.PaginationUtil;
+import com.fininfo.saeopcc.configuration.ResponseUtil;
 import com.fininfo.saeopcc.multitenancy.services.IssueQueryService;
 import com.fininfo.saeopcc.multitenancy.services.IssueService;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueCriteria;
@@ -10,6 +11,7 @@ import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -97,5 +99,12 @@ public class IssueRessource {
   @GetMapping("/issues/issue-account/{id}")
   public List<IssueDTO> getByIssueAccountId(@PathVariable("id") Long id, Pageable pageable) {
     return issueService.getByIssueAccount(id, pageable);
+  }
+
+  @GetMapping("/issues/{id}")
+  public ResponseEntity<IssueDTO> getSubscription(@PathVariable Long id) {
+    log.debug("REST request to get Subscription : {}", id);
+    Optional<IssueDTO> subDTO = issueService.findOne(id);
+    return ResponseUtil.wrapOrNotFound(subDTO);
   }
 }
