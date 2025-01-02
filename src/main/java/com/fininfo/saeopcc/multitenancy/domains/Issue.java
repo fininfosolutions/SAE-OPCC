@@ -3,6 +3,8 @@ package com.fininfo.saeopcc.multitenancy.domains;
 import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -45,6 +47,24 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
   @Enumerated(EnumType.STRING)
   @Column(name = "issue_status")
   private IssueStatus issueStatus;
+
+  @Column(name = "description")
+  private String description;
+
+  @Column(name = "opening_date")
+  private LocalDate openingDate;
+
+  @Column(name = "closing_date")
+  private LocalDate closingDate;
+
+  @Column(name = "quantity")
+  private BigDecimal quantity;
+
+  @Column(name = "amount")
+  private BigDecimal amount;
+
+  @Column(name = "price")
+  private BigDecimal price;
 
   @OneToOne private IssueAccount issueAccount;
 

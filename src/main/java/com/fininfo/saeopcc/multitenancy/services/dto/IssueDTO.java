@@ -1,6 +1,8 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,11 @@ public class IssueDTO {
   private String issueAccountIssueCompartementFundDescription;
   private String issueAccountIssueCompartementFundCode;
   private String issueAccountIssueCompartementFundIsin;
-
+  private String description;
+  private LocalDate openingDate;
+  private LocalDate closingDate;
+  private BigDecimal quantity;
+  private BigDecimal amount;
+  private BigDecimal price;
   private Set<SubscriptionDTO> subscriptions = new HashSet<>();
 }
