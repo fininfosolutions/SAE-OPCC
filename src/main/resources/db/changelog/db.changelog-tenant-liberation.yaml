@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: liberation
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: liberation
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: liberation_pkey
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
+              - column:
+                  name: liberation_date
+                  type: DATE
+              - column:
+                  name: percentage
+                  type: NUMERIC(21,2)
+              - column:
+                  name: released_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: released_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: message
+                  type: TEXT
+              - column:
+                  name: global_liberation_id
+                  type: BIGINT
+                  constraints:
+                    references: global_liberation(id)
+                    foreignKeyName: global_liberation_fkey
+              - column:
+                  name: call_id
+                  type: BIGINT
+                  constraints:
+                    references: call(id)
+                    foreignKeyName: call_fkey
+              - column:
+                  name: securities_account_id
+                  type: BIGINT
+                  constraints:
+                    references: securities_account(id)
+                    foreignKeyName: securities_account_fkey
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP

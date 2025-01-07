@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: call
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: call
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: call_pkey
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
+              - column:
+                  name: call_date
+                  type: DATE
+              - column:
+                  name: called_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: percentage
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: called_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: message
+                  type: TEXT
+              - column:
+                  name: subscription_id
+                  type: BIGINT
+                  constraints:
+                    references: subscription(id)
+                    foreignKeyName: subscription_fkey
+              - column:
+                  name: call_event_id
+                  type: BIGINT
+                  constraints:
+                    references: call_event(id)
+                    foreignKeyName: event_call_fkey
+              - column:
+                  name: securities_account_id
+                  type: BIGINT
+                  constraints:
+                    references: securities_account(id)
+                    foreignKeyName: securities_account_fkey
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP

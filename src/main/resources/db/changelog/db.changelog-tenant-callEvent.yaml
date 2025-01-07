@@ -1,0 +1,72 @@
+databaseChangeLog:
+  - changeSet:
+      id: call_event
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: call_event
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: call_event_pkey  
+              - column:
+                  name: percentage
+                  type: NUMERIC(21,2)                     
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
+              - column:
+                  name: closing_date
+                  type: DATE
+              - column:
+                  name: call_date
+                  type: DATE
+              - column:
+                  name: called_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: called_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: event_status
+                  type: VARCHAR(255)
+              - column:
+                  name: message
+                  type: TEXT
+              - column:
+                  name: issue_id
+                  type: BIGINT
+                  constraints:
+                    references: issue(id)
+                    foreignKeyName: issue_fkey
+              - column:
+                  name: devise_id
+                  type: BIGINT
+                  constraints:
+                    references: public.devise(id)
+                    foreignKeyName: devise_fkey
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP
+

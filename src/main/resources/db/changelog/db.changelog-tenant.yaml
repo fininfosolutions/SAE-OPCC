@@ -8,7 +8,9 @@ databaseChangeLog:
   - include:
       file: db/changelog/db.changelog-tenant-issueaccount.yaml      
   - include:
-      file: db/changelog/db.changelog-tenant-issue.yaml      
+      file: db/changelog/db.changelog-tenant-issue.yaml   
+  - include:
+      file: db/changelog/db.changelog-tenant-issueV1.yaml     
   - include:
       file: db/changelog/db.changelog-tenant-subscription.yaml
   - include:
@@ -45,3 +47,11 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-position.yaml
   - include:
       file: db/changelog/db.changelog-tenant-secPosition.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-callEvent.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-globalliberation.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-call.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-liberation.yaml
