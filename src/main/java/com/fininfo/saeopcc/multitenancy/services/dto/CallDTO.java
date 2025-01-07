@@ -1,11 +1,8 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallOrigin;
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,19 +16,17 @@ import lombok.NoArgsConstructor;
 public class CallDTO {
   private Long id;
   private String description;
-  private LocalDate appealDate;
-  private LocalDate closingDate;
-  private BigDecimal appealAmount;
+  private String reference;
+
+  private LocalDate callDate;
+  private BigDecimal calledAmount;
   private BigDecimal percentage;
-  private BigDecimal unfundedAmount;
-  private BigDecimal appealQuantity;
-  private BigDecimal sousAmount;
-  private BigDecimal sousQuantity;
-  private BigDecimal unfundedQuantity;
-  private Long deviseId;
-  private CallStatus callStatus;
-  private CallOrigin origin;
-  private String dinvestmentPeriod;
-  private String investmentPeriod;
- 
+  private BigDecimal remainingAmount;
+  private BigDecimal remainingQuantiy;
+  private BigDecimal calledQuantiy;
+  private CallStatus status;
+  private String message;
+  private Long subscriptionId;
+  private Long callEventId;
+  private Long securitiesAccountId;
 }

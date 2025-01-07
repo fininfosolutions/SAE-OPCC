@@ -12,7 +12,7 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    primaryKeyName: appeal_pkey
+                    primaryKeyName: call_pkey
               - column:
                   name: description
                   type: VARCHAR(255)
@@ -20,44 +20,29 @@ databaseChangeLog:
                   name: reference
                   type: VARCHAR(255)
               - column:
-                  name: appeal_date
+                  name: call_date
                   type: DATE
               - column:
-                  name: closing_date
-                  type: DATE
-              - column:
-                  name: appeal_amount
+                  name: called_amount
                   type: NUMERIC(21,2)
               - column:
                   name: percentage
                   type: NUMERIC(21,2)
               - column:
-                  name: unfunded_amount
+                  name: remaining_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: sous_amount
+                  name: remaining_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: sous_quantity
+                  name: called_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: appeal_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: unfunded_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: call_status
+                  name: status
                   type: VARCHAR(255)
               - column:
-                  name: dinvestment_period
-                  type: VARCHAR(255)
-              - column:
-                  name: investment_period
-                  type: VARCHAR(255)
-              - column:
-                  name: call_origin
-                  type: VARCHAR(255)
+                  name: message
+                  type: TEXT
               - column:
                   name: subscription_id
                   type: BIGINT
@@ -71,11 +56,11 @@ databaseChangeLog:
                     references: call_event(id)
                     foreignKeyName: event_call_fkey
               - column:
-                  name: devise_id
+                  name: securities_account_id
                   type: BIGINT
                   constraints:
-                    references: public.devise(id)
-                    foreignKeyName: devise_fkey
+                    references: securities_account(id)
+                    foreignKeyName: securities_account_fkey
               - column:
                   name: created_by
                   type: VARCHAR(255)

@@ -1,9 +1,10 @@
 package com.fininfo.saeopcc.multitenancy.domains;
 
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
+import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,12 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallOrigin;
-import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
-import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
-import com.fininfo.saeopcc.shared.domains.Devise;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,32 +33,23 @@ public class Call extends AbstractAuditingEntity implements Serializable {
   private String description;
   private String reference;
 
-  private LocalDate appealDate;
-  private LocalDate closingDate;
+  private LocalDate callDate;
 
-  private BigDecimal appealAmount;
+  private BigDecimal calledAmount;
 
   private BigDecimal percentage;
 
-  private BigDecimal unfundedAmount;
+  private BigDecimal remainingAmount;
 
-  private BigDecimal sousAmount;
-  private BigDecimal sousQuantity;
-
-  @Enumerated(EnumType.STRING)
-  private CallStatus callStatus;
+  private BigDecimal remainingQuantiy;
+  private BigDecimal calledQuantiy;
 
   @Enumerated(EnumType.STRING)
-  private CallOrigin callOrigin;
+  private CallStatus status;
 
-  private BigDecimal appealQuantity;
-  private BigDecimal unfundedQuantity;
-
-  private String dinvestmentPeriod;
-
-  private String investmentPeriod;
+  private String message;
 
   @ManyToOne @EqualsAndHashCode.Exclude private Subscription subscription;
   @ManyToOne @EqualsAndHashCode.Exclude private CallEvent callEvent;
-  @ManyToOne private Devise devise;
+  @ManyToOne @EqualsAndHashCode.Exclude private SecuritiesAccount securitiesAccount;
 }

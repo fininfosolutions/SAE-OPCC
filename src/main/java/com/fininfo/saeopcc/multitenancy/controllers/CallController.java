@@ -1,23 +1,18 @@
 package com.fininfo.saeopcc.multitenancy.controllers;
 
-import java.math.BigDecimal;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.fininfo.saeopcc.configuration.HeaderUtil;
 import com.fininfo.saeopcc.multitenancy.services.CallService;
 import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
 import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -29,24 +24,24 @@ public class CallController {
 
   @Autowired private CallService appealService;
 
-  @GetMapping("/calculate-appeal")
-  public CallDTO getAppeal(
-      @RequestParam Long subscriptionId,
-      @RequestParam(required = false) BigDecimal percentage,
-      @RequestParam(required = false) BigDecimal amount) {
+  // @GetMapping("/calculate-appeal")
+  // public CallDTO getAppeal(
+  //     @RequestParam Long subscriptionId,
+  //     @RequestParam(required = false) BigDecimal percentage,
+  //     @RequestParam(required = false) BigDecimal amount) {
 
-    if (percentage == null && amount == null) {
-      throw new IllegalArgumentException("Either 'percentage' or 'amount' must be provided.");
-    }
-    return appealService.getAppealDTO(subscriptionId, percentage, amount);
-  }
+  //   if (percentage == null && amount == null) {
+  //     throw new IllegalArgumentException("Either 'percentage' or 'amount' must be provided.");
+  //   }
+  //   return appealService.getAppealDTO(subscriptionId, percentage, amount);
+  // }
 
-  @GetMapping("/isamount-exceeding")
-  public Boolean isAmountExceeding(
-      @RequestParam Long subscriptionId, @RequestParam BigDecimal amount) {
+  // @GetMapping("/isamount-exceeding")
+  // public Boolean isAmountExceeding(
+  //     @RequestParam Long subscriptionId, @RequestParam BigDecimal amount) {
 
-    return appealService.isAmountExceeding(subscriptionId, amount);
-  }
+  //   return appealService.isAmountExceeding(subscriptionId, amount);
+  // }
 
   @PostMapping("/appeals")
   public ResponseEntity<CallDTO> createAppeal(@RequestBody CallDTO appealDTO)
