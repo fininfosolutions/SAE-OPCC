@@ -1,10 +1,17 @@
 package com.fininfo.saeopcc.multitenancy.controllers;
 
+import com.fininfo.saeopcc.configuration.HeaderUtil;
+import com.fininfo.saeopcc.configuration.PaginationUtil;
+import com.fininfo.saeopcc.configuration.ResponseUtil;
+import com.fininfo.saeopcc.multitenancy.services.CallEventService;
+import com.fininfo.saeopcc.multitenancy.services.dto.CallEventDTO;
+import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,28 +22,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.fininfo.saeopcc.configuration.HeaderUtil;
-import com.fininfo.saeopcc.configuration.PaginationUtil;
-import com.fininfo.saeopcc.configuration.ResponseUtil;
-import com.fininfo.saeopcc.multitenancy.services.CallEventService;
-import com.fininfo.saeopcc.multitenancy.services.dto.CallEventDTO;
-import com.fininfo.saeopcc.multitenancy.services.dto.EventDTO;
-import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class CallEventController {
 
-  @Autowired private CallEventService eventService;
+  @Autowired private CallEventService calleventService;
   @Autowired private ModelMapper modelMapper;
 
   private static final String ENTITY_NAME = "sae_event";
@@ -44,7 +41,7 @@ public class CallEventController {
   @Value("${spring.application.name}")
   private String applicationName;
 
-  @PostMapping("/events")
+  @PostMapping("/call-events")
   public ResponseEntity<CallEventDTO> createEvent(@RequestBody CallEventDTO eventDTO)
       throws URISyntaxException {
     log.debug("REST request to save Event : {}", eventDTO);
@@ -52,7 +49,7 @@ public class CallEventController {
       throw new BadRequestAlertException(
           "A new event cannot already have an ID", ENTITY_NAME, "idexists");
     }
-    CallEventDTO result = eventService.save(eventDTO);
+    CallEventDTO result = calleventService.save(eventDTO);
 
     return ResponseEntity.created(new URI("/api/events/" + result.getId()))
         .headers(
@@ -61,11 +58,20 @@ public class CallEventController {
         .body(result);
   }
 
-  @GetMapping("/events/{id}")
-  public ResponseEntity<EventDTO> getEvent(@PathVariable Long id) {
+  @GetMapping("/call-events/{id}")
+  public ResponseEntity<CallEventDTO> getEvent(@PathVariable Long id) {
     log.debug("REST request to get Event : {}", id);
-    Optional<EventDTO> eventDTO = eventService.findOne(id);
+    Optional<CallEventDTO> eventDTO = calleventService.findOne(id);
     return ResponseUtil.wrapOrNotFound(eventDTO);
+  }
+
+  @GetMapping("/parameters-exceeding")
+  public Boolean isAmountExceeding(
+      @RequestParam Long issueId, @RequestParam(required = false) BigDecimal percentage) {
+    if (percentage == null) {
+      throw new IllegalArgumentException("Either 'percentage' or 'amount' must be provided.");
+    }
+    return calleventService.parametersexceeding(issueId, percentage);
   }
 
   // @PutMapping("/events")
@@ -83,9 +89,10 @@ public class CallEventController {
   // }
 
   @GetMapping("/events/byIssue/{id}")
-  public ResponseEntity<List<EventDTO>> getEventsByIssue(@PathVariable Long id, Pageable pageable) {
+  public ResponseEntity<List<CallEventDTO>> getEventsByIssue(
+      @PathVariable Long id, Pageable pageable) {
     log.debug("REST request to get Events by Issue ID : {}", id);
-    Page<EventDTO> page = eventService.getEventsByIssue(id, pageable);
+    Page<CallEventDTO> page = calleventService.getEventsByIssue(id, pageable);
     HttpHeaders headers =
         PaginationUtil.generatePaginationHttpHeaders(
             ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -94,14 +101,15 @@ public class CallEventController {
 
   @GetMapping("/events/count/{issueId}")
   public ResponseEntity<Long> countEventsByIssue(@PathVariable Long issueId) {
-    long count = eventService.countEventsByIssue(issueId);
+    long count = calleventService.countEventsByIssue(issueId);
     return ResponseEntity.ok(count);
   }
 
-  @PutMapping("/events/validate")
-  public ResponseEntity<List<CallEventDTO>> validateEvents(@RequestBody List<CallEventDTO> eventDTOs) {
-    log.debug("REST request to validate Events : {}", eventDTOs);
-    List<CallEventDTO> validatedEvents = eventService.validateEvents(eventDTOs);
-    return ResponseEntity.ok(validatedEvents);
-  }
+  // @PutMapping("/events/validate")
+  // public ResponseEntity<List<CallEventDTO>> validateEvents(@RequestBody List<CallEventDTO>
+  // eventDTOs) {
+  //   log.debug("REST request to validate Events : {}", eventDTOs);
+  //   List<CallEventDTO> validatedEvents = eventService.validateEvents(eventDTOs);
+  //   return ResponseEntity.ok(validatedEvents);
+  // }
 }

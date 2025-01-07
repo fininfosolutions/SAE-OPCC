@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: global_liberation
+      author: fininfo
+      changes:
+        - createTable:
+            tableName: global_liberation
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: global_liberation_pkey 
+              - column:
+                  name: percentage
+                  type: NUMERIC(21,2)                     
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
+              - column:
+                  name: event_status
+                  type: VARCHAR(255)
+              - column:
+                  name: call_event_id
+                  type: BIGINT
+                  constraints:
+                    references: call_event(id)
+                    foreignKeyName: call_event_fkey
+ 
+

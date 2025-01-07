@@ -11,43 +11,40 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     primaryKey: true
-                    primaryKeyName: call_event_pkey   
+                    primaryKeyName: call_event_pkey  
+              - column:
+                  name: percentage
+                  type: NUMERIC(21,2)                     
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: reference
+                  type: VARCHAR(255)
               - column:
                   name: closing_date
                   type: DATE
               - column:
-                  name: appeal_date
+                  name: call_date
                   type: DATE
               - column:
-                  name: global_sous_initial_amount
+                  name: called_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: global_sous_initial_quantity
+                  name: called_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: global_sous_amount
+                  name: remaining_quantity
                   type: NUMERIC(21,2)
               - column:
-                  name: global_sous_quantity
+                  name: remaining_amount
                   type: NUMERIC(21,2)
               - column:
-                  name: global_appeal_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_appeal_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_unfunded_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: global_unfunded_quantity
-                  type: NUMERIC(21,2)
-              - column:
-                  name: dinvestment_period
+                  name: event_status
                   type: VARCHAR(255)
               - column:
-                  name: investment_period
-                  type: VARCHAR(255)
+                  name: message
+                  type: TEXT
               - column:
                   name: issue_id
                   type: BIGINT
@@ -60,4 +57,16 @@ databaseChangeLog:
                   constraints:
                     references: public.devise(id)
                     foreignKeyName: devise_fkey
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(255)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+              - column:
+                  name: last_modified_date
+                  type: TIMESTAMP
 

@@ -13,29 +13,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = false)
-public class CallEventDTO extends EventDTO {
+public class CallEventDTO {
   private Long id;
+  private BigDecimal percentage;
+  private String description;
+
+  private String reference;
+
   private LocalDate closingDate;
-  private LocalDate appealDate;
-  private BigDecimal globalSousInitialAmount;
-  private BigDecimal globalSousInitialQuantity;
-  private BigDecimal globalSousAmount;
-  private BigDecimal globalSousQuantity;
-  private BigDecimal globalAppealAmount;
-  private BigDecimal globalAppealQuantity;
-  private BigDecimal globalUnfundedAmount;
-  private BigDecimal globalUnfundedQuantity;
-  private String dinvestmentPeriod;
-  private String investmentPeriod;
+  private LocalDate callDate;
+  private BigDecimal calledAmount;
+  private EventStatus eventStatus;
+  private BigDecimal calledQuantity;
+  private BigDecimal remainingQuantity;
+  private BigDecimal remainingAmount;
+
+  private String message;
 
   private Long issueId;
-  private String issueDescription;
-  private LocalDate issueClosingDate;
-  private LocalDate issueOpeningDate;
-  private BigDecimal issueQuantity;
-  private BigDecimal issueAmount;
-  private BigDecimal issuePrice;
   private Long deviseId;
-  private String deviseCodeAlpha;
-
 }

@@ -23,23 +23,32 @@ databaseChangeLog:
                   name: liberation_date
                   type: DATE
               - column:
-                  name: liberation_amount
-                  type: NUMERIC(21,2)
-              - column:
-                  name: liberation_quantity
-                  type: NUMERIC(21,2)
-              - column:
                   name: percentage
                   type: NUMERIC(21,2)
               - column:
-                  name: liberation_status
+                  name: released_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: released_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: remaining_quantity
+                  type: NUMERIC(21,2)
+              - column:
+                  name: status
                   type: VARCHAR(255)
               - column:
-                  name: liberation_event_id
+                  name: message
+                  type: TEXT
+              - column:
+                  name: global_liberation_id
                   type: BIGINT
                   constraints:
-                    references: liberation_event(id)
-                    foreignKeyName: liberation_event_fkey
+                    references: global_liberation(id)
+                    foreignKeyName: global_liberation_fkey
               - column:
                   name: call_id
                   type: BIGINT
@@ -47,11 +56,11 @@ databaseChangeLog:
                     references: call(id)
                     foreignKeyName: call_fkey
               - column:
-                  name: devise_id
+                  name: securities_account_id
                   type: BIGINT
                   constraints:
-                    references: public.devise(id)
-                    foreignKeyName: devise_fkey
+                    references: securities_account(id)
+                    foreignKeyName: securities_account_fkey
               - column:
                   name: created_by
                   type: VARCHAR(255)
