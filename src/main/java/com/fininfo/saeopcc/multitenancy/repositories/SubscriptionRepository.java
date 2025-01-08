@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.repositories;
 
 import com.fininfo.saeopcc.multitenancy.domains.Subscription;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +18,11 @@ public interface SubscriptionRepository
 
   // List<Subscription> findByAsset_idAndStatus(Long assetId, SubscriptionStatus
   // subscriptionStatus);
+  List<Subscription> findByIssue_IdAndStatus(Long issueId, SubscriptionStatus status);
 
-  List<Subscription> findByIssue_id(Long issueId);
+  List<Subscription> findByIssue_Id(Long issueId);
 
-  Page<Subscription> findByIssue_id(Long issueId, Pageable pageable);
+  Page<Subscription> findByIssue_Id(Long issueId, Pageable pageable);
 
   long countByIssue_Id(Long issueId);
 }
