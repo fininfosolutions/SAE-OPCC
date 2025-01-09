@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: extend_big_decimal_columns_call_event
+      author: fininfo
+      changes:
+        - modifyDataType:
+            tableName: call_event
+            columnName: called_amount
+            newDataType: NUMERIC(21,4)
+        - modifyDataType:
+            tableName: call_event
+            columnName: called_quantity
+            newDataType: NUMERIC(21,4)
+        - modifyDataType:
+            tableName: call_event
+            columnName: remaining_quantity
+            newDataType: NUMERIC(21,4)
+        - modifyDataType:
+            tableName: call_event
+            columnName: remaining_amount
+            newDataType: NUMERIC(21,4)
+        - modifyDataType:
+            tableName: call_event
+            columnName: percentage
+            newDataType: NUMERIC(21,4)                                                
