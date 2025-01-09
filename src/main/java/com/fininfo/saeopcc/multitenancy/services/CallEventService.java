@@ -124,11 +124,11 @@ public class CallEventService {
       BigDecimal subQuantity =
           subscription.getQuantity() != null ? subscription.getQuantity() : BigDecimal.ZERO;
       BigDecimal calledQuantity = percentage.multiply(subQuantity);
-      call.setCalledQuantiy(calledQuantity);
+      call.setCalledQuantity(calledQuantity);
       BigDecimal remainingAmount = subAmount.subtract(calledAmount);
       call.setRemainingAmount(remainingAmount);
       BigDecimal remainingQuantity = subQuantity.subtract(calledQuantity);
-      call.setRemainingQuantiy(remainingQuantity);
+      call.setRemainingQuantity(remainingQuantity);
       call.setReference(callEvent.getReference());
       call.setDescription(callEvent.getDescription());
       call.setCallDate(callEvent.getCallDate());

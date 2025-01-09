@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: extend_big_decimal_columns_liberation
+      author: fininfo
+      changes:
+        - modifyDataType:
+            tableName: liberation
+            columnName: percentage
+            newDataType: NUMERIC(21,4) 
+        - modifyDataType:
+            tableName: liberation
+            columnName: remaining_quantity
+            newDataType: NUMERIC(21,4)                
+        - modifyDataType:
+            tableName: liberation
+            columnName: remaining_amount
+            newDataType: NUMERIC(21,4)       
+        - modifyDataType:
+            tableName: liberation
+            columnName: released_quantity
+            newDataType: NUMERIC(21,4)       
+        - modifyDataType:
+            tableName: liberation
+            columnName: released_amount
+            newDataType: NUMERIC(21,4)                                                                                                                                                                                                                                                                 
