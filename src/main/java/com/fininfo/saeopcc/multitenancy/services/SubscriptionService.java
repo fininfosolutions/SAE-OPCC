@@ -215,7 +215,7 @@ public class SubscriptionService {
   public Page<SubscriptionDTO> getSubscriptionsByIssue(Long issueId, Pageable pageable) {
     Optional<Issue> issueOpt = issueRepository.findById(issueId);
     if (issueOpt.isPresent()) {
-      Page<Subscription> page = subscriptionRepository.findByIssue_id(issueId, pageable);
+      Page<Subscription> page = subscriptionRepository.findByIssue_Id(issueId, pageable);
       return page.map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class));
     } else {
       return new PageImpl<>(new ArrayList<>());

@@ -6,6 +6,7 @@ import com.fininfo.saeopcc.shared.domains.Devise;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -31,20 +32,29 @@ public class CallEvent extends AbstractAuditingEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(precision = 21, scale = 4)
   private BigDecimal percentage;
+
   private String description;
 
   private String reference;
 
   private LocalDate closingDate;
   private LocalDate callDate;
+
+  @Column(precision = 21, scale = 4)
   private BigDecimal calledAmount;
 
   @Enumerated(EnumType.STRING)
   private EventStatus eventStatus;
 
+  @Column(precision = 21, scale = 4)
   private BigDecimal calledQuantity;
+
+  @Column(precision = 21, scale = 4)
   private BigDecimal remainingQuantity;
+
+  @Column(precision = 21, scale = 4)
   private BigDecimal remainingAmount;
 
   private String message;

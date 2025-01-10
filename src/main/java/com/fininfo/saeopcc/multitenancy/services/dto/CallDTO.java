@@ -29,4 +29,5 @@ public class CallDTO {
   private Long subscriptionId;
   private Long callEventId;
   private Long securitiesAccountId;
+  private Long securitiesAccountAssetId;
 }

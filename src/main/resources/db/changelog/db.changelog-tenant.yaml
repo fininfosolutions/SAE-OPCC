@@ -55,3 +55,14 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-call.yaml
   - include:
       file: db/changelog/db.changelog-tenant-liberation.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-callEventV1.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-globalliberationV1.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-callV1.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-liberationV1.yaml
+
+
+

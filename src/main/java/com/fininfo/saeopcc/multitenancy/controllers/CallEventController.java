@@ -3,6 +3,7 @@ package com.fininfo.saeopcc.multitenancy.controllers;
 import com.fininfo.saeopcc.configuration.HeaderUtil;
 import com.fininfo.saeopcc.configuration.PaginationUtil;
 import com.fininfo.saeopcc.configuration.ResponseUtil;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.EventStatus;
 import com.fininfo.saeopcc.multitenancy.services.CallEventService;
 import com.fininfo.saeopcc.multitenancy.services.dto.CallEventDTO;
 import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
@@ -12,7 +13,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class CallEventController {
 
   @Autowired private CallEventService calleventService;
-  @Autowired private ModelMapper modelMapper;
 
   private static final String ENTITY_NAME = "sae_event";
 
@@ -58,6 +58,13 @@ public class CallEventController {
         .body(result);
   }
 
+  @PutMapping("/call-events/validate")
+  public ResponseEntity<List<CallEventDTO>> validateCallEvents(
+      @RequestBody List<CallEventDTO> callEventDTOs) {
+    List<CallEventDTO> validatedEvents = calleventService.validateEvents(callEventDTOs);
+    return ResponseEntity.ok(validatedEvents);
+  }
+
   @GetMapping("/call-events/{id}")
   public ResponseEntity<CallEventDTO> getEvent(@PathVariable Long id) {
     log.debug("REST request to get Event : {}", id);
@@ -74,19 +81,15 @@ public class CallEventController {
     return calleventService.parametersexceeding(issueId, percentage);
   }
 
-  // @PutMapping("/events")
-  // public ResponseEntity<EventDTO> updateEvent(@RequestBody EventDTO eventDTO) {
-  //   log.debug("REST request to update Event : {}", eventDTO);
-  //   if (eventDTO.getId() == null) {
-  //     throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-  //   }
-  //   EventDTO result = eventService.updateEvent(eventDTO);
-  //   return ResponseEntity.ok()
-  //       .headers(
-  //           HeaderUtil.createEntityUpdateAlert(
-  //               applicationName, true, ENTITY_NAME, eventDTO.getId().toString()))
-  //       .body(result);
-  // }
+  @PutMapping("/call-events")
+  public CallEventDTO updateManuelCallEvent(@RequestBody CallEventDTO callEventDTO) {
+    if (callEventDTO.getId() == null
+        || !callEventDTO.getEventStatus().equals(EventStatus.PREVALIDATED))
+      throw new BadRequestAlertException(
+          "This call-event cannot be updated", ENTITY_NAME, "invalide");
+
+    return calleventService.updateEvent(callEventDTO);
+  }
 
   @GetMapping("/events/byIssue/{id}")
   public ResponseEntity<List<CallEventDTO>> getEventsByIssue(
@@ -104,12 +107,4 @@ public class CallEventController {
     long count = calleventService.countEventsByIssue(issueId);
     return ResponseEntity.ok(count);
   }
-
-  // @PutMapping("/events/validate")
-  // public ResponseEntity<List<CallEventDTO>> validateEvents(@RequestBody List<CallEventDTO>
-  // eventDTOs) {
-  //   log.debug("REST request to validate Events : {}", eventDTOs);
-  //   List<CallEventDTO> validatedEvents = eventService.validateEvents(eventDTOs);
-  //   return ResponseEntity.ok(validatedEvents);
-  // }
 }

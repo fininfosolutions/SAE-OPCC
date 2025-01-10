@@ -32,4 +32,5 @@ public class CallEventDTO {
 
   private Long issueId;
   private Long deviseId;
+  private String deviseCodeAlpha;
 }
