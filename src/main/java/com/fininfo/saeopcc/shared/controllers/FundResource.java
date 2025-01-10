@@ -1,9 +1,12 @@
 package com.fininfo.saeopcc.shared.controllers;
 
 import com.fininfo.saeopcc.configuration.HeaderUtil;
+import com.fininfo.saeopcc.configuration.PaginationUtil;
 import com.fininfo.saeopcc.configuration.ResponseUtil;
 import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
+import com.fininfo.saeopcc.shared.services.FundQueryService;
 import com.fininfo.saeopcc.shared.services.FundService;
+import com.fininfo.saeopcc.shared.services.dto.FundCriteria;
 import com.fininfo.saeopcc.shared.services.dto.FundDTO;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -11,6 +14,9 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -29,12 +36,23 @@ public class FundResource {
   private String applicationName;
 
   @Autowired private FundService fundService;
+  @Autowired private FundQueryService fundQueryService;
 
   @GetMapping("/funds")
-  public ResponseEntity<List<FundDTO>> getAllbonds() {
-    List<FundDTO> fundDTOs = fundService.findAll();
-    return ResponseEntity.ok(fundDTOs);
+  public ResponseEntity<List<FundDTO>> getAllFunds(FundCriteria criteria, Pageable pageable) {
+    log.debug("REST request to get Funds by criteria: {}", criteria);
+    Page<FundDTO> page = fundQueryService.findByCriteria(criteria, pageable);
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
   }
+
+  // @GetMapping("/funds")
+  // public ResponseEntity<List<FundDTO>> getAllbonds() {
+  //   List<FundDTO> fundDTOs = fundService.findAll();
+  //   return ResponseEntity.ok(fundDTOs);
+  // }
 
   @GetMapping("/funds/{id}")
   public ResponseEntity<FundDTO> getFund(@PathVariable Long id) {
