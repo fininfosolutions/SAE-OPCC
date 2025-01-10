@@ -83,7 +83,7 @@ public class CallService {
                 for (GlobalLiberation globalLib : globalLiberations) {
 
                   Liberation liberation = new Liberation();
-                  liberation.setLiberationEvent(globalLib);
+                  liberation.setGlobalLiberation(globalLib);
                   liberation.setCall(call);
 
                   BigDecimal globalPercentage =

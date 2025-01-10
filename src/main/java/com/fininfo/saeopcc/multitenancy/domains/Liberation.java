@@ -55,7 +55,7 @@ public class Liberation extends AbstractAuditingEntity implements Serializable {
   @Column(precision = 21, scale = 4)
   private BigDecimal remainingQuantity;
 
-  @ManyToOne @EqualsAndHashCode.Exclude private GlobalLiberation liberationEvent;
+  @ManyToOne @EqualsAndHashCode.Exclude private GlobalLiberation globalLiberation;
   @ManyToOne @EqualsAndHashCode.Exclude private Call call;
   @ManyToOne @EqualsAndHashCode.Exclude private SecuritiesAccount securitiesAccount;
 }
