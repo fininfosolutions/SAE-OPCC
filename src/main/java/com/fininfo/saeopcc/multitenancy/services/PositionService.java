@@ -7,6 +7,7 @@ import com.fininfo.saeopcc.multitenancy.domains.Subscription;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.PositionType;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.TransactionType;
 import com.fininfo.saeopcc.multitenancy.repositories.MovementRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.SecPositionRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.SubscriptionRepository;
@@ -39,16 +40,17 @@ public class PositionService {
   @Autowired private MovementRepository movementRepository;
 
   private Position mapperPosition(Movement movement, Position position) {
+
     Optional<Subscription> subscriptionOpt =
         subscriptionRepository.findById(movement.getInstructionId());
-
-    if (subscriptionOpt.isPresent()) {
-      Subscription subscription = subscriptionOpt.get();
-      position.setValueDate(subscription.getSettlementDate());
-    } else {
-      position.setValueDate(null);
+    if (movement.getTransactionType().equals(TransactionType.SUBSCRIPTION)) {
+      if (subscriptionOpt.isPresent()) {
+        Subscription subscription = subscriptionOpt.get();
+        position.setValueDate(subscription.getSettlementDate());
+      } else {
+        position.setValueDate(null);
+      }
     }
-
     position.setPositionDate(Instant.now());
     position.setPositionType(positionType(movement.getType()));
     return position;
@@ -129,27 +131,4 @@ public class PositionService {
 
     return secPosition;
   }
-
-  // private Position createCashPosition(Movement mvt) {
-  //   CashPosition cashPosition = (CashPosition) mapperPosition(mvt, new CashPosition());
-  //   cashPosition.setEndDate(END_DATE);
-  //   cashPosition = cashPositionRepository.save(cashPosition);
-
-  //   cashPosition.setAmount(
-  //       mvt.getAmount()
-  //           .multiply(BigDecimal.valueOf(mvt.getDirection()))
-  //           .add(getLastPosition(mvt.getAccount().getId(), null, PositionType.CASH)));
-
-  //   cashPosition.setAccount(mvt.getAccount());
-  //   cashPosition.setPositionDate(Instant.now());
-  //   cashPosition.setReference(mvt.getReference());
-  //   cashPosition.setInvestmentType(mvt.getInvestmentType());
-
-  //   cashPosition = cashPositionRepository.save(cashPosition);
-  //   mvt.setImpacted(true);
-  //   mvt.setStatus(MovementStatus.IMPACTED);
-  //   mvt.setImpactedDate(LocalDate.now());
-  //   movementRepository.save(mvt);
-  //   return cashPosition;
-  // }
 }

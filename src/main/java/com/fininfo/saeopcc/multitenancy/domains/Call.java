@@ -5,7 +5,6 @@ import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,14 +35,19 @@ public class Call extends AbstractAuditingEntity implements Serializable {
   private String reference;
 
   private LocalDate callDate;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal calledAmount;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal percentage;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal remainingAmount;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal remainingQuantity;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal calledQuantity;
 

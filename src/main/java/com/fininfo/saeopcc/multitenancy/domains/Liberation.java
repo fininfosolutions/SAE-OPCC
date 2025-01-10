@@ -5,7 +5,6 @@ import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,12 +34,16 @@ public class Liberation extends AbstractAuditingEntity implements Serializable {
   private String description;
   private String reference;
   private String message;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal percentage;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal releasedAmount;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal releasedQuantity;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal remainingAmount;
 
@@ -48,6 +51,7 @@ public class Liberation extends AbstractAuditingEntity implements Serializable {
 
   @Enumerated(EnumType.STRING)
   private LiberationStatus status;
+
   @Column(precision = 21, scale = 4)
   private BigDecimal remainingQuantity;
 

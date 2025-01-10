@@ -129,7 +129,6 @@ public class CallEventService {
       call.setRemainingAmount(remainingAmount);
       BigDecimal remainingQuantity = subQuantity.subtract(calledQuantity);
       call.setRemainingQuantity(remainingQuantity);
-      call.setReference(callEvent.getReference());
       call.setDescription(callEvent.getDescription());
       call.setCallDate(callEvent.getCallDate());
       SecuritiesAccount secaccount = subscription.getSecuritiesAccount();
@@ -154,9 +153,13 @@ public class CallEventService {
         atLeastOneIncomplete = true;
       } else {
         call.setSecuritiesAccount(accounts.get(0));
-        call.setStatus(CallStatus.VALIDATED);
+        call.setStatus(CallStatus.PREVALIDATED);
       }
-      callRepository.save(call);
+      call = callRepository.save(call);
+      if (call.getId() != null) {
+        call.setReference(callEvent.getReference() + "-" + call.getId());
+        call = callRepository.save(call);
+      }
     }
     if (!atLeastOneIncomplete) {
       callEvent.setEventStatus(EventStatus.VALIDATED);
