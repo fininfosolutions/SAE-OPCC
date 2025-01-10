@@ -105,7 +105,7 @@ public class MovementService {
     movement.setTransactionType(TransactionType.CALL);
     movement.setInstructionId(callDTO.getId());
     movement.setAsset(assetRepository.findById(callDTO.getSecuritiesAccountAssetId()).orElse(null));
-    movement.setQuantity(callDTO.getCalledQuantiy());
+    movement.setQuantity(callDTO.getCalledQuantity());
 
     if (isValidated) {
       movement.setStatus(MovementStatus.CANCELED);

@@ -1,12 +1,14 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.multitenancy.domains.Call;
+import com.fininfo.saeopcc.multitenancy.domains.CallEvent;
 import com.fininfo.saeopcc.multitenancy.domains.GlobalLiberation;
 import com.fininfo.saeopcc.multitenancy.domains.Liberation;
 import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.EventStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.LiberationStatus;
+import com.fininfo.saeopcc.multitenancy.repositories.CallEventRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.CallRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.GlobalLiberationRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.LiberationRepository;
@@ -15,6 +17,7 @@ import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +25,9 @@ import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +41,8 @@ public class CallService {
   @Autowired private MovementService movementService;
   @Autowired private GlobalLiberationRepository globalLiberationRepository;
   @Autowired private SecuritiesAccountRepository securitiesAccountRepository;
+
+  @Autowired private CallEventRepository callEventRepository;
 
   @Transactional(readOnly = true)
   public Optional<CallDTO> findOne(Long id) {
@@ -75,7 +83,7 @@ public class CallService {
                 for (GlobalLiberation globalLib : globalLiberations) {
 
                   Liberation liberation = new Liberation();
-                  liberation.setLiberationEvent(globalLib);
+                  liberation.setGlobalLiberation(globalLib);
                   liberation.setCall(call);
 
                   BigDecimal globalPercentage =
@@ -136,5 +144,19 @@ public class CallService {
               return modelMapper.map(call, CallDTO.class);
             })
         .collect(Collectors.toList());
+  }
+
+  public Page<CallDTO> getCallsByEvent(Long eventId, Pageable pageable) {
+    Optional<CallEvent> eventOpt = callEventRepository.findById(eventId);
+    if (eventOpt.isPresent()) {
+      Page<Call> page = callRepository.findByCallEvent_Id(eventId, pageable);
+      return page.map(event -> modelMapper.map(event, CallDTO.class));
+    } else {
+      return new PageImpl<>(new ArrayList<>());
+    }
+  }
+
+  public long countCallsByEvent(Long eventId) {
+    return callRepository.countByCallEvent_Id(eventId);
   }
 }

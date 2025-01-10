@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.controllers;
 
 import com.fininfo.saeopcc.configuration.HeaderUtil;
+import com.fininfo.saeopcc.configuration.PaginationUtil;
 import com.fininfo.saeopcc.configuration.ResponseUtil;
 import com.fininfo.saeopcc.multitenancy.domains.Call;
 import com.fininfo.saeopcc.multitenancy.repositories.CallRepository;
@@ -8,11 +9,15 @@ import com.fininfo.saeopcc.multitenancy.services.CallService;
 import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
 import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Slf4j
 @RestController
@@ -40,6 +46,12 @@ public class CallController {
     return ResponseUtil.wrapOrNotFound(callDTO);
   }
 
+  @PutMapping("/call/validate")
+  public ResponseEntity<List<CallDTO>> validateCalls(@RequestBody List<CallDTO> callDTOs) {
+    List<CallDTO> validatedCalls = callService.validatecalls(callDTOs);
+    return ResponseEntity.ok(validatedCalls);
+  }
+
   @PutMapping("/call")
   public ResponseEntity<CallDTO> updateCall(@RequestBody CallDTO callDTO)
       throws URISyntaxException {
@@ -57,5 +69,21 @@ public class CallController {
             HeaderUtil.createEntityUpdateAlert(
                 applicationName, true, ENTITY_NAME, callDTO.getId().toString()))
         .body(result);
+  }
+
+  @GetMapping("/call/byCallEvent/{id}")
+  public ResponseEntity<List<CallDTO>> getEventsByIssue(@PathVariable Long id, Pageable pageable) {
+    log.debug("REST request to get Events by Issue ID : {}", id);
+    Page<CallDTO> page = callService.getCallsByEvent(id, pageable);
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
+  }
+
+  @GetMapping("/call/count/{eventId}")
+  public ResponseEntity<Long> countEventsByIssue(@PathVariable Long eventId) {
+    long count = callService.countCallsByEvent(eventId);
+    return ResponseEntity.ok(count);
   }
 }
