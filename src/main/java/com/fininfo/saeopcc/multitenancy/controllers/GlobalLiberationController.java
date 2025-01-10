@@ -42,6 +42,20 @@ public class GlobalLiberationController {
   @Value("${spring.application.name}")
   private String applicationName;
 
+  @PutMapping("/global-liberations/validate")
+  public ResponseEntity<List<GlobalLiberationDTO>> validateGlobalLiberations(
+      @RequestBody List<GlobalLiberationDTO> globalLiberationDTOs) {
+    List<GlobalLiberationDTO> validatedGloballiberations =
+        globalLiberationService.validateGlobalLiberations(globalLiberationDTOs);
+    return ResponseEntity.ok(validatedGloballiberations);
+  }
+
+  @GetMapping("/global-liberations/count")
+  public ResponseEntity<Long> countGlobalLiberationsByIssueId(@RequestParam Long issueId) {
+    long count = globalLiberationRepository.countByCallEventIssueId(issueId);
+    return ResponseEntity.ok(count);
+  }
+
   @GetMapping("/global-liberations")
   public ResponseEntity<List<GlobalLiberationDTO>> getAllGlobalLiberations(
       @RequestParam Long issueId, Pageable pageable) {

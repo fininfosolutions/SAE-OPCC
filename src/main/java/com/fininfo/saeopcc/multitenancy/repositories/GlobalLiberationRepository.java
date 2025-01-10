@@ -16,4 +16,6 @@ public interface GlobalLiberationRepository
   List<GlobalLiberation> findByEventStatusAndCallEvent_Id(EventStatus eventStatus, Long id);
 
   Page<GlobalLiberation> findByCallEventIssueId(Long issueId, Pageable pageable);
+
+  long countByCallEventIssueId(Long callEventIssueId);
 }
