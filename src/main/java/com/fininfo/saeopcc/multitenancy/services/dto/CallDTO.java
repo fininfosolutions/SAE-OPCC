@@ -22,12 +22,15 @@ public class CallDTO {
   private BigDecimal calledAmount;
   private BigDecimal percentage;
   private BigDecimal remainingAmount;
-  private BigDecimal remainingQuantiy;
-  private BigDecimal calledQuantiy;
+  private BigDecimal remainingQuantity;
+  private BigDecimal calledQuantity;
   private CallStatus status;
   private String message;
   private Long subscriptionId;
   private Long callEventId;
   private Long securitiesAccountId;
   private Long securitiesAccountAssetId;
+  private String securitiesAccountAccountNumber;
+  private BigDecimal subscriptionAmount;
+  private BigDecimal subscriptionQuantity;
 }
