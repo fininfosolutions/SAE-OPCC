@@ -1,0 +1,70 @@
+package com.fininfo.saeopcc.multitenancy.controllers;
+
+import com.fininfo.saeopcc.configuration.ResponseUtil;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.EventStatus;
+import com.fininfo.saeopcc.multitenancy.services.GlobalLiberationService;
+import com.fininfo.saeopcc.multitenancy.services.dto.GlobalLiberationDTO;
+import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/v1")
+public class GlobalLiberationController {
+
+  @Autowired private GlobalLiberationService globalLiberationService;
+
+  private static final String ENTITY_NAME = "sae_event";
+
+  @Value("${spring.application.name}")
+  private String applicationName;
+
+  @PostMapping("/global-liberations")
+  public ResponseEntity<List<GlobalLiberationDTO>> createEvents(
+      @RequestBody List<GlobalLiberationDTO> globalLiberationDTOs) throws URISyntaxException {
+
+    log.debug("REST request to save multiple GlobalLiberation : {}", globalLiberationDTOs);
+
+    for (GlobalLiberationDTO dto : globalLiberationDTOs) {
+      if (dto.getId() != null) {
+        throw new BadRequestAlertException(
+            "A new GlobalLiberation cannot already have an ID", ENTITY_NAME, "idexists");
+      }
+    }
+    List<GlobalLiberationDTO> results = globalLiberationService.saveAll(globalLiberationDTOs);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(results);
+  }
+
+  @GetMapping("/global-liberations/{id}")
+  public ResponseEntity<GlobalLiberationDTO> getEvent(@PathVariable Long id) {
+    log.debug("REST request to get GlobalLiberation : {}", id);
+    Optional<GlobalLiberationDTO> globalLiberationDTO = globalLiberationService.findOne(id);
+    return ResponseUtil.wrapOrNotFound(globalLiberationDTO);
+  }
+
+  @PutMapping("/global-liberations")
+  public GlobalLiberationDTO updateManuelGlobalLiberation(
+      @RequestBody GlobalLiberationDTO globalLiberationDTO) {
+    if (globalLiberationDTO.getId() == null
+        || !globalLiberationDTO.getEventStatus().equals(EventStatus.PREVALIDATED))
+      throw new BadRequestAlertException(
+          "This global-liberation cannot be updated", ENTITY_NAME, "invalide");
+
+    return globalLiberationService.updateGlobalLiberation(globalLiberationDTO);
+  }
+}
