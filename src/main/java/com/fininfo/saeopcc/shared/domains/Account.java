@@ -32,8 +32,8 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "description")

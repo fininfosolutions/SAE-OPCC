@@ -6,6 +6,7 @@ import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.TransactionType;
 import com.fininfo.saeopcc.multitenancy.repositories.MovementRepository;
+import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.MovementDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionDTO;
 import com.fininfo.saeopcc.shared.domains.AccountTypeSLA;
@@ -43,6 +44,11 @@ public class MovementService {
     positionService.createPosition(secMovement);
   }
 
+  public void handleMovementsAndPositionsfromcall(CallDTO callDTO) {
+    Movement secMovement = createMovementfromCall(callDTO, MovementType.SEC, false);
+    positionService.createPosition(secMovement);
+  }
+
   public Movement createMovementfromSubscription(
       SubscriptionDTO subscriptionDTO, MovementType type, Boolean isValidated) {
     AccountTypeSLA accountTypesla =
@@ -70,6 +76,36 @@ public class MovementService {
             .findById(subscriptionDTO.getIssueIssueAccountIssueCompartementFundId())
             .orElse(null));
     movement.setQuantity(subscriptionDTO.getQuantity());
+
+    if (isValidated) {
+      movement.setStatus(MovementStatus.CANCELED);
+    } else {
+      movement.setStatus(MovementStatus.CREATED);
+    }
+
+    return movementRepository.save(movement);
+  }
+
+  public Movement createMovementfromCall(CallDTO callDTO, MovementType type, Boolean isValidated) {
+    AccountTypeSLA accountTypesla =
+        accountTypeSLAService.getAccountTypeSLAByOperationType(TransactionType.CALL);
+
+    Movement movement = new Movement();
+
+    Optional<Movement> secMovementOpt =
+        movementRepository.findSecMovementByAccountAndDirection(
+            callDTO.getSecuritiesAccountId(), callDTO.getReference(), accountTypesla.getSens());
+    movement = secMovementOpt.orElse(new Movement());
+    movement.setAccount(accountRepository.findById(callDTO.getSecuritiesAccountId()).orElse(null));
+    movement.setType(type);
+    movement.setMovementDate(LocalDate.now());
+    movement.setSens(accountTypesla.getSens());
+    movement.setDirection(accountTypesla.getTransDirection());
+    movement.setReference(callDTO.getReference());
+    movement.setTransactionType(TransactionType.CALL);
+    movement.setInstructionId(callDTO.getId());
+    movement.setAsset(assetRepository.findById(callDTO.getSecuritiesAccountAssetId()).orElse(null));
+    movement.setQuantity(callDTO.getCalledQuantiy());
 
     if (isValidated) {
       movement.setStatus(MovementStatus.CANCELED);
