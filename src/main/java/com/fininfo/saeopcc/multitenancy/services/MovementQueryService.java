@@ -152,17 +152,15 @@ public class MovementQueryService extends QueryService<Movement> {
                 buildLocalDateSpecification(criteria.getImpactedDate(), Movement_.impactedDate));
       }
 
-      // Handle account (join Account entity for accountNumber filtering)
-      if (criteria.getAccountAccountNumber() != null) {
+      if (criteria.getAccountNumber() != null) {
         specification =
             specification.and(
                 buildSpecification(
-                    criteria.getAccountAccountNumber(),
+                    criteria.getAccountNumber(),
                     root ->
                         root.join(Movement_.account, JoinType.LEFT).get(Account_.accountNumber)));
       }
 
-      // Handle asset (join Asset entity) - **Updated Section**
       if (criteria.getAssetId() != null) {
         specification =
             specification.and(
@@ -176,6 +174,14 @@ public class MovementQueryService extends QueryService<Movement> {
                 buildSpecification(
                     criteria.getAssetCode(),
                     root -> root.join(Movement_.asset, JoinType.LEFT).get(Asset_.code)));
+      }
+
+      if (criteria.getIsin() != null) {
+        specification =
+            specification.and(
+                buildSpecification(
+                    criteria.getIsin(),
+                    root -> root.join(Movement_.asset, JoinType.LEFT).get(Asset_.isin)));
       }
     }
     return specification;
