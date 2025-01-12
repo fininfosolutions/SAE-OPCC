@@ -35,4 +35,11 @@ public class LiberationDTO {
   private Long globalLiberationId;
   private Long callId;
   private Long securitiesAccountId;
+
+  private BigDecimal callCalledAmount;
+  private BigDecimal callCalledQuantity;
+  private Long securitiesAccountAssetId;
+  private String securitiesAccountAccountNumber;
+  private String securitiesAccountShareholderDescription;
+  private String callEventDeviseCodeAlpha;
 }
