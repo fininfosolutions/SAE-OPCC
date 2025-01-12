@@ -96,7 +96,7 @@ public class MovementCriteria implements Serializable, Criteria {
   private BigDecimalFilter amount;
   private StringFilter assetAssetType;
   private LongFilter assetId;
-  private StringFilter assetIsin;
+  private StringFilter isin;
   private MovementTypeFilter type;
   private StringFilter nostroSecurityAccount;
   private StringFilter custodian;
@@ -106,7 +106,8 @@ public class MovementCriteria implements Serializable, Criteria {
   private StringFilter assetCode;
   private BigDecimalFilter quantity;
   private LongFilter accountId;
-  private StringFilter accountAccountNumber;
+  private StringFilter accountNumber;
+  private StringFilter shareholderDescription;
 
   // Copy constructor to clone another instance of MovementCriteria
   public MovementCriteria(MovementCriteria other) {
@@ -122,7 +123,7 @@ public class MovementCriteria implements Serializable, Criteria {
     this.amount = other.amount == null ? null : other.amount.copy();
     this.assetAssetType = other.assetAssetType == null ? null : other.assetAssetType.copy();
     this.assetId = other.assetId == null ? null : other.assetId.copy();
-    this.assetIsin = other.assetIsin == null ? null : other.assetIsin.copy();
+    this.isin = other.isin == null ? null : other.isin.copy();
     this.type = other.type == null ? null : other.type.copy();
     this.nostroSecurityAccount =
         other.nostroSecurityAccount == null ? null : other.nostroSecurityAccount.copy();
@@ -133,8 +134,9 @@ public class MovementCriteria implements Serializable, Criteria {
     this.assetCode = other.assetCode == null ? null : other.assetCode.copy();
     this.quantity = other.quantity == null ? null : other.quantity.copy();
     this.accountId = other.accountId == null ? null : other.accountId.copy();
-    this.accountAccountNumber =
-        other.accountAccountNumber == null ? null : other.accountAccountNumber.copy();
+    this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
+    this.shareholderDescription =
+        other.shareholderDescription == null ? null : other.shareholderDescription.copy();
   }
 
   // Constructor for initializing all fields
@@ -150,7 +152,7 @@ public class MovementCriteria implements Serializable, Criteria {
       BigDecimalFilter amount,
       StringFilter assetAssetType,
       LongFilter assetId,
-      StringFilter assetIsin,
+      StringFilter isin,
       MovementTypeFilter type,
       StringFilter nostroSecurityAccount,
       StringFilter custodian,
@@ -160,7 +162,8 @@ public class MovementCriteria implements Serializable, Criteria {
       StringFilter assetCode,
       BigDecimalFilter quantity,
       LongFilter accountId,
-      StringFilter accountAccountNumber) {
+      StringFilter accountNumber,
+      StringFilter shareholderDescription) {
     this.id = id;
     this.reference = reference;
     this.instructionReference = instructionReference;
@@ -172,7 +175,7 @@ public class MovementCriteria implements Serializable, Criteria {
     this.amount = amount;
     this.assetAssetType = assetAssetType;
     this.assetId = assetId;
-    this.assetIsin = assetIsin;
+    this.isin = isin;
     this.type = type;
     this.nostroSecurityAccount = nostroSecurityAccount;
     this.custodian = custodian;
@@ -182,7 +185,8 @@ public class MovementCriteria implements Serializable, Criteria {
     this.assetCode = assetCode;
     this.quantity = quantity;
     this.accountId = accountId;
-    this.accountAccountNumber = accountAccountNumber;
+    this.accountNumber = accountNumber;
+    this.shareholderDescription = shareholderDescription;
   }
 
   @Override

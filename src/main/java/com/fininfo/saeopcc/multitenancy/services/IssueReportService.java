@@ -124,7 +124,7 @@ public class IssueReportService {
       titleParagraph.add(new Text("ANNEXE5:").setBold().setUnderline(1, -2));
     }
     if (asset.getAssetType().equals(AssetType.FUND)) {
-      titleParagraph.add(" Lettre comptable d’admission d’OPCVM");
+      titleParagraph.add(" Lettre comptable d’admission d’OPCC");
     } else {
       titleParagraph.add(" Lettre comptable d'admission");
     }
