@@ -1,5 +1,6 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
+import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import com.fininfo.saeopcc.shared.domains.enumeration.AssetType;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,5 @@ public class SecPositionDTO extends PositionDTO {
   private AssetType assetAssetType;
 
   private String assetReference;
+  private AccountType accountAccountType;
 }
