@@ -77,6 +77,9 @@ public class MovementQueryService extends QueryService<Movement> {
                       if (sec.getShareholder() != null) {
                         movementDTO.setClientDescription(sec.getShareholder().getDescription());
                       }
+                      if (sec.getAccountType() != null) {
+                        movementDTO.setAccountAccountType(sec.getAccountType());
+                      }
                     });
               }
               return movementDTO;

@@ -1,23 +1,32 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
+import com.fininfo.saeopcc.multitenancy.domains.Call;
+import com.fininfo.saeopcc.multitenancy.domains.CallEvent;
 import com.fininfo.saeopcc.multitenancy.domains.Compartement;
 import com.fininfo.saeopcc.multitenancy.domains.Issue;
 import com.fininfo.saeopcc.multitenancy.domains.IssueAccount;
+import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
 import com.fininfo.saeopcc.multitenancy.domains.Shareholder;
 import com.fininfo.saeopcc.multitenancy.domains.Subscription;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.EventStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.NotificationStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Origin;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionDirection;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.multitenancy.domains.flow.Notification;
 import com.fininfo.saeopcc.multitenancy.domains.flow.NotificationError;
+import com.fininfo.saeopcc.multitenancy.repositories.CallEventRepository;
+import com.fininfo.saeopcc.multitenancy.repositories.CallRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.CompartementRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueAccountRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueRepository;
+import com.fininfo.saeopcc.multitenancy.repositories.SecuritiesAccountRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.SubscriptionRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionDTO;
 import com.fininfo.saeopcc.shared.domains.Custodian;
 import com.fininfo.saeopcc.shared.domains.Fund;
+import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import com.fininfo.saeopcc.shared.domains.enumeration.TransactionType;
 import com.fininfo.saeopcc.shared.repositories.AssetRepository;
 import com.fininfo.saeopcc.shared.repositories.SAEConfigRepository;
@@ -25,6 +34,7 @@ import com.fininfo.saeopcc.shared.services.AssetService;
 import com.fininfo.saeopcc.shared.services.CounterpartService;
 import com.fininfo.saeopcc.shared.services.CustodianService;
 import com.fininfo.saeopcc.shared.services.FundService;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -56,6 +66,9 @@ public class SubscriptionService {
   @Autowired private IssueRepository issueRepository;
   @Autowired private IssueAccountRepository issueAccountRepository;
   @Autowired private MovementService movementService;
+  @Autowired private CallEventRepository callEventRepository;
+  @Autowired private SecuritiesAccountRepository securitiesAccountRepository;
+  @Autowired private CallRepository callRepository;
 
   private static final String SAE_PREFIX = "SAE";
 
@@ -270,12 +283,93 @@ public class SubscriptionService {
                                       "Subscription not found for id: " + dto.getId()));
 
                   subscription.setStatus(SubscriptionStatus.VALIDATED);
+                  subscription = subscriptionRepository.save(subscription);
 
-                  return modelMapper.map(
-                      subscriptionRepository.save(subscription), SubscriptionDTO.class);
+                  List<CallEvent> callevents =
+                      callEventRepository.findByIssue_IdAndEventStatus(
+                          dto.getIssueId(), EventStatus.VALIDATED);
+
+                  if (!callevents.isEmpty()) {
+                    for (CallEvent callevent : callevents) {
+
+                      Call call = new Call();
+                      call.setCallEvent(callevent);
+                      call.setSubscription(subscription);
+
+                      BigDecimal percentage =
+                          callevent.getPercentage() != null
+                              ? callevent.getPercentage()
+                              : BigDecimal.ZERO;
+                      call.setPercentage(percentage);
+
+                      BigDecimal subAmount =
+                          subscription.getAmount() != null
+                              ? subscription.getAmount()
+                              : BigDecimal.ZERO;
+                      BigDecimal subQuantity =
+                          subscription.getQuantity() != null
+                              ? subscription.getQuantity()
+                              : BigDecimal.ZERO;
+
+                      BigDecimal calledAmount = percentage.multiply(subAmount);
+                      BigDecimal calledQuantity = percentage.multiply(subQuantity);
+
+                      call.setCalledAmount(calledAmount);
+                      call.setCalledQuantity(calledQuantity);
+
+                      BigDecimal remainingAmount = subAmount.subtract(calledAmount);
+                      BigDecimal remainingQuantity = subQuantity.subtract(calledQuantity);
+
+                      call.setRemainingAmount(remainingAmount);
+                      call.setRemainingQuantity(remainingQuantity);
+
+                      call.setDescription(callevent.getDescription());
+                      call.setCallDate(callevent.getCallDate());
+
+                      SecuritiesAccount secaccount = subscription.getSecuritiesAccount();
+
+                      List<SecuritiesAccount> accounts =
+                          securitiesAccountRepository
+                              .findByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountType(
+                                  (secaccount.getAsset() != null)
+                                      ? secaccount.getAsset().getId()
+                                      : null,
+                                  (subscription.getShareholder() != null)
+                                      ? subscription.getShareholder().getId()
+                                      : null,
+                                  (secaccount.getIntermediary() != null)
+                                      ? secaccount.getIntermediary().getId()
+                                      : null,
+                                  AccountType.APPELE);
+
+                      if (accounts == null || accounts.isEmpty()) {
+                        call.setSecuritiesAccount(null);
+                        call.setMessage("Compte titre inexistant");
+                        call.setStatus(CallStatus.INCOMPLETE);
+
+                        callevent.setEventStatus(EventStatus.INCOMPLETE);
+                        callEventRepository.save(callevent);
+
+                      } else {
+                        call.setSecuritiesAccount(accounts.get(0));
+                        call.setStatus(CallStatus.PREVALIDATED);
+                      }
+
+                      call = callRepository.save(call);
+
+                      if (call.getId() != null) {
+                        call.setReference(callevent.getReference() + "-" + call.getId());
+                        call = callRepository.save(call);
+                      }
+                    }
+                  }
+
+                  return modelMapper.map(subscription, SubscriptionDTO.class);
                 })
             .collect(Collectors.toList());
+
     subscriptionsDtoSaved.sort(Comparator.comparing(dto -> dto.getSettlementDate()));
+
     subscriptionsDtoSaved.forEach(
         subsDto -> {
           movementService.handleMovementsAndPositionsfromsubscription(

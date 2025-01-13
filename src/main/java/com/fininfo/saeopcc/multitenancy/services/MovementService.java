@@ -100,8 +100,8 @@ public class MovementService {
     movement2.setMovementDate(LocalDate.now());
     movement2.setReference(liberationDTO.getReference());
     movement2.setTransactionType(TransactionType.LIBERATION);
-    movement1.setSens(Direction.DELIVER);
-    movement1.setDirection(-1);
+    movement2.setSens(Direction.DELIVER);
+    movement2.setDirection(-1);
 
     movement2.setInstructionId(liberationDTO.getId());
     movement2.setAsset(

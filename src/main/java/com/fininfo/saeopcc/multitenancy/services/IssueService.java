@@ -3,6 +3,7 @@ package com.fininfo.saeopcc.multitenancy.services;
 import com.fininfo.saeopcc.multitenancy.domains.Issue;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueDTO;
+import com.fininfo.saeopcc.shared.domains.enumeration.IssueStatus;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,7 @@ public class IssueService {
 
   public IssueDTO save(IssueDTO issueDTO) {
     Issue issue = modelMapper.map(issueDTO, Issue.class);
+    issue.setIssueStatus(IssueStatus.VALIDATED);
     issue = issueRepository.save(issue);
     return modelMapper.map(issue, IssueDTO.class);
   }

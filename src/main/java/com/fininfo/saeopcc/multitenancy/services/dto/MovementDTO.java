@@ -5,6 +5,7 @@ import com.fininfo.saeopcc.multitenancy.domains.enumeration.InvestmentType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.TransactionType;
+import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
@@ -54,4 +55,5 @@ public class MovementDTO {
   private String clientDescription;
 
   private String accountAccountNumber;
+  private AccountType accountAccountType;
 }
