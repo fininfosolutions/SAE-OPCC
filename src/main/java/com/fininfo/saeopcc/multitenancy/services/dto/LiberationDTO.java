@@ -34,6 +34,9 @@ public class LiberationDTO {
   private BigDecimal remainingQuantity;
   private Long globalLiberationId;
   private Long callId;
+  private Long callSecuritiesAccountId;
+  private Long callSecuritiesAccountAssetId;
+
   private Long securitiesAccountId;
 
   private BigDecimal callCalledAmount;

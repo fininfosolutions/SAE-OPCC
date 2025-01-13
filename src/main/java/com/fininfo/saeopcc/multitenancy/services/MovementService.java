@@ -1,12 +1,14 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.multitenancy.domains.Movement;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.Direction;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.TransactionType;
 import com.fininfo.saeopcc.multitenancy.repositories.MovementRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
+import com.fininfo.saeopcc.multitenancy.services.dto.LiberationDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.MovementDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.SubscriptionDTO;
 import com.fininfo.saeopcc.shared.domains.AccountTypeSLA;
@@ -47,6 +49,68 @@ public class MovementService {
   public void handleMovementsAndPositionsfromcall(CallDTO callDTO) {
     Movement secMovement = createMovementfromCall(callDTO, MovementType.SEC, false);
     positionService.createPosition(secMovement);
+  }
+
+  public void handleMovementsAndPositionsfromliberation(LiberationDTO liberationDTO) {
+    log.debug("handleMovementsAndPositionsfromliberation : {}", liberationDTO);
+
+    AccountTypeSLA accountTypesla =
+        accountTypeSLAService.getAccountTypeSLAByOperationType(TransactionType.LIBERATION);
+
+    Movement movement1 = new Movement();
+
+    Optional<Movement> existingMovementOpt1 =
+        movementRepository.findSecMovementByAccountAndDirection(
+            liberationDTO.getSecuritiesAccountId(),
+            liberationDTO.getReference(),
+            accountTypesla.getSens());
+    movement1 = existingMovementOpt1.orElse(new Movement());
+
+    movement1.setAccount(
+        accountRepository.findById(liberationDTO.getSecuritiesAccountId()).orElse(null));
+    movement1.setType(MovementType.SEC);
+    movement1.setMovementDate(LocalDate.now());
+    movement1.setSens(accountTypesla.getSens());
+    movement1.setDirection(accountTypesla.getTransDirection());
+    movement1.setReference(liberationDTO.getReference());
+    movement1.setTransactionType(TransactionType.LIBERATION);
+    movement1.setInstructionId(liberationDTO.getId());
+    movement1.setAsset(
+        assetRepository.findById(liberationDTO.getSecuritiesAccountAssetId()).orElse(null));
+    movement1.setQuantity(liberationDTO.getReleasedQuantity());
+
+    movement1.setStatus(MovementStatus.CREATED);
+
+    movement1 = movementRepository.save(movement1);
+
+    positionService.createPosition(movement1);
+
+    Movement movement2 = new Movement();
+
+    Optional<Movement> existingMovementOpt2 =
+        movementRepository.findSecMovementByAccountAndDirection(
+            liberationDTO.getSecuritiesAccountId(),
+            liberationDTO.getReference(),
+            Direction.DELIVER);
+    movement2 = existingMovementOpt2.orElse(new Movement());
+
+    movement2.setAccount(
+        accountRepository.findById(liberationDTO.getCallSecuritiesAccountId()).orElse(null));
+    movement2.setType(MovementType.SEC);
+    movement2.setMovementDate(LocalDate.now());
+    movement2.setReference(liberationDTO.getReference());
+    movement2.setTransactionType(TransactionType.LIBERATION);
+    movement2.setSens(Direction.DELIVER);
+    movement2.setDirection(-1);
+
+    movement2.setInstructionId(liberationDTO.getId());
+    movement2.setAsset(
+        assetRepository.findById(liberationDTO.getCallSecuritiesAccountAssetId()).orElse(null));
+    movement2.setQuantity(liberationDTO.getReleasedQuantity());
+    movement2.setStatus(MovementStatus.CREATED);
+
+    movement2 = movementRepository.save(movement2);
+    positionService.createPosition(movement2);
   }
 
   public Movement createMovementfromSubscription(

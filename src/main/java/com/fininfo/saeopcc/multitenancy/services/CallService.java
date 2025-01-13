@@ -130,7 +130,7 @@ public class CallService {
                       globalLiberationRepository.save(globalLib);
                     } else {
                       liberation.setSecuritiesAccount(accounts.get(0));
-                      liberation.setStatus(LiberationStatus.VALIDATED);
+                      liberation.setStatus(LiberationStatus.PREVALIDATED);
                     }
                     liberation = liberationRepository.save(liberation);
                     if (liberation.getId() != null) {

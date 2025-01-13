@@ -59,6 +59,14 @@ public class LiberationController {
         .body(result);
   }
 
+  @PutMapping("/liberation/validate")
+  public ResponseEntity<List<LiberationDTO>> validateLiberations(
+      @RequestBody List<LiberationDTO> liberationDTOs) {
+    List<LiberationDTO> validatedLiberations =
+        liberationService.validateliberations(liberationDTOs);
+    return ResponseEntity.ok(validatedLiberations);
+  }
+
   @GetMapping("/liberation/{id}")
   public ResponseEntity<LiberationDTO> getLiberation(@PathVariable Long id) {
     log.debug("REST request to get Liberation : {}", id);

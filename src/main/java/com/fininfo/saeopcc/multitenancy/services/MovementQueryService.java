@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.configuration.QueryService;
+import com.fininfo.saeopcc.configuration.StringFilter;
 import com.fininfo.saeopcc.multitenancy.domains.Movement;
 import com.fininfo.saeopcc.multitenancy.domains.Movement_;
 import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
@@ -13,7 +14,9 @@ import com.fininfo.saeopcc.shared.domains.Asset_;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.criteria.From;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +76,9 @@ public class MovementQueryService extends QueryService<Movement> {
                     sec -> {
                       if (sec.getShareholder() != null) {
                         movementDTO.setClientDescription(sec.getShareholder().getDescription());
+                      }
+                      if (sec.getAccountType() != null) {
+                        movementDTO.setAccountAccountType(sec.getAccountType());
                       }
                     });
               }
@@ -182,6 +188,32 @@ public class MovementQueryService extends QueryService<Movement> {
                 buildSpecification(
                     criteria.getIsin(),
                     root -> root.join(Movement_.asset, JoinType.LEFT).get(Asset_.isin)));
+      }
+      if (criteria.getShareholderDescription() != null) {
+        specification =
+            specification.and(
+                (root, query, builder) -> {
+                  From<Movement, SecuritiesAccount> sAccJoin =
+                      builder.treat(
+                          root.join(Movement_.account, JoinType.LEFT), SecuritiesAccount.class);
+
+                  Path<String> descPath =
+                      sAccJoin.join("shareholder", JoinType.LEFT).<String>get("description");
+
+                  StringFilter filter = criteria.getShareholderDescription();
+
+                  if (filter.getContains() != null) {
+                    return builder.like(
+                        builder.lower(descPath), "%" + filter.getContains().toLowerCase() + "%");
+                  }
+                  if (filter.getEquals() != null) {
+                    return builder.equal(descPath, filter.getEquals());
+                  }
+                  if (filter.getNotEquals() != null) {
+                    return builder.notEqual(descPath, filter.getNotEquals());
+                  }
+                  return builder.conjunction();
+                });
       }
     }
     return specification;
