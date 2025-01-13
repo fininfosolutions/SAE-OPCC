@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.LiberationStatus;
+import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class LiberationDTO {
   private Long callSecuritiesAccountAssetId;
 
   private Long securitiesAccountId;
+  private AccountType securitiesAccountAccountType;
 
   private BigDecimal callCalledAmount;
   private BigDecimal callCalledQuantity;
