@@ -1,6 +1,7 @@
 package com.fininfo.saeopcc.multitenancy.services.dto;
 
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.CallStatus;
+import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,8 @@ public class CallDTO {
   private Long callEventId;
   private Long securitiesAccountId;
   private Long securitiesAccountAssetId;
+  private AccountType securitiesAccountAccountType;
+
   private String securitiesAccountAccountNumber;
   private BigDecimal subscriptionAmount;
   private BigDecimal subscriptionQuantity;
