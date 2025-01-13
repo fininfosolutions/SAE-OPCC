@@ -2,11 +2,15 @@ package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.multitenancy.domains.GlobalLiberation;
 import com.fininfo.saeopcc.multitenancy.domains.Liberation;
+import com.fininfo.saeopcc.multitenancy.domains.enumeration.LiberationStatus;
 import com.fininfo.saeopcc.multitenancy.repositories.GlobalLiberationRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.LiberationRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.LiberationDTO;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ public class LiberationService {
 
   @Autowired private GlobalLiberationRepository globalLiberationRepository;
   @Autowired private ModelMapper modelMapper;
+  @Autowired private MovementService movementService;
 
   @Transactional(readOnly = true)
   public Optional<LiberationDTO> findOne(Long id) {
@@ -35,6 +40,30 @@ public class LiberationService {
 
     Liberation savedLiberation = liberationRepository.save(liberation);
     return modelMapper.map(savedLiberation, LiberationDTO.class);
+  }
+
+  @Transactional
+  public List<LiberationDTO> validateliberations(List<LiberationDTO> liberationDTOs) {
+
+    return liberationDTOs.stream()
+        .map(
+            dto -> {
+              Liberation liberation =
+                  liberationRepository
+                      .findById(dto.getId())
+                      .orElseThrow(
+                          () ->
+                              new EntityNotFoundException(
+                                  "Liberation not found for id: " + dto.getId()));
+
+              liberation.setStatus(LiberationStatus.VALIDATED);
+              liberation = liberationRepository.save(liberation);
+
+              movementService.handleMovementsAndPositionsfromliberation(dto);
+
+              return modelMapper.map(liberation, LiberationDTO.class);
+            })
+        .collect(Collectors.toList());
   }
 
   public Page<LiberationDTO> getByGlobalLiberation(Long globalLiberationId, Pageable pageable) {
