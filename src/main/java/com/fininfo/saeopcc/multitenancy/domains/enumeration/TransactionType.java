@@ -6,6 +6,7 @@ public enum TransactionType {
   ENTRANCE,
   CALL,
   EXIT,
+  LIBERATION,
   REGISTRATION,
   RADIATION,
   CONTRACT,
