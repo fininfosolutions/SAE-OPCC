@@ -83,6 +83,10 @@ public class SecPositionService {
                       if (secAccount.getShareholder() != null) {
                         dto.setShareholderDescription(secAccount.getShareholder().getDescription());
                       }
+                      if (secAccount.getAccountType() != null) {
+                        dto.setAccountAccountType(secAccount.getAccountType());
+                      }
+
                       if (secAccount.getIntermediary() != null) {
                         dto.setIntermediaryDescription(
                             secAccount.getIntermediary().getDescription());
