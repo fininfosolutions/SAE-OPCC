@@ -1,12 +1,14 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.multitenancy.domains.Movement;
+import com.fininfo.saeopcc.multitenancy.domains.SecuritiesAccount;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.Direction;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.MovementType;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.SubscriptionStatus;
 import com.fininfo.saeopcc.multitenancy.domains.enumeration.TransactionType;
 import com.fininfo.saeopcc.multitenancy.repositories.MovementRepository;
+import com.fininfo.saeopcc.multitenancy.repositories.SecuritiesAccountRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.CallDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.LiberationDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.MovementDTO;
@@ -39,6 +41,8 @@ public class MovementService {
   @Autowired private AccountRepository accountRepository;
 
   @Autowired private ModelMapper modelMapper;
+
+  @Autowired private SecuritiesAccountRepository securitiesAccountRepository;
 
   public void handleMovementsAndPositionsfromsubscription(
       SubscriptionDTO subscriptionDTO, SubscriptionStatus status) {
@@ -190,6 +194,28 @@ public class MovementService {
 
   @Transactional(readOnly = true)
   public Optional<MovementDTO> findOne(Long id) {
-    return movementRepository.findById(id).map(mvn -> modelMapper.map(mvn, MovementDTO.class));
+    return movementRepository
+        .findById(id)
+        .map(
+            movement -> {
+              MovementDTO movementDTO = modelMapper.map(movement, MovementDTO.class);
+
+              if (movement.getInstructionId() != null && movement.getAccount() != null) {
+                Optional<SecuritiesAccount> secAccount =
+                    securitiesAccountRepository.findById(movement.getAccount().getId());
+
+                secAccount.ifPresent(
+                    sec -> {
+                      if (sec.getShareholder() != null) {
+                        movementDTO.setClientDescription(sec.getShareholder().getDescription());
+                      }
+                      if (sec.getAccountType() != null) {
+                        movementDTO.setAccountAccountType(sec.getAccountType());
+                      }
+                    });
+              }
+
+              return movementDTO;
+            });
   }
 }
