@@ -32,5 +32,9 @@ public class IssueDTO {
   private BigDecimal quantity;
   private BigDecimal amount;
   private BigDecimal price;
+
+  private BigDecimal initialClosingAmount;
+  private BigDecimal maximumLimitAmount;
+  private BigDecimal nextClosingAmount;
   private Set<SubscriptionDTO> subscriptions = new HashSet<>();
 }
