@@ -68,6 +68,10 @@ public class Issue extends AbstractAuditingEntity implements Serializable {
 
   @OneToOne private IssueAccount issueAccount;
 
+  private BigDecimal initialClosingAmount;
+  private BigDecimal maximumLimitAmount;
+  private BigDecimal nextClosingAmount;
+
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
   @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   private Set<Subscription> subscriptions = new HashSet<>();

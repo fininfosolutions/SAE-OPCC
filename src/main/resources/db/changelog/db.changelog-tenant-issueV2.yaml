@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-champs-to-issue
+      author: fininfo
+      changes:
+        - addColumn:
+            tableName: issue
+            columns:
+              - column:
+                  name: initial_closing_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: maximum_limit_amount
+                  type: NUMERIC(21,2)
+              - column:
+                  name: next_closing_amount
+                  type: NUMERIC(21,2)
+
