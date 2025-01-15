@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SummaryController {
   @Autowired private SummaryService summaryService;
 
-  @GetMapping("/{issueId}")
+  @GetMapping("/summary/{issueId}")
   public ResponseEntity<SummaryDTO> getSummary(@PathVariable Long issueId) {
     SummaryDTO summaryDTO = summaryService.getSummary(issueId);
     return ResponseEntity.ok(summaryDTO);
