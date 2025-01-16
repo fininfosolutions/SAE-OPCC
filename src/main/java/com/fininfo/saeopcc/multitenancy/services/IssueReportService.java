@@ -6,7 +6,9 @@ import com.fininfo.saeopcc.multitenancy.domains.IssueReport;
 import com.fininfo.saeopcc.multitenancy.repositories.CompartementRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueAccountRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueReportRepository;
+import com.fininfo.saeopcc.multitenancy.services.dto.IssueDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueReportDTO;
+import com.fininfo.saeopcc.multitenancy.services.dto.SummaryDTO;
 import com.fininfo.saeopcc.shared.domains.Asset;
 import com.fininfo.saeopcc.shared.domains.FiscalNature;
 import com.fininfo.saeopcc.shared.domains.Fund;
@@ -55,6 +57,9 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -506,5 +511,286 @@ public class IssueReportService {
 
     // Handle other enum types as needed
     return enumValue.toString();
+  }
+
+  public byte[] generatePdfReport(IssueDTO issueDTO, SummaryDTO summaryDTO) {
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    PdfDocument pdf = new PdfDocument(new PdfWriter(outputStream));
+    Document document = new Document(pdf);
+
+    DeviceRgb headerBackground = new DeviceRgb(233, 237, 246); // Couleur de l'entête
+    DeviceRgb labelColor = new DeviceRgb(113, 146, 69); // Couleur des labels
+    DeviceRgb valueColor = new DeviceRgb(50, 50, 50); // Couleur des valeurs
+
+    // Ajouter le titre "ÉMISSION"
+    Paragraph emissionTitle =
+        new Paragraph("ÉMISSION")
+            .setFontSize(12)
+            .setBold()
+            .setTextAlignment(TextAlignment.LEFT)
+            .setMarginBottom(5)
+            .setMarginTop(20)
+            .setFontColor(valueColor);
+    document.add(emissionTitle);
+
+    // Table : Section "ÉMISSION"
+    Table emissionTable =
+        new Table(UnitValue.createPercentArray(new float[] {5, 15, 15, 10, 10, 10, 10, 10, 10, 5}))
+            .useAllAvailableWidth();
+
+    // Ajout des entêtes
+    emissionTable.addHeaderCell(createHeaderCell("ID", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Description", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Fonds", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Compartiment", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Prix de souscription", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Quantité souscrite", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Taille du fonds", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Limite Max", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Date d'ouverture", headerBackground));
+    emissionTable.addHeaderCell(createHeaderCell("Date de clôture", headerBackground));
+
+    // Ajout des valeurs avec des valeurs par défaut pour les champs nuls
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null && issueDTO.getId() != null ? String.valueOf(issueDTO.getId()) : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null && issueDTO.getDescription() != null
+                ? issueDTO.getDescription()
+                : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null && issueDTO.getIssueAccountIssueCompartementFundDescription() != null
+                ? issueDTO.getIssueAccountIssueCompartementFundDescription()
+                : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null && issueDTO.getIssueAccountIssueCompartementId() != null
+                ? issueDTO.getIssueAccountIssueCompartementId()
+                : ""));
+    emissionTable.addCell(
+        createValueCell(issueDTO != null ? formatAmountWithSpaces(issueDTO.getPrice(), 0) : ""));
+    emissionTable.addCell(
+        createValueCell(issueDTO != null ? formatAmountWithSpaces(issueDTO.getQuantity(), 1) : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null ? formatAmountWithSpaces(issueDTO.getInitialClosingAmount(), 0) : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null ? formatAmountWithSpaces(issueDTO.getMaximumLimitAmount(), 0) : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null && issueDTO.getOpeningDate() != null
+                ? issueDTO.getOpeningDate().toString()
+                : ""));
+    emissionTable.addCell(
+        createValueCell(
+            issueDTO != null && issueDTO.getClosingDate() != null
+                ? issueDTO.getClosingDate().toString()
+                : ""));
+
+    document.add(emissionTable);
+
+    // Ajouter un espace entre les sections
+    document.add(new Paragraph("\n"));
+
+    // Ajouter le titre "VUE 360°"
+    Paragraph summaryTitle =
+        new Paragraph("VUE 360°")
+            .setFontSize(12)
+            .setBold()
+            .setTextAlignment(TextAlignment.LEFT)
+            .setMarginBottom(5)
+            .setMarginTop(20)
+            .setFontColor(valueColor);
+    document.add(summaryTitle);
+
+    // Table : Section "VUE 360°"
+    Table summaryTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
+
+    /*
+      @param type
+        0: Montant
+        1: Quantité
+        2: Percentage
+    */
+    addSummaryField(
+        summaryTable,
+        "Montant Appelé:",
+        summaryDTO != null ? summaryDTO.getCalledAmount() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Quantité Appelée:",
+        summaryDTO != null ? summaryDTO.getCalledQuantity() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "Capital Restant:",
+        summaryDTO != null ? summaryDTO.getRemainingCapital() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Montant Non Appelé:",
+        summaryDTO != null ? summaryDTO.getNotCalledAmount() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Quantité Non Appelée:",
+        summaryDTO != null ? summaryDTO.getNotCalledQuantity() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "Quantité Restante:",
+        summaryDTO != null ? summaryDTO.getRemainingQuantity() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "Total Souscrit:",
+        summaryDTO != null ? summaryDTO.getTotalSubscribed() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Quantité Souscrite:",
+        summaryDTO != null ? summaryDTO.getQuantitySubscribed() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "Total Non Souscrit:",
+        summaryDTO != null ? summaryDTO.getTotalUnsubscribed() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Quantité Non Souscrite:",
+        summaryDTO != null ? summaryDTO.getQuantityUnsubscribed() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "Montant Libéré:",
+        summaryDTO != null ? summaryDTO.getReleasedAmount() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Quantité Libérée:",
+        summaryDTO != null ? summaryDTO.getReleasedQuantity() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "Montant Non Libéré:",
+        summaryDTO != null ? summaryDTO.getNotReleasedAmount() : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        summaryTable,
+        "Quantité Non Libérée:",
+        summaryDTO != null ? summaryDTO.getNotReleasedQuantity() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        summaryTable,
+        "% Non Appelé:",
+        summaryDTO != null ? summaryDTO.getNotCalledPercentage() : "",
+        labelColor,
+        valueColor,
+        2);
+
+    document.add(summaryTable);
+
+    document.close();
+
+    return outputStream.toByteArray();
+  }
+
+  private Cell createHeaderCell(String text, DeviceRgb backgroundColor) {
+    return new Cell()
+        .add(new Paragraph(text).setFontSize(10))
+        .setTextAlignment(TextAlignment.CENTER)
+        .setBackgroundColor(backgroundColor);
+  }
+
+  private Cell createValueCell(String text) {
+    return new Cell()
+        .add(new Paragraph(text).setFontSize(10))
+        .setTextAlignment(TextAlignment.CENTER);
+  }
+
+  private void addSummaryField(
+      Table table,
+      String label,
+      Object value,
+      DeviceRgb labelColor,
+      DeviceRgb valueColor,
+      int type) {
+    Table innerTable =
+        new Table(2)
+            .useAllAvailableWidth()
+            .addCell(
+                new Cell()
+                    .add(new Paragraph(label).setFontSize(8).setFontColor(labelColor))
+                    .setBorder(Border.NO_BORDER)
+                    .setTextAlignment(TextAlignment.LEFT))
+            .addCell(
+                new Cell()
+                    .add(
+                        new Paragraph(formatAmountWithSpaces(value, type))
+                            .setFontSize(8)
+                            .setFontColor(valueColor))
+                    .setBorder(Border.NO_BORDER)
+                    .setTextAlignment(TextAlignment.RIGHT));
+    table.addCell(new Cell().add(innerTable));
+  }
+
+  private String formatAmountWithSpaces(Object value, int type) {
+
+    NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
+    numberFormat.setMaximumFractionDigits(2);
+    numberFormat.setMinimumFractionDigits(2);
+
+    if (value == null) {
+      return "N/A";
+    }
+    if (value instanceof BigDecimal number) {
+      String formattedValue = numberFormat.format(number);
+
+      switch (type) {
+        case 0 -> {
+          return formattedValue + " MAD";
+        }
+        case 1 -> {
+          return formattedValue;
+        }
+        case 2 -> {
+          return value + " %";
+        }
+      }
+    }
+    return value.toString();
   }
 }
