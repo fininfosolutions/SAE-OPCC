@@ -18,5 +18,7 @@ public interface CallEventRepository
 
   List<CallEvent> findByIssue_IdAndEventStatus(Long issueId, EventStatus status);
 
+  List<CallEvent> findByIssue_IdInAndEventStatus(List<Long> issue_id, EventStatus eventStatus);
+
   long countByIssue_Id(Long issueId);
 }

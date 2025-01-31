@@ -19,5 +19,12 @@ public interface LiberationRepository
   List<Liberation> findByGlobalLiberationIdInAndStatus(
       List<Long> globalLiberationIds, LiberationStatus status);
 
+  List<Liberation> findByCall_IdAndStatus(Long issueId, LiberationStatus status);
+
   long countByGlobalLiberation_Id(Long issueId);
+
+  List<Liberation> findByStatusAndGlobalLiberation_Id(LiberationStatus eventStatus, Long id);
+
+  List<Liberation> findByStatusAndGlobalLiberation_IdIn(
+      LiberationStatus status, List<Long> globalLiberation_id);
 }
