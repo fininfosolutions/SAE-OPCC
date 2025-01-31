@@ -18,6 +18,8 @@ public interface CallRepository extends JpaRepository<Call, Long>, JpaSpecificat
 
   List<Call> findByCallEvent_IdAndStatus(Long issueId, CallStatus status);
 
+  List<Call> findByCallEvent_IdInAndStatus(List<Long> callEvent_id, CallStatus status);
+
   List<Call> findByCallEventIdInAndStatus(List<Long> callEventIds, CallStatus status);
 
   long countByCallEvent_Id(Long issueId);

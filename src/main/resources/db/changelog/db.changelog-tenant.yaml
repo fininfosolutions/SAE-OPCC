@@ -67,6 +67,8 @@ databaseChangeLog:
       file: db/changelog/db.changelog-tenant-callV1.yaml
   - include:
       file: db/changelog/db.changelog-tenant-liberationV1.yaml
+  - include:
+      file: db/changelog/db.changelog-tenant-documentV2.yaml
 
 
 

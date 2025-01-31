@@ -27,4 +27,6 @@ public interface CompartementRepository
   Optional<Compartement> findByFund(Fund fund);
 
   List<Compartement> findAllByClient_id(Long aLong, Pageable pageable);
+
+  List<Compartement> findByClient_Id(Long clientId);
 }

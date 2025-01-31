@@ -16,4 +16,8 @@ public interface IssueRepository
   Optional<Issue> findByIssueAccount(IssueAccount issueAccount);
 
   List<Issue> findAllByIssueAccount_Id(Long id, Pageable pageable);
+
+  List<Issue> findByIssueAccount_Id(Long id);
+
+  List<Issue> findByIssueAccount_IdIn(List<Long> issueAccount_id);
 }

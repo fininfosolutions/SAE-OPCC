@@ -1,0 +1,14 @@
+databaseChangeLog:
+
+- changeSet:
+    id: document_table_add_column
+    author: fininfo
+    changes:
+    - addColumn:
+        tableName: document
+        columns:
+        - column:
+            name: date
+            type: DATE
+
+       
