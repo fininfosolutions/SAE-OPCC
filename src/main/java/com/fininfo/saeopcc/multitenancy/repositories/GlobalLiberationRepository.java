@@ -15,6 +15,9 @@ public interface GlobalLiberationRepository
     extends JpaRepository<GlobalLiberation, Long>, JpaSpecificationExecutor<GlobalLiberation> {
   List<GlobalLiberation> findByEventStatusAndCallEvent_Id(EventStatus eventStatus, Long id);
 
+  List<GlobalLiberation> findByEventStatusAndCallEvent_IdIn(
+      EventStatus eventStatus, List<Long> callEvent_id);
+
   Page<GlobalLiberation> findByCallEventIssueId(Long issueId, Pageable pageable);
 
   List<GlobalLiberation> findByCallEventIdInAndEventStatus(

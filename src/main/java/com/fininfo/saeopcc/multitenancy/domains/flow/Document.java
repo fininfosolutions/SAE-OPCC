@@ -3,6 +3,7 @@ package com.fininfo.saeopcc.multitenancy.domains.flow;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fininfo.saeopcc.shared.domains.AbstractAuditingEntity;
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,9 @@ public class Document extends AbstractAuditingEntity implements Serializable {
 
   @Column(name = "size")
   private Long size;
+
+  @Column(name = "date")
+  private LocalDate date;
 
   @Column(name = "reference_notif", unique = true)
   private String referenceNotif;
