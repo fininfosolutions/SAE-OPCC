@@ -111,3 +111,6 @@ multitenancy:
       packages: com.fininfo.saeopcc.shared.repositories
     liquibase:
       enabled: false
+java:
+  awt:
+    headless: true
