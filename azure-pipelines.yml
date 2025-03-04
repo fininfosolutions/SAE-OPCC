@@ -44,9 +44,21 @@ jobs:
       #----------------------------------------------------------------------
       # Test Packaging
       #----------------------------------------------------------------------
-      - script: ./mvnw -DskipTests clean verify
-        displayName: 'TESTS: packaging'
+     # - script: ./mvnw -DskipTests clean verify
+     #   displayName: 'TESTS: packaging'
        
+
+      - script: ./mvnw clean install -DskipTests
+        displayName: 'Construire le fichier JAR avec Maven'
+
+      - script: |
+          echo "Liste des fichiers dans le répertoire de travail"
+          ls -l
+        displayName: 'Vérifier la présence du fichier JAR'
+
+      - script: |
+          docker build -f ./dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
+        displayName: 'Build Docker Image from Dockerfile'
       #----------------------------------------------------------------------
       # Build Docker Image
       #----------------------------------------------------------------------
@@ -58,9 +70,7 @@ jobs:
           echo "TAG6="$(Build.BuildNumber) >> .env
         displayName: 'Docker TAG Image'
 
-      - script: |
-           docker build -f ./dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
-        displayName: 'Build Docker Image from Dockerfile' 
+      
 
 #----------------------------------------------------------------------
 # Connect to Nexus
