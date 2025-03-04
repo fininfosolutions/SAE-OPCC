@@ -47,9 +47,7 @@ jobs:
       - script: ./mvnw -DskipTests clean verify
         displayName: 'TESTS: packaging'
 
-      - script: |
-          docker build -f ./dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
-        displayName: 'Build Docker Image from Dockerfile' 
+      -
        
       
       #----------------------------------------------------------------------
@@ -62,6 +60,10 @@ jobs:
           cd /home/administrateur/myagent1/_work/8/s
           echo "TAG6="$(Build.BuildNumber) >> .env
         displayName: 'Docker TAG Image'
+
+      - script: |
+           docker build -f ./dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
+        displayName: 'Build Docker Image from Dockerfile' 
 
 #----------------------------------------------------------------------
 # Connect to Nexus
