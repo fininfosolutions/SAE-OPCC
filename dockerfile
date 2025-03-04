@@ -1,5 +1,5 @@
 # Use a Debian-based OpenJDK image
-FROM openjdk:17-buster
+FROM openjdk:17-windowsservercore
 
 # Set the working directory inside the container
 WORKDIR /app
