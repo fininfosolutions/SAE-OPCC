@@ -50,7 +50,7 @@ jobs:
       - script: |
           docker build -f ./dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
         displayName: 'Build Docker Image from Dockerfile' 
-
+       
       
       #----------------------------------------------------------------------
       # Build Docker Image
