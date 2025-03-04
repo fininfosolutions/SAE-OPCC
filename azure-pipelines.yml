@@ -52,9 +52,9 @@ jobs:
         displayName: 'Construire le fichier JAR avec Maven'
 
       - script: |
-          echo "Liste des fichiers dans le répertoire de travail"
-          ls -l
-        displayName: 'Vérifier la présence du fichier JAR'
+          echo "Liste des fichiers dans le répertoire target"
+          ls target/
+        displayName: 'Vérifier les fichiers dans le répertoire target'
 
       - script: |
           docker build -f ./dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
