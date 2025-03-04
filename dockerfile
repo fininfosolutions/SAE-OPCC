@@ -1,4 +1,4 @@
-FROM openjdk:17-buster  # or another Debian-based image
+FROM openjdk:17-buster 
 
 WORKDIR /app
 
