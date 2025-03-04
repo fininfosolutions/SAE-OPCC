@@ -48,8 +48,8 @@ jobs:
         displayName: 'TESTS: packaging'
 
       - script: |
-          docker build -t sae-opcc:latest -f Dockerfile .
-        displayName: 'Build Docker Image from Dockerfile'
+          docker build -f ./Dockerfile -t 192.168.30.15:1200/sae-opcc:$(Build.BuildNumber) .
+        displayName: 'Build Docker Image from Dockerfile' 
 
       
       #----------------------------------------------------------------------
