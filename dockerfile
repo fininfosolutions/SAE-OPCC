@@ -1,5 +1,5 @@
 # Utiliser une image de base Java
-FROM openjdk:17-jre
+FROM openjdk:17 
 
 # Ajouter le fichier jar dans le conteneur
 WORKDIR /app
