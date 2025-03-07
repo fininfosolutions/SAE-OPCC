@@ -351,7 +351,7 @@
             <version>3.2.1</version>
             <configuration>
                <from>
-                  <image>openjdk:17-alpine</image>
+                  <image>openjdk:17</image>
                </from>
                <to>
                   <image>sae-opcc:latest</image>
