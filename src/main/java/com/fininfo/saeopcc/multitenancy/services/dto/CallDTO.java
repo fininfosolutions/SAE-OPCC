@@ -36,7 +36,8 @@ public class CallDTO {
   private String securitiesAccountAccountNumber;
   private BigDecimal subscriptionAmount;
   private BigDecimal subscriptionQuantity;
-
   private String subscriptionShareholderDescription;
+  private Long subscriptionSecuritiesAccountId;
+  private Long subscriptionSecuritiesAccountAssetId;
   private String callEventDeviseCodeAlpha;
 }
