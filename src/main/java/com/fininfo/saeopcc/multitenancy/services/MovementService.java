@@ -53,6 +53,32 @@ public class MovementService {
   public void handleMovementsAndPositionsfromcall(CallDTO callDTO) {
     Movement secMovement = createMovementfromCall(callDTO, MovementType.SEC, false);
     positionService.createPosition(secMovement);
+    Movement movement2 = new Movement();
+
+    Optional<Movement> existingMovementOpt2 =
+        movementRepository.findSecMovementByAccountAndDirection(
+            callDTO.getSubscriptionSecuritiesAccountId(),
+            callDTO.getReference(),
+            Direction.DELIVER);
+    movement2 = existingMovementOpt2.orElse(new Movement());
+
+    movement2.setAccount(
+        accountRepository.findById(callDTO.getSubscriptionSecuritiesAccountId()).orElse(null));
+    movement2.setType(MovementType.SEC);
+    movement2.setMovementDate(LocalDate.now());
+    movement2.setReference(callDTO.getReference());
+    movement2.setTransactionType(TransactionType.CALL);
+    movement2.setSens(Direction.DELIVER);
+    movement2.setDirection(-1);
+
+    movement2.setInstructionId(callDTO.getId());
+    movement2.setAsset(
+        assetRepository.findById(callDTO.getSubscriptionSecuritiesAccountAssetId()).orElse(null));
+    movement2.setQuantity(callDTO.getCalledQuantity());
+    movement2.setStatus(MovementStatus.CREATED);
+
+    movement2 = movementRepository.save(movement2);
+    positionService.createPosition(movement2);
   }
 
   public void handleMovementsAndPositionsfromliberation(LiberationDTO liberationDTO) {
