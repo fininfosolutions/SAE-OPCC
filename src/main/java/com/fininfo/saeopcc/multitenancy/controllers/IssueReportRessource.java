@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,8 +31,9 @@ public class IssueReportRessource {
   }
 
   @PostMapping("/generateletterpdf")
-  public ResponseEntity<byte[]> generatePdf(@RequestBody AssetDTO assetDTO) {
-    byte[] pdfContent = admissionService.generateIssueReportPdf(assetDTO);
+  public ResponseEntity<byte[]> generatePdf(
+      @RequestBody AssetDTO assetDTO, @RequestParam Long issueId) {
+    byte[] pdfContent = admissionService.generateIssueReportPdf(assetDTO, issueId);
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_PDF)
         .header("Content-Disposition", "inline; filename=admission_letter.pdf")

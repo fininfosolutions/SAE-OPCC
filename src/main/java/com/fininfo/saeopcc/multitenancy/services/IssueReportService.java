@@ -1,11 +1,13 @@
 package com.fininfo.saeopcc.multitenancy.services;
 
 import com.fininfo.saeopcc.multitenancy.domains.Compartement;
+import com.fininfo.saeopcc.multitenancy.domains.Issue;
 import com.fininfo.saeopcc.multitenancy.domains.IssueAccount;
 import com.fininfo.saeopcc.multitenancy.domains.IssueReport;
 import com.fininfo.saeopcc.multitenancy.repositories.CompartementRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueAccountRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.IssueReportRepository;
+import com.fininfo.saeopcc.multitenancy.repositories.IssueRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueReportDTO;
 import com.fininfo.saeopcc.multitenancy.services.dto.SummaryDTO;
@@ -86,6 +88,8 @@ public class IssueReportService {
   @Autowired private ModelMapper modelMapper;
 
   @Autowired private FundRepository fundRepository;
+  @Autowired private IssueRepository issueRepository;
+
   @Autowired private CompartementRepository compartementRepository;
 
   public IssueReportDTO generateIssueReport(Long issueAccountDTOId) {
@@ -104,7 +108,11 @@ public class IssueReportService {
     return modelMapper.map(savedLetter, IssueReportDTO.class);
   }
 
-  public byte[] generateIssueReportPdf(AssetDTO assetDTO) {
+  public byte[] generateIssueReportPdf(AssetDTO assetDTO, Long issueId) {
+    Optional<Issue> optionalIssue = issueRepository.findById(issueId);
+    String quantity =
+        optionalIssue.isPresent() ? optionalIssue.get().getQuantity().toString() : "N/A";
+
     Asset asset = modelMapper.map(assetDTO, Asset.class);
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -224,10 +232,7 @@ public class IssueReportService {
     table.addCell(asset.getCode());
     Cell secquantityCell =
         new Cell().add(new Paragraph("Quantité de titres")).setBackgroundColor(lightBlue);
-    Cell secquantity2Cell =
-        new Cell()
-            .add(new Paragraph(asset.getSecuritiesInCirculationNumber().toString()))
-            .setBackgroundColor(lightBlue);
+    Cell secquantity2Cell = new Cell().add(new Paragraph(quantity)).setBackgroundColor(lightBlue);
     table.addCell(secquantityCell);
     table.addCell(secquantity2Cell);
     if (asset.getAssetType().equals(AssetType.FUND)) {
@@ -239,15 +244,15 @@ public class IssueReportService {
         table.addCell(
             createEnumCheckBoxList(
                 FundCategory.values(), fund != null ? fund.getFundCategory() : null));
-        Cell categoryCell2 =
-            new Cell().add(new Paragraph("Composition")).setBackgroundColor(lightBlue);
-        table.addCell(categoryCell2);
-        table
-            .addCell(
-                createEnumCheckBoxList(
-                    FundClassification.values(),
-                    fund != null ? fund.getFundClassification() : null))
-            .setBackgroundColor(lightBlue);
+        // Cell categoryCell2 =
+        //     new Cell().add(new Paragraph("Composition")).setBackgroundColor(lightBlue);
+        // table.addCell(categoryCell2);
+        // table
+        //     .addCell(
+        //         createEnumCheckBoxList(
+        //             FundClassification.values(),
+        //             fund != null ? fund.getFundClassification() : null))
+        //     .setBackgroundColor(lightBlue);
       }
     }
 
