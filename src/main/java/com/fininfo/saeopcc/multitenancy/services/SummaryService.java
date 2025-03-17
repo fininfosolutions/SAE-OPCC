@@ -116,13 +116,14 @@ public class SummaryService {
             .filter(Objects::nonNull)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    BigDecimal price = issue.getPrice() != null ? issue.getPrice() : BigDecimal.ONE;
-
-    BigDecimal quantitySubscribed = totalSubscribed.divide(price, 4, RoundingMode.HALF_UP);
+    BigDecimal quantitySubscribed =
+        validatedSubscriptions.stream()
+            .map(Subscription::getQuantity)
+            .filter(Objects::nonNull)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     BigDecimal totalUnsubscribed = issueAmount.subtract(totalSubscribed);
-
-    BigDecimal quantityUnsubscribed = totalUnsubscribed.divide(price, 4, RoundingMode.HALF_UP);
+    BigDecimal quantityUnsubscribed = issueQuantity.subtract(quantitySubscribed);
 
     List<GlobalLiberation> validatedGlobalLiberations = new ArrayList<>();
     if (!callEventIds.isEmpty()) {
