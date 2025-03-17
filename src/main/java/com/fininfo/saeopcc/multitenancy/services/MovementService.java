@@ -159,7 +159,7 @@ public class MovementService {
     movement.setAccount(
         accountRepository.findById(subscriptionDTO.getSecuritiesAccountId()).orElse(null));
     movement.setType(type);
-    movement.setMovementDate(LocalDate.now());
+    movement.setMovementDate(subscriptionDTO.getSettlementDate());
     movement.setSens(accountTypesla.getSens());
     movement.setDirection(accountTypesla.getTransDirection());
     movement.setReference(subscriptionDTO.getReference());
@@ -192,7 +192,7 @@ public class MovementService {
     movement = secMovementOpt.orElse(new Movement());
     movement.setAccount(accountRepository.findById(callDTO.getSecuritiesAccountId()).orElse(null));
     movement.setType(type);
-    movement.setMovementDate(LocalDate.now());
+    movement.setMovementDate(callDTO.getCallDate());
     movement.setSens(accountTypesla.getSens());
     movement.setDirection(accountTypesla.getTransDirection());
     movement.setReference(callDTO.getReference());
