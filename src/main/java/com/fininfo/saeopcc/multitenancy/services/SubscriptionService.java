@@ -225,18 +225,30 @@ public class SubscriptionService {
     return reference.replace("SAE", "SAE".concat(aditionaleZeros));
   }
 
-  public Page<SubscriptionDTO> getSubscriptionsByIssue(Long issueId, Pageable pageable) {
+  public Page<SubscriptionDTO> getSubscriptionsByIssue(
+      Long issueId, SubscriptionStatus status, Pageable pageable) {
     Optional<Issue> issueOpt = issueRepository.findById(issueId);
+
     if (issueOpt.isPresent()) {
-      Page<Subscription> page = subscriptionRepository.findByIssue_Id(issueId, pageable);
+      Page<Subscription> page;
+      if (status != null) {
+        page = subscriptionRepository.findByIssue_IdAndStatus(issueId, status, pageable);
+      } else {
+        page = subscriptionRepository.findByIssue_Id(issueId, pageable);
+      }
+
       return page.map(subscription -> modelMapper.map(subscription, SubscriptionDTO.class));
     } else {
       return new PageImpl<>(new ArrayList<>());
     }
   }
 
-  public long countSubscriptionsByIssue(Long issueId) {
-    return subscriptionRepository.countByIssue_Id(issueId);
+  public long countSubscriptionsByIssue(Long issueId, SubscriptionStatus status) {
+    if (status != null) {
+      return subscriptionRepository.countByIssue_IdAndStatus(issueId, status);
+    } else {
+      return subscriptionRepository.countByIssue_Id(issueId);
+    }
   }
 
   @Transactional(readOnly = true)
