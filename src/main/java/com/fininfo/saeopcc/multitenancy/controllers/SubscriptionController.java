@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -64,17 +65,23 @@ public class SubscriptionController {
 
   @GetMapping("/subscriptions/byIssue/{id}")
   public ResponseEntity<List<SubscriptionDTO>> getSubscriptionsByIssue(
-      @PathVariable Long id, Pageable pageable) {
-    Page<SubscriptionDTO> page = subscriptionService.getSubscriptionsByIssue(id, pageable);
+      @PathVariable Long id,
+      @RequestParam(required = false) SubscriptionStatus status,
+      Pageable pageable) {
+
+    Page<SubscriptionDTO> page = subscriptionService.getSubscriptionsByIssue(id, status, pageable);
     HttpHeaders headers =
         PaginationUtil.generatePaginationHttpHeaders(
             ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
     return ResponseEntity.ok().headers(headers).body(page.getContent());
   }
 
   @GetMapping("/subscriptions/count/{issueId}")
-  public ResponseEntity<Long> countSubscriptionsByIssue(@PathVariable Long issueId) {
-    long count = subscriptionService.countSubscriptionsByIssue(issueId);
+  public ResponseEntity<Long> countSubscriptionsByIssue(
+      @PathVariable Long issueId, @RequestParam(required = false) SubscriptionStatus status) {
+
+    long count = subscriptionService.countSubscriptionsByIssue(issueId, status);
     return ResponseEntity.ok(count);
   }
 

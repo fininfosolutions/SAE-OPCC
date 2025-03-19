@@ -20,9 +20,14 @@ public interface SubscriptionRepository
   // subscriptionStatus);
   List<Subscription> findByIssue_IdAndStatus(Long issueId, SubscriptionStatus status);
 
+  Page<Subscription> findByIssue_IdAndStatus(
+      Long issueId, SubscriptionStatus status, Pageable pageable);
+
   List<Subscription> findByIssue_Id(Long issueId);
 
   Page<Subscription> findByIssue_Id(Long issueId, Pageable pageable);
 
   long countByIssue_Id(Long issueId);
+
+  long countByIssue_IdAndStatus(Long issueId, SubscriptionStatus status);
 }
