@@ -61,6 +61,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -523,11 +525,9 @@ public class IssueReportService {
     PdfDocument pdf = new PdfDocument(new PdfWriter(outputStream));
     Document document = new Document(pdf);
 
-    DeviceRgb headerBackground = new DeviceRgb(233, 237, 246); // Couleur de l'entête
-    DeviceRgb labelColor = new DeviceRgb(113, 146, 69); // Couleur des labels
-    DeviceRgb valueColor = new DeviceRgb(50, 50, 50); // Couleur des valeurs
-
-    // Ajouter le titre "ÉMISSION"
+    // DeviceRgb headerBackground = new DeviceRgb(233, 237, 246);
+    DeviceRgb labelColor = new DeviceRgb(113, 146, 69);
+    DeviceRgb valueColor = new DeviceRgb(50, 50, 50);
     Paragraph emissionTitle =
         new Paragraph("ÉMISSION")
             .setFontSize(12)
@@ -538,69 +538,79 @@ public class IssueReportService {
             .setFontColor(valueColor);
     document.add(emissionTitle);
 
-    // Table : Section "ÉMISSION"
-    Table emissionTable =
-        new Table(UnitValue.createPercentArray(new float[] {5, 15, 15, 10, 10, 10, 10, 10, 10, 5}))
-            .useAllAvailableWidth();
+    Table emissionTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
 
-    // Ajout des entêtes
-    emissionTable.addHeaderCell(createHeaderCell("ID", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Description", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Fonds", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Compartiment", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Prix de souscription", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Quantité souscrite", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Taille du fonds", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Limite Max", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Date d'ouverture", headerBackground));
-    emissionTable.addHeaderCell(createHeaderCell("Date de clôture", headerBackground));
+    addSummaryField(
+        emissionTable,
+        "Description:",
+        issueDTO != null ? issueDTO.getDescription() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        emissionTable,
+        "Fonds:",
+        issueDTO != null ? issueDTO.getIssueAccountIssueCompartementFundDescription() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        emissionTable,
+        "Compartiment:",
+        issueDTO != null ? issueDTO.getIssueAccountIssueCompartementId() : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        emissionTable,
+        "Prix de souscription:",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getPrice(), 0) : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        emissionTable,
+        "Quantité souscrite:",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getQuantity(), 1) : "",
+        labelColor,
+        valueColor,
+        1);
+    addSummaryField(
+        emissionTable,
+        "Taille du fonds:",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getInitialClosingAmount(), 0) : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        emissionTable,
+        "Limite Max:",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getMaximumLimitAmount(), 0) : "",
+        labelColor,
+        valueColor,
+        0);
+    addSummaryField(
+        emissionTable,
+        "Date d'ouverture:",
+        issueDTO != null && issueDTO.getOpeningDate() != null
+            ? formatDate(issueDTO.getOpeningDate())
+            : "",
+        labelColor,
+        valueColor,
+        1);
 
-    // Ajout des valeurs avec des valeurs par défaut pour les champs nuls
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null && issueDTO.getId() != null ? String.valueOf(issueDTO.getId()) : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null && issueDTO.getDescription() != null
-                ? issueDTO.getDescription()
-                : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null && issueDTO.getIssueAccountIssueCompartementFundDescription() != null
-                ? issueDTO.getIssueAccountIssueCompartementFundDescription()
-                : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null && issueDTO.getIssueAccountIssueCompartementId() != null
-                ? issueDTO.getIssueAccountIssueCompartementId()
-                : ""));
-    emissionTable.addCell(
-        createValueCell(issueDTO != null ? formatAmountWithSpaces(issueDTO.getPrice(), 0) : ""));
-    emissionTable.addCell(
-        createValueCell(issueDTO != null ? formatAmountWithSpaces(issueDTO.getQuantity(), 1) : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null ? formatAmountWithSpaces(issueDTO.getInitialClosingAmount(), 0) : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null ? formatAmountWithSpaces(issueDTO.getMaximumLimitAmount(), 0) : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null && issueDTO.getOpeningDate() != null
-                ? issueDTO.getOpeningDate().toString()
-                : ""));
-    emissionTable.addCell(
-        createValueCell(
-            issueDTO != null && issueDTO.getClosingDate() != null
-                ? issueDTO.getClosingDate().toString()
-                : ""));
-
+    addSummaryField(
+        emissionTable,
+        "Date de clôture:",
+        issueDTO != null && issueDTO.getClosingDate() != null
+            ? formatDate(issueDTO.getClosingDate())
+            : "",
+        labelColor,
+        valueColor,
+        1);
     document.add(emissionTable);
-
-    // Ajouter un espace entre les sections
     document.add(new Paragraph("\n"));
 
-    // Ajouter le titre "VUE 360°"
     Paragraph summaryTitle =
         new Paragraph("VUE 360°")
             .setFontSize(12)
@@ -611,15 +621,8 @@ public class IssueReportService {
             .setFontColor(valueColor);
     document.add(summaryTitle);
 
-    // Table : Section "VUE 360°"
     Table summaryTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
 
-    /*
-      @param type
-        0: Montant
-        1: Quantité
-        2: Percentage
-    */
     addSummaryField(
         summaryTable,
         "Montant Appelé:",
@@ -733,17 +736,12 @@ public class IssueReportService {
     return outputStream.toByteArray();
   }
 
-  private Cell createHeaderCell(String text, DeviceRgb backgroundColor) {
-    return new Cell()
-        .add(new Paragraph(text).setFontSize(10))
-        .setTextAlignment(TextAlignment.CENTER)
-        .setBackgroundColor(backgroundColor);
-  }
-
-  private Cell createValueCell(String text) {
-    return new Cell()
-        .add(new Paragraph(text).setFontSize(10))
-        .setTextAlignment(TextAlignment.CENTER);
+  private String formatDate(LocalDate date) {
+    if (date == null) {
+      return "";
+    }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    return date.format(formatter);
   }
 
   private void addSummaryField(
