@@ -26,6 +26,7 @@ public class IssueDTO {
   private String issueAccountIssueCompartementFundDescription;
   private String issueAccountIssueCompartementFundCode;
   private String issueAccountIssueCompartementFundIsin;
+  private String issueAccountIssueCompartementFonds;
   private String description;
   private LocalDate openingDate;
   private LocalDate closingDate;

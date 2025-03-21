@@ -14,6 +14,7 @@ import com.fininfo.saeopcc.multitenancy.repositories.GlobalLiberationRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.LiberationRepository;
 import com.fininfo.saeopcc.multitenancy.repositories.SecuritiesAccountRepository;
 import com.fininfo.saeopcc.multitenancy.services.dto.GlobalLiberationDTO;
+import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
 import com.fininfo.saeopcc.shared.domains.enumeration.AccountType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -47,16 +48,19 @@ public class GlobalLiberationService {
 
       globalLiberation.setEventStatus(EventStatus.PREVALIDATED);
 
-      Optional<CallEvent> optionalCallevent = callEventRepository.findById(dto.getCallEventId());
-      if (!optionalCallevent.isPresent()) {
-        throw new IllegalArgumentException("GlobalLiberation without associated CallEvent");
-      }
+      CallEvent callEvent =
+          callEventRepository
+              .findById(dto.getCallEventId())
+              .orElseThrow(
+                  () ->
+                      new BadRequestAlertException("CallEvent not found", "callEvent", "notfound"));
+      callEvent.setLiberated(true);
+      callEventRepository.save(callEvent);
 
       globalLiberation = globalLiberationRepository.save(globalLiberation);
 
       if (globalLiberation.getId() != null) {
-        String reference =
-            optionalCallevent.get().getReference() + "-GL" + globalLiberation.getId();
+        String reference = callEvent.getReference() + "-GL" + globalLiberation.getId();
         globalLiberation.setReference(reference);
 
         globalLiberation = globalLiberationRepository.save(globalLiberation);
