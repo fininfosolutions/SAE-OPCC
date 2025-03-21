@@ -8,6 +8,7 @@ import com.fininfo.saeopcc.multitenancy.services.IssueService;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueCriteria;
 import com.fininfo.saeopcc.multitenancy.services.dto.IssueDTO;
 import com.fininfo.saeopcc.shared.controllers.errors.BadRequestAlertException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -106,5 +108,13 @@ public class IssueRessource {
     log.debug("REST request to get Subscription : {}", id);
     Optional<IssueDTO> subDTO = issueService.findOne(id);
     return ResponseUtil.wrapOrNotFound(subDTO);
+  }
+
+  @GetMapping("/issue/quantity/{issueId}")
+  public ResponseEntity<BigDecimal> getCurrentQuantity(
+      @PathVariable("issueId") Long issueId, @RequestParam(required = false) Long subscriptionId) {
+
+    BigDecimal quantity = issueService.getCurrentQuantity(issueId, subscriptionId);
+    return ResponseEntity.ok().body(quantity);
   }
 }
