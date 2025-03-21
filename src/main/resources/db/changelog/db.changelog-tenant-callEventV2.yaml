@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-liberated-to-call-event
+      author: fininfo
+      changes:
+        - addColumn:
+            tableName: call_event
+            columns:
+              - column:
+                  name: liberated
+                  type: BOOLEAN

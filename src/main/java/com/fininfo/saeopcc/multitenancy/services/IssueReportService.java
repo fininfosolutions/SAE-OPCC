@@ -60,7 +60,8 @@ import com.itextpdf.layout.properties.UnitValue;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -557,7 +558,7 @@ public class IssueReportService {
     addSummaryField(
         emissionTable,
         "Compartiment:",
-        issueDTO != null ? issueDTO.getIssueAccountIssueCompartementId() : "",
+        issueDTO != null ? issueDTO.getIssueAccountIssueCompartementFonds() : "",
         labelColor,
         valueColor,
         1);
@@ -570,7 +571,7 @@ public class IssueReportService {
         0);
     addSummaryField(
         emissionTable,
-        "Quantité souscrite:",
+        "Quantités de titres:",
         issueDTO != null ? formatAmountWithSpaces(issueDTO.getQuantity(), 1) : "",
         labelColor,
         valueColor,
@@ -578,17 +579,33 @@ public class IssueReportService {
     addSummaryField(
         emissionTable,
         "Taille du fonds:",
-        issueDTO != null ? formatAmountWithSpaces(issueDTO.getInitialClosingAmount(), 0) : "",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getAmount(), 0) : "",
         labelColor,
         valueColor,
         0);
     addSummaryField(
         emissionTable,
-        "Limite Max:",
+        "Closing Initial:",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getInitialClosingAmount(), 0) : "",
+        labelColor,
+        valueColor,
+        0);
+
+    addSummaryField(
+        emissionTable,
+        "Limite Maximale:",
         issueDTO != null ? formatAmountWithSpaces(issueDTO.getMaximumLimitAmount(), 0) : "",
         labelColor,
         valueColor,
         0);
+    addSummaryField(
+        emissionTable,
+        "Closing Ultérieur:",
+        issueDTO != null ? formatAmountWithSpaces(issueDTO.getNextClosingAmount(), 0) : "",
+        labelColor,
+        valueColor,
+        0);
+
     addSummaryField(
         emissionTable,
         "Date d'ouverture:",
@@ -771,28 +788,24 @@ public class IssueReportService {
   }
 
   private String formatAmountWithSpaces(Object value, int type) {
-
-    NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-    numberFormat.setMaximumFractionDigits(2);
-    numberFormat.setMinimumFractionDigits(2);
-
     if (value == null) {
       return "N/A";
     }
-    if (value instanceof BigDecimal number) {
-      String formattedValue = numberFormat.format(number);
 
-      switch (type) {
-        case 0 -> {
-          return formattedValue + " MAD";
-        }
-        case 1 -> {
-          return formattedValue;
-        }
-        case 2 -> {
-          return value + " %";
-        }
-      }
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+    symbols.setGroupingSeparator(' ');
+
+    DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
+
+    if (value instanceof BigDecimal number) {
+      String formattedValue = decimalFormat.format(number);
+
+      return switch (type) {
+        case 0 -> formattedValue + " MAD";
+        case 1 -> formattedValue;
+        case 2 -> formattedValue + " %";
+        default -> formattedValue;
+      };
     }
     return value.toString();
   }

@@ -47,6 +47,7 @@ public class CallEventService {
   public CallEventDTO save(CallEventDTO eventDTO) {
     CallEvent event = modelMapper.map(eventDTO, CallEvent.class);
     event.setEventStatus(EventStatus.PREVALIDATED);
+    event.setLiberated(false);
     Optional<Issue> optionalIssue = issueRepository.findById(eventDTO.getIssueId());
     if (!optionalIssue.isPresent()) {
       throw new IllegalArgumentException("event without issue");
@@ -171,6 +172,7 @@ public class CallEventService {
 
   public CallEventDTO updateEvent(CallEventDTO callEventDTO) {
     CallEvent event = modelMapper.map(callEventDTO, CallEvent.class);
+    event.setLiberated(false);
     return modelMapper.map(eventRepository.save(event), CallEventDTO.class);
   }
 

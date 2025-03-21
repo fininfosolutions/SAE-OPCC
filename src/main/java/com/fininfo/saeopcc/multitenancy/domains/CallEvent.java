@@ -58,6 +58,7 @@ public class CallEvent extends AbstractAuditingEntity implements Serializable {
   private BigDecimal remainingAmount;
 
   private String message;
+  private Boolean liberated;
 
   @ManyToOne @EqualsAndHashCode.Exclude private Issue issue;
   @ManyToOne private Devise devise;
