@@ -29,6 +29,7 @@ public class CallEventDTO {
   private BigDecimal remainingAmount;
 
   private String message;
+  private Boolean liberated;
 
   private Long issueId;
   private Long deviseId;
