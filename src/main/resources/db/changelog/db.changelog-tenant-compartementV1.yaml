@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: update-compartement-v1
+      author: fininfo
+      changes:
+        - dropColumn:
+            tableName: compartement
+            columnName: investment_size
+        - addColumn:
+            tableName: compartement
+            columns:
+              - column:
+                  name: investment_min_size
+                  type: NUMERIC(21,2)
+        - addColumn:
+            tableName: compartement
+            columns:
+              - column:
+                  name: investment_max_size
+                  type: NUMERIC(21,2)
