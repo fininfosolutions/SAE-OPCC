@@ -61,8 +61,11 @@ public class Compartement {
   @Column(name = "international_strategy")
   private String internationalStrategy;
 
-  @Column(name = "investment_size")
-  private BigDecimal investmentSize;
+  @Column(name = "investment_min_size")
+  private BigDecimal investmentMinSize;
+
+  @Column(name = "investment_max_size")
+  private BigDecimal investmentMaxSize;
 
   @Column(name = "investment_policy")
   private String investmentPolicy;
