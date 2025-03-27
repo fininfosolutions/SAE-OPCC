@@ -28,7 +28,8 @@ public class CompartementDTO {
   private String investmentOrientation;
   private String geographicIntervention;
   private String internationalStrategy;
-  private BigDecimal investmentSize;
+  private BigDecimal investmentMinSize;
+  private BigDecimal investmentMaxSize;
   private String investmentPolicy;
   private String debtPolicy;
   private String businessPractices;
