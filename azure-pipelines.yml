@@ -43,7 +43,7 @@ jobs:
 
       # Analyse SonarQube
       - script: |
-          /opt/maven/bin/mvn -f /home/***/myagent1/_work/102/s/pom.xml \
+          /opt/maven/bin/mvn -f /home/***/myagent1/_work/100/s/pom.xml \
           -Dsonar.projectKey=SAE-Opcc \
           -Dsonar.host.url=http://sonarqube.fininfosolutions.com \
           -Dsonar.login=squ_bec4f98e1b0565dbe30c5149ebd475055b1d74b7 \
