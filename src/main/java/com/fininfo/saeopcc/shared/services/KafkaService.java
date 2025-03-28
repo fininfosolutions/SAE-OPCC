@@ -539,13 +539,6 @@ public class KafkaService {
                   field.set(entity, f);
 
                 } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
-                    instanceof Client) {
-
-                  Client f = new Client();
-                  f.setId(((ObjectNode) value).get("id").longValue());
-                  field.set(entity, f);
-
-                } else if (Class.forName(field.getType().getName()).getConstructor().newInstance()
                     instanceof Fund) {
 
                   Fund f = new Fund();
