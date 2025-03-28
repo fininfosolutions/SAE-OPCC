@@ -298,7 +298,7 @@ public class SecuritiesAccountService {
 
     AccountCategory accountCategory =
         accountCategoryRepository.findById(accountCategoryId).orElse(null);
-    if (accountCategory.getDescription().equals("00")) {
+    if (accountCategory != null && "00".equals(accountCategory.getDescription())) {
       return securitiesAccountRepository
           .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
               assetId, shareholderId, intermediaryId, old_ACCOUNT_TYPES);
