@@ -37,7 +37,7 @@ public class ShareholderService {
     } else return null;
   }
 
-  @Transactional
+  // @Transactional
   public Shareholder syncShareholder(Shareholder shareholder, String tenant) {
 
     Shareholder synced = null;
@@ -57,13 +57,15 @@ public class ShareholderService {
   }
 
   private void createOrUpdateAddresses(Shareholder shareholder) {
-    Role role = roleRepository.getReferenceById(shareholder.getId());
-    Set<Address> addressList = shareholder.getAddresses();
-    if (!addressList.isEmpty()) {
-      for (Address address : addressList) {
-        address.setRole(role);
+    Optional<Role> roleopt = roleRepository.findById(shareholder.getId());
+    if (roleopt.isPresent()) {
+      Set<Address> addressList = shareholder.getAddresses();
+      if (!addressList.isEmpty()) {
+        for (Address address : addressList) {
+          address.setRole(roleopt.get());
+        }
+        addressRepo.saveAll(addressList);
       }
-      addressRepo.saveAll(addressList);
     }
   }
 }
