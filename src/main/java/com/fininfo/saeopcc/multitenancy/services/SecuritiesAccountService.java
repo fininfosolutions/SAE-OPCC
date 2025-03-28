@@ -303,7 +303,7 @@ public class SecuritiesAccountService {
           .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
               assetId, shareholderId, intermediaryId, old_ACCOUNT_TYPES);
     }
-    if (accountCategory.getDescription().equals("20")) {
+    if (accountCategory != null && "20".equals(accountCategory.getDescription())) {
       return securitiesAccountRepository
           .existsByAsset_IdAndShareholder_IdAndIntermediary_IdAndAccountTypeIn(
               assetId, shareholderId, intermediaryId, VALID_ACCOUNT_TYPES);

@@ -102,6 +102,7 @@
       <dependency>
          <groupId>org.postgresql</groupId>
          <artifactId>postgresql</artifactId>
+         <version>42.7.5</version>
          <scope>runtime</scope>
       </dependency>
       <dependency>
@@ -235,6 +236,7 @@
       <dependency>
          <groupId>com.hazelcast</groupId>
          <artifactId>hazelcast-hibernate53</artifactId>
+           <version>5.2.0</version>
       </dependency>
       <dependency>
          <groupId>com.hazelcast</groupId>
