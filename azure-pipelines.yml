@@ -39,7 +39,27 @@ jobs:
       #----------------------------------------------------------------------
       - script: mvn spotless:apply
         displayName: 'Apply Spotless'
+      
 
+      # Analyse SonarQube
+      - script: |
+          /opt/maven/bin/mvn -f /home/***/myagent1/_work/102/s/pom.xml \
+          -Dsonar.projectKey=SAE-Opcc \
+          -Dsonar.host.url=http://sonarqube.fininfosolutions.com \
+          -Dsonar.login=squ_bec4f98e1b0565dbe30c5149ebd475055b1d74b7 \
+          clean package sonar:sonar
+        displayName: 'SonarQube Analysis'
+
+#      # Vérification des bugs dans SonarQube
+      - script: |
+          SONAR_PROJECT_KEY="SAE-Opcc"
+          SONAR_HOST_URL="http://sonarqube.fininfosolutions.com"
+          SONAR_AUTH_TOKEN="squ_bec4f98e1b0565dbe30c5149ebd475055b1d74b7"
+
+          BUG_COUNT=$(curl -s "$SONAR_HOST_URL/api/issues/search?componentKeys=$SONAR_PROJECT_KEY&types=BUG" \
+          -u $SONAR_AUTH_TOKEN: | grep -o '"total":[0-9]*' | awk -F: '{print $2}' | head -1 | tr -d '\n')
+
+          echo "Nombre de bugs trouvés : $BUG_COUNT"
 
       #----------------------------------------------------------------------
       # Test Packaging
