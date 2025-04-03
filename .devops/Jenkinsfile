@@ -1,0 +1,3 @@
+@Library('jenkins-commons-library-local') _
+ 
+fininfoJavaProjectCI("ms-opcc", "com.fininfo.saeopcc.SaeOpccApplication", "sae-opcc")
